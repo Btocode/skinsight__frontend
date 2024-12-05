@@ -3,8 +3,13 @@
 @tailwind utilities;
 
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
-  /* background: radial-gradient(50.03% 52.3% at 50.05% 50.05%, rgba(5, 146, 249, 0.5) 4.17%, rgba(255, 255, 255, 0) 100%) 
-background: radial-gradient(50.03% 52.3% at 50.05% 50.05%, rgba(192, 12, 255, 0.7) 4.17%, rgba(255, 255, 255, 0) 100%)  */
+  --primary: #8599fe;
+  --accent: #2c2c2c;
+  --foreground: #1e0e62;
+}
+
+@layer utilities {
+  .menu-link {
+    @apply text-base font-normal leading-[26px]  text-foreground;
+  }
 }
