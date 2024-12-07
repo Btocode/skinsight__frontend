@@ -1,20 +1,30 @@
 // src/app/layout.tsx
 import { ReduxProvider } from "@/lib/redux/ReduxProvider";
-import { Header } from "@/components/layout/Header";
+import { DM_Sans } from "next/font/google";
 import "./globals.css";
+
+const dmSans = DM_Sans({
+  subsets: ["latin"],
+  variable: "--font-dm-sans",
+});
 
 export default function RootLayout({
   children,
+  modal,
 }: {
   children: React.ReactNode;
+  modal: React.ReactNode;
 }) {
   return (
     <html lang="en">
-      <body>
+      <body
+        className={`${dmSans.variable} font-["${dmSans.variable}"]`}
+        suppressHydrationWarning
+      >
         <ReduxProvider>
-          {/* <Header /> */}
           {children}
-          </ReduxProvider>
+          {modal}
+        </ReduxProvider>
       </body>
     </html>
   );

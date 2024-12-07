@@ -20,6 +20,7 @@
     "react-redux": "^9.1.2"
   },
   "devDependencies": {
+    "@jest/types": "^29.6.3",
     "@testing-library/jest-dom": "^6.6.3",
     "@testing-library/react": "^16.0.1",
     "@types/node": "^20",

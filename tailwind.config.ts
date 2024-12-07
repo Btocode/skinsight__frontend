@@ -8,8 +8,15 @@ export default {
   ],
   theme: {
     extend: {
+      container: {
+        center: true,
+        padding: {
+          DEFAULT: "1rem",
+        },
+      },
       colors: {
-        background: "var(--background)",
+        primary: "var(--primary)",
+        accent: "var(--accent)",
         foreground: "var(--foreground)",
       },
     },
