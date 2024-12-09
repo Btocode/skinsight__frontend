@@ -18,7 +18,7 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body
-        className={`${dmSans.variable} font-["${dmSans.variable}"]`}
+        className={`${dmSans.variable} font-dm-sans`}
         suppressHydrationWarning
       >
         <ReduxProvider>

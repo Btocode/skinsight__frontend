@@ -19,6 +19,9 @@ export default {
         accent: "var(--accent)",
         foreground: "var(--foreground)",
       },
+      fontFamily: {
+        ["dm-sans"]: ["var(--font-dm-sans)"],
+      },
     },
   },
   plugins: [],
