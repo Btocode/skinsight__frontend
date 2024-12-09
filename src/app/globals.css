@@ -12,4 +12,7 @@
   .menu-link {
     @apply text-base font-normal leading-[26px]  text-foreground;
   }
+  .btn-primary {
+    @apply outline-none border-none px-8 py-3 bg-[#8599FE] hover:bg-blue-500 text-white rounded-xl  text-lg font-medium transition-colors;
+  }
 }
