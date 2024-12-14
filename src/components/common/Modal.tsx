@@ -1,14 +1,23 @@
 "use client";
 
+import { cn } from "@/lib/utils";
 import React, { useState, useEffect } from "react";
 
 interface ModalProps {
   isOpen: boolean;
   onClose: () => void;
   children: React.ReactNode;
+  className?: string;
+  contentClassName?: string;
 }
 
-const Modal: React.FC<ModalProps> = ({ isOpen, onClose, children }) => {
+const Modal: React.FC<ModalProps> = ({
+  isOpen,
+  onClose,
+  children,
+  className,
+  contentClassName,
+}) => {
   const [isModalOpen, setIsModalOpen] = useState(isOpen);
 
   useEffect(() => {
@@ -35,9 +44,14 @@ const Modal: React.FC<ModalProps> = ({ isOpen, onClose, children }) => {
 
   return (
     <div
-      className={`fixed inset-0 z-50 flex items-center justify-center overflow-x-hidden overflow-y-auto outline-none focus:outline-none transition-opacity duration-300 ${
-        isModalOpen ? "opacity-100" : "opacity-0 pointer-events-none"
-      }`}
+      className={cn(
+        `fixed inset-0 z-50 flex items-center justify-center overflow-x-hidden overflow-y-auto outline-none focus:outline-none transition-opacity duration-300`,
+        className,
+        {
+          "opacity-0 pointer-events-none": !isModalOpen,
+          "opacity-100": isModalOpen,
+        }
+      )}
     >
       <div
         className="fixed inset-0 bg-black transition-opacity duration-300 ease-in-out"
@@ -68,7 +82,9 @@ const Modal: React.FC<ModalProps> = ({ isOpen, onClose, children }) => {
               />
             </svg>
           </button>
-          <div className="relative p-6 flex-auto">{children}</div>
+          <div className={cn("relative p-6 flex-auto", contentClassName)}>
+            {children}
+          </div>
         </div>
       </div>
     </div>

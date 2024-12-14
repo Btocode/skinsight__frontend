@@ -18,7 +18,7 @@ import Link from "next/link";
  */
 const SignUpForm = () => {
   return (
-    <div className="bg-white rounded-3xl w-full lg:w-[500px] mx-auto p-6 relative">
+    <div className="bg-white rounded-3xl w-full lg:w-[520px] mx-auto p-6 relative">
       <div className="text-center mb-8">
         <h1 className="text-4xl font-semibold mb-4 bg-gradient-to-r from-blue-400 to-violet-400 text-transparent bg-clip-text">
           Sign up to get personalized recommendations
