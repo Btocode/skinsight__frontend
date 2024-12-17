@@ -59,7 +59,7 @@ const Modal: React.FC<ModalProps> = ({
         style={{ opacity: isModalOpen ? 0.5 : 0 }}
       ></div>
       <div
-        className={`relative w-auto max-w-3xl mx-auto my-6 transition-all duration-300 ease-in-out ${
+        className={`relative w-auto  my-6 transition-all duration-300 ease-in-out ${
           isModalOpen ? "scale-100 translate-y-0" : "scale-95 translate-y-4"
         }`}
       >

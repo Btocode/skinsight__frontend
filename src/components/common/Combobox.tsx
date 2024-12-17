@@ -81,11 +81,11 @@ export function Combobox({
     }
   }, [highlightedIndex, open]);
 
-  useEffect(() => {
-    if (!open) {
-      buttonRef.current?.focus();
-    }
-  }, [open]);
+  // useEffect(() => {
+  //   if (!open) {
+  //     buttonRef.current?.focus();
+  //   }
+  // }, [open]);
 
   useEffect(() => {
     const handleOutsideClick = (event: MouseEvent) => {
@@ -123,7 +123,9 @@ export function Combobox({
         aria-controls={open ? "dropdown-list" : undefined}
         type="button"
       >
-        <span className="truncate">{value ? value.label : placeholder}</span>
+        <span className="truncate text-lg">
+          {value ? value.label : placeholder}
+        </span>
         <div
           className={cn(
             "ml-2 h-4 w-4 shrink-0 opacity-50 transition-transform duration-200",
@@ -159,7 +161,7 @@ export function Combobox({
             <li
               key={option.value}
               className={cn(
-                "relative flex cursor-default select-none items-center rounded-sm px-2 py-3 text-sm outline-none transition-colors",
+                "relative flex cursor-default select-none items-center rounded-sm px-2 py-3 text-base outline-none transition-colors",
                 index === highlightedIndex &&
                   "bg-[#EDF0FF] text-accent-foreground",
                 value?.value === option.value && "font-medium text-primary"

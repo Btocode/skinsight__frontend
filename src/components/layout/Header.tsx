@@ -37,9 +37,9 @@ const DesktopNavbar = () => {
           Help
         </Link>
 
-        <Link href="/sign-up">
+        <Link href="/sign-in">
           <button className="text-base font-medium border-2 rounded-full px-6 py-2 text-foreground">
-            Sign Up
+            Log in
           </button>
         </Link>
       </div>
@@ -100,10 +100,10 @@ const MobileNavbar = () => {
             Help
           </Link>
           <Link
-            href="/signup"
+            href="/sign-in"
             className="block w-full text-center px-3 py-2 rounded-md text-base font-medium text-white bg-purple-600 hover:bg-purple-700"
           >
-            Sign Up
+            Log in
           </Link>
         </div>
       </div>
