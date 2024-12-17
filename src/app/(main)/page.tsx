@@ -22,9 +22,11 @@ const HomePage = () => {
               Find my products
             </button>
           </Link>
-          <button className="w-full lg:w-auto text-base font-medium border-2 rounded-lg px-10 py-3 text-primary">
-            Find alternatives
-          </button>
+          <Link href="/find-alternatives" className="w-full lg:w-auto">
+            <button className="w-full lg:w-auto text-base font-medium border-2 rounded-lg px-10 py-3 text-primary">
+              Find alternatives
+            </button>
+          </Link>
         </div>
       </article>
       <div className="flex-1 relative h-[620px] mt-4 lg:mt-0">
