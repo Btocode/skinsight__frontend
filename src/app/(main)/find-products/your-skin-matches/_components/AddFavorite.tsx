@@ -17,6 +17,7 @@ const AddFavorite = () => {
   return (
     <>
       <button
+        id="add-favorite"
         type="button"
         onClick={() => setOpen(true)}
         className="flex flex-1 items-center justify-center gap-2 rounded-full bg-violet-100 py-3 text-violet-600 transition-colors hover:bg-violet-200"

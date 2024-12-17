@@ -3,9 +3,9 @@ import MatchesProductFilter from "./_components/MatchesProductFilter";
 import MatchesProductHeader from "./_components/MatchesProductHeader";
 import TonersProducts from "./_components/TonersProducts";
 import CleansersProducts from "./_components/CleansersProducts";
-import Advertisement from "../../(account)/_components/Advertisement";
 import MoisturisersProducts from "./_components/MoisturisersProducts";
 import Image from "next/image";
+import Advertisement from "@/components/common/Advertisement";
 
 const getProducts = async () => {
   const response = await fetch("http://localhost:3000/api/your-skin-matches");
