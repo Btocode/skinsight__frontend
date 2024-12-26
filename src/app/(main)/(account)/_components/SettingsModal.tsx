@@ -7,11 +7,19 @@ import MarketingPreference from "./MarketingPreference";
 import ChangePassword from "./ChangePassword";
 import DownloadData from "./DownloadData";
 import DeleteAccount from "./DeleteAccount";
+import AccountDeleteSuccess from "./AccountDeleteSuccess";
 
 const SettingsModal = () => {
   const [state, setState] = useState<string | null>(null);
   const [open, setOpen] = useState(false);
-  const onClose = useCallback(() => setOpen(false), []);
+
+  const onStateClose = () => setState(null);
+
+  const onClose = useCallback(() => {
+    setOpen(false);
+    onStateClose();
+  }, []);
+
   return (
     <>
       <button
@@ -23,13 +31,15 @@ const SettingsModal = () => {
       </button>
       <Modal isOpen={open} onClose={onClose}>
         {state === "marketing" ? (
-          <MarketingPreference onClose={() => setState(null)} />
+          <MarketingPreference onClose={onStateClose} />
         ) : state === "password" ? (
-          <ChangePassword onClose={() => setState(null)} />
+          <ChangePassword onClose={onStateClose} />
         ) : state === "download" ? (
-          <DownloadData onClose={() => setState(null)} />
+          <DownloadData onClose={onStateClose} />
         ) : state === "delete" ? (
-          <DeleteAccount onClose={() => setState(null)} />
+          <DeleteAccount setState={setState} onClose={onStateClose} />
+        ) : state === "delete-success" ? (
+          <AccountDeleteSuccess onClose={onStateClose} />
         ) : (
           <div className="w-[550px]">
             <h2 className="text-2xl font-semibold leading-[36px] tracking-[-0.02em] text-[#111111]">

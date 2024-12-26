@@ -1,13 +1,8 @@
 "use client";
 import Button from "@/components/common/Button";
+import Link from "next/link";
 
-const DeleteAccount = ({
-  onClose,
-  setState,
-}: {
-  onClose: () => void;
-  setState: (state: string) => void;
-}) => {
+const AccountDeleteSuccess = ({ onClose }: { onClose: () => void }) => {
   return (
     <div className="w-[550px]">
       <Button
@@ -34,20 +29,25 @@ const DeleteAccount = ({
         Back
       </Button>
       <h2 className="text-2xl font-semibold leading-[36px] tracking-[-0.02em] text-[#111111]">
-        Delete my account
+        You have deleted your account
       </h2>
-      <hr className="w-full h-px my-6 bg-[#EFEFEF]" />
+      <hr className="w-full h-px my-5 bg-[#EFEFEF]" />
       <p className="text-[16px] leading-[24px] tracking-[-3%] text-[#575656]">
-        Are you sure you want to delete your account? You will lose access to
-        the Skinsight tool and your saved items.
+        We’re sad to see you go! Please tell us what went wrong on
+        <Link
+          href="mailto:help@skinsight.com"
+          className="font-semibold text-primary px-1"
+        >
+          help@skinsight.com
+        </Link>{" "}
+        and we’d be happy to reach out to you
       </p>
 
       <div className="flex items-center gap-4 mt-6 pb-2">
-        <Button onClick={() => setState("delete-success")}>Yes, delete</Button>
-        <Button variant={"outline"}>No, cancel</Button>
+        <Button>This is goodby</Button>
       </div>
     </div>
   );
 };
 
-export default DeleteAccount;
+export default AccountDeleteSuccess;
