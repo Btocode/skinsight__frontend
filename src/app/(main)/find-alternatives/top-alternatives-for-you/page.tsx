@@ -5,10 +5,11 @@ import React from "react";
 import TopAlternativesProducts from "./_components/TopAlternativesProducts";
 import { notFound } from "next/navigation";
 import Advertisement from "@/components/common/Advertisement";
+import GradientImage from "@/components/common/GradientImage";
 
 const getProducts = async () => {
   const response = await fetch("http://localhost:3000/api/find-alternatives");
-  return response.json();
+  return await response.json();
 };
 
 const TopAlternativesForYouPage = async () => {
@@ -63,19 +64,8 @@ const TopAlternativesForYouPage = async () => {
       </div>
       <Advertisement />
 
-      <Image
-        src={"/gradient1.png"}
-        alt="gradient1"
-        width={700}
-        height={500}
-        className="fixed -left-32 -top-20 lg:top-10 -z-10"
-      />
-      <Image
-        src={"/gradient3.png"}
-        alt="gradient3"
-        width={400}
-        height={375}
-        className="absolute top-[700px] lg:top-[620px] -right-20 -z-10"
+      <GradientImage
+        secondImage={{ url: "/gradient3.png", width: 400, height: 375 }}
       />
     </section>
   );

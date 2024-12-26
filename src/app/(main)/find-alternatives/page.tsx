@@ -1,4 +1,5 @@
 import { Combobox } from "@/components/common/Combobox";
+import GradientImage from "@/components/common/GradientImage";
 import HeadingPrimary from "@/components/common/HeadingPrimary";
 import Image from "next/image";
 
@@ -38,19 +39,8 @@ const FindAlternativesPage = () => {
         />
       </div>
 
-      <Image
-        src={"/gradient1.png"}
-        alt="gradient1"
-        width={550}
-        height={420}
-        className="absolute -left-56 -top-20 lg:top-20 -z-10"
-      />
-      <Image
-        src={"/gradient3.png"}
-        alt="gradient3"
-        width={400}
-        height={375}
-        className="absolute top-[700px] lg:top-[620px] -right-20 -z-10"
+      <GradientImage
+        secondImage={{ url: "/gradient3.png", width: 400, height: 375 }}
       />
     </section>
   );
