@@ -12,9 +12,9 @@ const ages = [
 
 const SelectAge = () => {
   return (
-    <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-x-4 gap-y-8">
+    <div className="grid grid-cols-2 md:grid-cols-3 gap-4 lg:gap-x-4 lg:gap-y-8">
       {ages.map((item, index) => (
-        <Card key={index} className="h-[160px]">
+        <Card key={index} className="w-full h-[160px]">
           {Array.isArray(item) ? (
             <>
               <h3 className="text-xl font-semibold">{item[0]}</h3>

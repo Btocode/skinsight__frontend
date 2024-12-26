@@ -12,24 +12,26 @@ import Advertisement from "@/components/common/Advertisement";
 const ProductDetails = () => {
   return (
     <section className="container py-10">
-      <div className="flex items-center justify-between gap-4">
+      <div className="lg:flex items-center justify-between gap-4">
         <div className="space-y-2">
           <BackButton />
-          <p className="text-xl font-medium leading-[24px] tracking-[-0.02em]">
+          <p className="text-base lg:text-xl font-medium leading-[24px] tracking-[-0.02em]">
             Glow Recipe
           </p>
-          <h2 className="text-[42px] font-semibold leading-[49.98px] tracking-[-0.02em]">
+          <h2 className="text-3xl lg:text-[42px] font-semibold leading-[36px] lg:leading-[49.98px] tracking-[-0.02em]">
             Watermelon Glow PHA+BHA
           </h2>
-          <p className="text-xl font-medium leading-[26px]">
+          <p className="text-base lg:text-xl font-medium leading-[26px]">
             Price{" "}
-            <span className="text-2xl font-semibold leading-[26px]">$565</span>
+            <span className="text-xl lg:text-2xl font-semibold leading-[26px]">
+              $565
+            </span>
           </p>
         </div>
-        <div className="flex items-center gap-4">
+        <div className="flex items-center gap-4 mt-4 lg:mt-0">
           <button
             type="button"
-            className="flex px-6 items-center justify-center gap-2 rounded-full bg-violet-100 py-3 text-violet-600 transition-colors hover:bg-violet-200"
+            className="flex px-6 items-center justify-center gap-2 rounded-xl lg:rounded-full bg-violet-100 py-4 text-violet-600 transition-colors hover:bg-violet-200"
           >
             <svg width="25" height="24" viewBox="0 0 25 24" fill="none">
               <path
@@ -59,14 +61,14 @@ const ProductDetails = () => {
                 />
               </svg>
             }
-            className="rounded-full"
+            className="lg:rounded-full"
           >
             <span>Buy now</span>
           </Button>
         </div>
       </div>
-      <div className="flex justify-between gap-8">
-        <div>
+      <div className="lg:flex justify-between gap-8">
+        <div className="mb-8 lg:mb-0">
           <ProductAccordion />
           <ProductGallery />
         </div>
@@ -78,7 +80,7 @@ const ProductDetails = () => {
         title="Tonners"
         content="Toners balance your skin's pH levels & help prep skin for optimal absorption of the rest of your skincare routine. Our toners are formulated to multi-task by treating skin with clinically effective actives, while also hydrating & balancing skin with gentle ingredients so you can treat your specific skin concerns without irritating skin or stripping it of moisture."
       />
-      <div className="h-[160px] w-[1000px] mx-auto my-10 relative">
+      <div className="h-[160px] lg:w-[1000px] mx-auto my-10 relative">
         <Image src={"/brand.png"} alt="brand" fill />
       </div>
       <ProductTabs />

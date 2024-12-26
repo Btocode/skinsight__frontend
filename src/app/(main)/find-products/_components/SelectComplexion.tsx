@@ -35,14 +35,19 @@ const complexionOptions = [
 const SelectComplexion = () => {
   return (
     <>
-      <p className="-mt-6">Select two from the options</p>
-      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-8">
+      <p className="hidden lg:block -mt-6">Select two from the options</p>
+      <div className="grid grid-cols-2 md:grid-cols-3 gap-4 lg:gap-x-4 lg:gap-y-8">
         {complexionOptions.map((item, index) => (
-          <Card key={index} className="w-[260px] h-[250px]">
-            <div className="space-y-1">
+          <Card
+            key={index}
+            className="w-full lg:w-[260px]  h-[210px] lg:h-[250px]"
+          >
+            <div className="space-y-1 ">
               <span>{item.icon}</span>
-              <h2 className="text-xl font-semibold">{item.title}</h2>
-              <p className="text-lg font-normal">{item.description}</p>
+              <h2 className="text-lg lg:text-xl font-semibold">{item.title}</h2>
+              <p className="text-sm lg:text-lg font-normal">
+                {item.description}
+              </p>
             </div>
           </Card>
         ))}

@@ -3,7 +3,7 @@ import { MatchesProductCard } from "./MatchesProductCard";
 const TonersProducts = ({ products }) => {
   return (
     <section id="toners" className="max-w-[1420px] mx-auto py-4">
-      <div className="flex items-center justify-between mt-[36px] mb-[48px]">
+      <div className="flex items-center justify-between mt-6 lg:mt-[36px] mb-[48px]">
         <h4 className="text-2xl font-semibold leading-[26px] text-accent">
           Toners
         </h4>

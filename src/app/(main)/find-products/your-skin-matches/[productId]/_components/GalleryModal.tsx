@@ -23,12 +23,12 @@ const GalleryModal = ({
 
   return (
     <Modal isOpen={open} onClose={onClose}>
-      <BackButton />
-      <div className="w-[800px]">
-        <h2 className="text-[32px] font-semibold leading-[32px] tracking-[-0.02em] text-center">
+      <BackButton buttonProps={{ className: "hidden lg:flex" }} />
+      <div className="w-[380px] lg:w-[800px]">
+        <h2 className="hidden lg:block text-[32px] font-semibold leading-[32px] tracking-[-0.02em] lg:text-center">
           Watermelon Glow PHA+BHA
         </h2>
-        <div className="mt-8 max-w-2xl mx-auto h-[360px] overflow-hidden rounded-md">
+        <div className="mt-10 lg:mt-8 mb-4 lg:mb-0 w-full lg:max-w-2xl mx-auto h-[360px] overflow-hidden rounded-md">
           <iframe
             src={embedUrl}
             title="YouTube video player"
@@ -37,6 +37,9 @@ board-write; encrypted-media; gyroscope; picture-in-picture; web-share"
             className="w-full h-full object-cover"
           />
         </div>
+        <h2 className="text-lg lg:text-[32px] font-semibold leading-[26px] lg:leading-[32px] tracking-[-0.02em] lg:text-center">
+          Watermelon Glow PHA+BHA
+        </h2>
         <div className="mt-8 pb-2 max-w-2xl mx-auto  flex  justify-between gap-4 overflow-x-auto scroll-smooth hide-scrollbar">
           {galleryItems.map((item) => (
             <div

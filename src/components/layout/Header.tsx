@@ -30,7 +30,7 @@ const DesktopNavbar = () => {
         </Link>
       </div>
       <div className="flex items-center gap-8">
-        <Link href="/about" className="menu-link">
+        <Link href="/about-us" className="menu-link">
           About
         </Link>
         <Link href="/help" className="menu-link">
@@ -84,16 +84,16 @@ const MobileNavbar = () => {
         } transition-all duration-300 ease-in-out`}
       >
         <div className="flex flex-col gap-4 pt-2">
-          <Link href="/recommend" className="menu-link">
+          <Link href="/find-products" className="menu-link">
             Recommend Products
           </Link>
-          <Link href="/alternatives" className="menu-link">
+          <Link href="/find-alternatives" className="menu-link">
             Find Alternatives
           </Link>
-          <Link href="/regimen" className="menu-link">
+          <Link href="/build-regimen" className="menu-link">
             Build Regimen
           </Link>
-          <Link href="/about" className="menu-link">
+          <Link href="/about-us" className="menu-link">
             About
           </Link>
           <Link href="/help" className="menu-link">

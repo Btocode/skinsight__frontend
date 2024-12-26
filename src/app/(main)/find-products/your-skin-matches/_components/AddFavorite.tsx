@@ -33,7 +33,7 @@ const AddFavorite = () => {
         <span>Add to routine</span>
       </button>
       <Modal isOpen={open} onClose={onClose}>
-        <div className="bg-white rounded-3xl max-w-lg w-full mx-auto p-8 relative">
+        <div className="bg-white rounded-3xl  max-w-xs lg:max-w-lg w-full mx-auto py-8 lg:p-8 relative">
           {/* User Icon */}
           <div className="flex justify-center mb-2">
             <svg
@@ -70,7 +70,7 @@ const AddFavorite = () => {
 
           {/* Content */}
           <div className="text-center space-y-2">
-            <h2 className="text-2xl font-semibold leading-[32px] tracking-[-0.03em] text-center text-accent">
+            <h2 className="text-lg lg:text-2xl font-semibold leading-[26px] lg:leading-[32px] tracking-[-0.03em] text-center text-accent">
               Would you like to add your favorite products now and match with
               hundreds of skintwins?
             </h2>
@@ -79,7 +79,7 @@ const AddFavorite = () => {
               can also see how popular these products are with your skintwins.
             </p>
             {/* Buttons */}
-            <div className="flex flex-col sm:flex-row gap-4 justify-center pt-4">
+            <div className="flex  gap-4 justify-center pt-4">
               <Button onClick={onConfirm}>Yes, Let&apos;s go</Button>
               <Button variant={"outline"} onClick={onClose}>
                 No, thanks

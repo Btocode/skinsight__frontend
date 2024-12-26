@@ -43,7 +43,7 @@ const ProductTabs = () => {
 
   return (
     <div className="flex flex-col gap-10">
-      <div className="max-w-2xl w-full mx-auto flex items-center justify-center">
+      <div className=" max-w-sm lg:max-w-2xl w-full mx-auto flex items-center justify-center">
         {[
           { id: "1", label: "Top alternatives" },
           { id: "2", label: "Build your regimen" },

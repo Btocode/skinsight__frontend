@@ -49,7 +49,7 @@ export default function ProductGallery() {
               >
                 <div
                   onClick={() => setGalleryItem(item.image)}
-                  className="w-[86px] h-[86px] rounded-full border-2 border-rose-300 flex items-center justify-center overflow-hidden mb-2"
+                  className="w-16 h-16 lg:w-[86px] lg:h-[86px] rounded-full border-2 border-rose-300 flex items-center justify-center overflow-hidden mb-2"
                 >
                   <div className="w-20 h-20 rounded-full border-2 border-gray-50 overflow-hidden relative">
                     <Image

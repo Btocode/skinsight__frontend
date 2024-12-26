@@ -11,7 +11,7 @@ const Tag = ({ variant, children }: TagProps) => {
   return (
     <div
       className={cn(
-        "flex items-center gap-4 bg-[#13DE9B1A] px-4 py-3 rounded-xl bg-clip-padding backdrop-filter backdrop-blur-lg bg-opacity-60 text-green-500 relative",
+        "flex items-center gap-4 bg-[#13DE9B1A] px-2 lg:px-4 py-2 lg:py-3 rounded-xl bg-clip-padding backdrop-filter backdrop-blur-lg bg-opacity-60 text-green-500 relative",
         {
           "bg-[#13DE9B1A] text-green-500": variant === "matched",
           "bg-[#8599FE1A] text-purple-500": variant === "most_viewed",
@@ -28,7 +28,7 @@ const Tag = ({ variant, children }: TagProps) => {
           "bg-[#80E8DE]": variant === "popular",
         })}
       ></span>
-      <span>{children}</span>
+      <span className="text-sm lg:text-base">{children}</span>
     </div>
   );
 };

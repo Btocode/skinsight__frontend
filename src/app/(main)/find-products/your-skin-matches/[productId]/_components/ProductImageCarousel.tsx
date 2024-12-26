@@ -22,7 +22,7 @@ const ProductImageCarousel = () => {
   };
 
   return (
-    <div className="w-[600px] bg-white border rounded-xl p-4 space-y-4">
+    <div className="w-full lg:mx-0 lg:w-[600px] bg-white border rounded-xl p-4 space-y-4">
       <div className="flex items-center gap-2">
         <Tag variant="matched">99% matched</Tag>
         <Tag variant="best_rated">Most loved by your skintwins</Tag>
@@ -52,7 +52,7 @@ const ProductImageCarousel = () => {
           </svg>
         </Button>
 
-        <div className="relative w-[380px] h-[500px]">
+        <div className="relative w-[300px] h-[320px] lg:h-[500px]">
           <Image
             src={images[index]}
             alt="product"

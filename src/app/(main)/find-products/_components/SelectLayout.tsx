@@ -7,14 +7,15 @@ import SelectSkinConcern from "./SelectSkinConcern";
 import SelectAge from "./SelectAge";
 import SelectRegion from "./SelectRegion";
 import FindPerfectMatch from "./FindPerfectMatch";
-import Image from "next/image";
+import GradientImage from "@/components/common/GradientImage";
+import HeadingPrimary from "@/components/common/HeadingPrimary";
 
 const SelectLayout = ({ name }: { name: string }) => {
   const getText: { [key: string]: JSX.Element | string } = {
     gender: "What’s your gender?",
     "skin-type": "What’s your skin type?",
     complexion: "What’s your complexion?",
-    "skin-concern": "What’s are skin concerns?",
+    "skin-concern": "What are your skin concerns?",
     age: "What’s your age?",
     region: "Select your region",
     "find-perfect-match": (
@@ -35,34 +36,23 @@ const SelectLayout = ({ name }: { name: string }) => {
   };
 
   return (
-    <section className="container flex justify-center items-center min-h-[85svh] relative">
-      <div className="flex flex-col gap-8">
-        <div className="space-y-6">
+    <section className="container flex justify-center lg:items-center min-h-[85svh] py-10 relative">
+      <div className="w-full lg:w-auto lg:space-y-8">
+        <div className="lg:space-y-6">
           <BackButton />
           {/* range slider */}
           {name === "find-perfect-match" && (
-            <div className="h-5 w-full  bg-[#8F80E829] relative rounded-full overflow-hidden">
+            <div className="h-5 w-full  bg-[#8F80E829] relative rounded-full overflow-hidden mb-1 lg:mb-0">
               <span className="absolute top-0 left-0 w-1/2 h-full rounded-r-full bg-[#8F80E8] "></span>
             </div>
           )}
-          <h2 className="heading-primary">{getText[name]}</h2>
+          <HeadingPrimary className="leading-[44px]">
+            {getText[name]}
+          </HeadingPrimary>
         </div>
         {components[name]}
       </div>
-      <Image
-        src={"/gradient1.png"}
-        alt="gradient1"
-        width={550}
-        height={420}
-        className="absolute left-0 -top-20 lg:top-10 -z-10"
-      />
-      <Image
-        src={"/gradient2.png"}
-        alt="gradient1"
-        width={800}
-        height={475}
-        className="absolute top-[700px] lg:top-[520px] -right-20 lg:right-64 -z-10"
-      />
+      <GradientImage />
     </section>
   );
 };

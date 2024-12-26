@@ -98,7 +98,7 @@ function FilterModal() {
   };
 
   return (
-    <div className="bg-white w-[500px] py-4 mt-2 overflow-hidden space-y-4">
+    <div className="bg-white w-[380px] lg:w-[500px] py-4 mt-2 overflow-hidden space-y-4">
       {/* Sort Section */}
       <div className="w-full space-y-2">
         <div className="flex items-center justify-between px-6">
@@ -205,19 +205,19 @@ function FilterModal() {
       </div>
 
       {/* Action Buttons */}
-      <div className="px-8 flex gap-4">
+      <div className="px-8 flex justify-start gap-4">
         <Button
           onClick={() =>
             console.log("Applied:", { sortOptions, filterOptions })
           }
-          className="flex-1 rounded-full"
+          className="lg:flex-1 rounded-full"
         >
           Apply
         </Button>
         <Button
           variant={"outline"}
           onClick={handleClear}
-          className="flex-1 rounded-full"
+          className="lg:flex-1 rounded-full"
         >
           Clear
         </Button>

@@ -1,5 +1,5 @@
+import GradientImage from "@/components/common/GradientImage";
 import { cn } from "@/lib/utils";
-import Image from "next/image";
 
 export default function SkeletonLoader() {
   return (
@@ -22,20 +22,7 @@ export default function SkeletonLoader() {
         ))}
       </div>
 
-      <Image
-        src={"/gradient1.png"}
-        alt="gradient1"
-        width={550}
-        height={420}
-        className="absolute -left-[250px] -top-20 lg:top-10 -z-10"
-      />
-      <Image
-        src={"/gradient2.png"}
-        alt="gradient1"
-        width={800}
-        height={475}
-        className="absolute top-[700px] lg:top-[520px] -right-20 lg:right-64 -z-10"
-      />
+      <GradientImage />
     </div>
   );
 }

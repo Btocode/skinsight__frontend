@@ -12,7 +12,7 @@ const Card = ({ children, className, circleClassName }: CardProps) => {
   return (
     <div
       className={cn(
-        "w-[200px] h-[180px] rounded-xl bg-[#8599FE26] relative",
+        "w-full lg:w-[200px] h-[180px] rounded-xl bg-[#8599FE26] relative",
         className
       )}
     >

@@ -82,7 +82,9 @@ const Modal: React.FC<ModalProps> = ({
               />
             </svg>
           </button>
-          <div className={cn("relative p-6 flex-auto", contentClassName)}>
+          <div
+            className={cn("relative p-2 lg:p-6 flex-auto", contentClassName)}
+          >
             {children}
           </div>
         </div>
