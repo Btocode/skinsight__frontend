@@ -8,11 +8,12 @@ const ComfortableProductCount = () => {
   const router = useRouter();
   return (
     <div className="max-w-2xl w-full space-y-6">
-      <HeadingPrimary className="lg:text-[50px] leading-[52px]">
-        How many products are you comfortable using <br /> in a regimen?
+      <HeadingPrimary className="lg:text-[50px] leading-[44px] lg:leading-[52px]">
+        How many products are you comfortable using{" "}
+        <br className="hidden lg:block" /> in a regimen?
       </HeadingPrimary>
 
-      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-x-4 gap-y-8">
+      <div className="grid grid-cols-2 md:grid-cols-3 gap-x-4 gap-y-8">
         {["3-4", "5-6", "7+"].map((i) => {
           return (
             <div
@@ -21,7 +22,7 @@ const ComfortableProductCount = () => {
               }
               key={i}
               className={cn(
-                "w-[200px] h-[180px] rounded-xl bg-[#8599FE26] relative"
+                "lg:w-[200px] h-[180px] rounded-xl bg-[#8599FE26] relative"
               )}
             >
               <span

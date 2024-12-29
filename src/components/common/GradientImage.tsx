@@ -22,7 +22,7 @@ const GradientImage = ({ firstImage, secondImage }: GradientImageProps) => {
         width={firstImage?.width ?? 600}
         height={firstImage?.height ?? 420}
         className={cn(
-          "fixed left-0 -top-20 lg:top-20 -z-10",
+          "fixed -left-32 top-10 lg:left-0 lg:top-20 -z-10",
           firstImage?.className
         )}
       />
@@ -32,7 +32,7 @@ const GradientImage = ({ firstImage, secondImage }: GradientImageProps) => {
         width={secondImage?.width ?? 800}
         height={secondImage?.height ?? 475}
         className={cn(
-          "fixed top-[700px] lg:top-[520px] -right-20 lg:right-52 -z-10",
+          "fixed top-[500px] -right-36 lg:right-52 lg:top-[520px]  -z-10",
           secondImage?.className
         )}
       />

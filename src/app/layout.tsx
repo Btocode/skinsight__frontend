@@ -2,6 +2,14 @@
 import { ReduxProvider } from "@/lib/redux/ReduxProvider";
 import { DM_Sans } from "next/font/google";
 import "./globals.css";
+import { Metadata } from "next";
+
+export const metadata: Metadata = {
+  title: {
+    default: "Skinsight",
+    template: "%s | Skinsight",
+  },
+};
 
 const dmSans = DM_Sans({
   subsets: ["latin"],

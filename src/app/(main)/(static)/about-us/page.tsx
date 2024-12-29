@@ -1,6 +1,5 @@
 import HeadingPrimary from "@/components/common/HeadingPrimary";
 import { cn } from "@/lib/utils";
-import Image from "next/image";
 
 const AboutUs = () => {
   const styles = {
@@ -10,13 +9,13 @@ const AboutUs = () => {
   return (
     <section className="container py-10">
       <div>
-        <p className="text-accent text-[24px] leading-[26px] font-semibold mb-2">
+        <p className="text-accent text-lg lg:text-[24px] leading-[26px] font-semibold mb-2">
           More about
         </p>
-        <HeadingPrimary className="lg:text-4xl">
+        <HeadingPrimary className="lg:text-4xl leading-[44px]">
           Skinsight & our journey
         </HeadingPrimary>
-        <hr className="w-full h-px my-8 bg-[#EFEFEF]" />
+        <hr className="hidden lg:block w-full h-px my-4 lg:my-8 bg-[#EFEFEF]" />
       </div>
       <article className="max-w-[1350px] mx-auto mt-10">
         <div className="space-y-2">
@@ -39,13 +38,13 @@ const AboutUs = () => {
             unchanged.
           </p>
         </div>
-        <div className="flex justify-between gap-10 my-8">
+        <div className="flex flex-col lg:flex-row justify-between gap-10 my-8">
           <h4 className={cn(styles.heading, "max-w-[620px]")}>
             Lorem Ipsum is simply dummy text of the printing and typesetting
             industry. Lorem Ipsum has been the industry&apos;s standard dummy
             text ever since the 1500s, when an unknown printer took a galley.
           </h4>
-          <h4 className="max-w-[400px] text-[14px] font-bold leading-[26px] tracking-[2px] text-[#15143966]">
+          <h4 className="max-w-[400px] text-base lg:text-[14px] font-bold leading-[26px] tracking-[2px] text-[#15143966]">
             Lorem Ipsum is simply dummy text of the printing and typesetting
             industry. Lorem Ipsum has been the industry.
           </h4>
@@ -110,20 +109,6 @@ const AboutUs = () => {
           </p>
         </div>
       </article>
-      <Image
-        src={"/gradient1.png"}
-        alt="gradient1"
-        width={700}
-        height={500}
-        className="fixed -left-20 -top-20 lg:top-10 -z-10"
-      />
-      <Image
-        src={"/gradient2.png"}
-        alt="gradient3"
-        width={800}
-        height={200}
-        className="fixed top-[700px] lg:top-[500px] -right-32 -z-10"
-      />
     </section>
   );
 };

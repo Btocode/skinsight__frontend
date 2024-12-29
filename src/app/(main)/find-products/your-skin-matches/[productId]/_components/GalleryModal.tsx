@@ -40,7 +40,7 @@ board-write; encrypted-media; gyroscope; picture-in-picture; web-share"
         <h2 className="text-lg lg:text-[32px] font-semibold leading-[26px] lg:leading-[32px] tracking-[-0.02em] lg:text-center">
           Watermelon Glow PHA+BHA
         </h2>
-        <div className="mt-8 pb-2 max-w-2xl mx-auto  flex  justify-between gap-4 overflow-x-auto scroll-smooth hide-scrollbar">
+        <div className="mt-8 pb-2 max-w-xs lg:max-w-2xl mx-auto  flex  justify-between gap-4 overflow-x-auto scroll-smooth hide-scrollbar">
           {galleryItems.map((item) => (
             <div
               key={item.id}

@@ -3,7 +3,7 @@ import { Switch } from "@/components/common/Switch";
 
 const MarketingPreference = ({ onClose }: { onClose: () => void }) => {
   return (
-    <div className="w-[550px]">
+    <div className="w-[380px] lg:w-[550px]">
       <Button
         variant={"back"}
         onClick={onClose}
@@ -27,7 +27,7 @@ const MarketingPreference = ({ onClose }: { onClose: () => void }) => {
       >
         Back
       </Button>
-      <h2 className="text-2xl font-semibold leading-[36px] tracking-[-0.02em] text-[#111111]">
+      <h2 className="text-base lg:text-xl font-semibold leading-[36px] tracking-[-0.02em] text-[#111111]">
         Marketing preferences
       </h2>
       <hr className="w-full h-px my-6 bg-[#EFEFEF]" />
@@ -46,7 +46,7 @@ export default MarketingPreference;
 const Step = ({ label, enabled }: { label: string; enabled: boolean }) => {
   return (
     <li className="flex items-center justify-between cursor-pointer">
-      <span className="text-xl font-semibold leading-[30px] tracking-[-0.03em] text-[#575656]">
+      <span className="text-base lg:text-xl font-semibold leading-[30px] tracking-[-0.03em] text-[#575656]">
         {label}
       </span>
       <Switch enabled={enabled} onToggle={() => {}} />

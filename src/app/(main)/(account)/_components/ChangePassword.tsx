@@ -3,7 +3,7 @@ import { InputBox } from "@/components/common/InputBox";
 
 const ChangePassword = ({ onClose }: { onClose: () => void }) => {
   return (
-    <div className="w-[550px]">
+    <div className="w-[380px] lg:w-[550px]">
       <Button
         variant={"back"}
         onClick={onClose}
@@ -27,7 +27,7 @@ const ChangePassword = ({ onClose }: { onClose: () => void }) => {
       >
         Back
       </Button>
-      <h2 className="text-2xl font-semibold leading-[36px] tracking-[-0.02em] text-[#111111]">
+      <h2 className="text-base lg:text-xl font-semibold leading-[36px] tracking-[-0.02em] text-[#111111]">
         Change password
       </h2>
       <hr className="w-full h-px my-6 bg-[#EFEFEF]" />

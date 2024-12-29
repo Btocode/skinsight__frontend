@@ -1,6 +1,5 @@
 import BackButton from "@/components/common/BackButton";
 import HeadingPrimary from "@/components/common/HeadingPrimary";
-import Image from "next/image";
 
 const PrivacyPolicyPage = () => {
   const styles = {
@@ -11,8 +10,10 @@ const PrivacyPolicyPage = () => {
     <section className="container py-10">
       <div>
         <BackButton />
-        <HeadingPrimary className="lg:text-4xl">Privacy Policy</HeadingPrimary>
-        <hr className="w-full h-px my-8 bg-[#EFEFEF]" />
+        <HeadingPrimary className="lg:text-4xl leading-[44px]">
+          Privacy Policy
+        </HeadingPrimary>
+        <hr className="hidden lg:block w-full h-px my-4 lg:my-8 bg-[#EFEFEF]" />
       </div>
       <article className="max-w-[1350px] mx-auto mt-10 flex flex-col gap-8">
         <div className="space-y-8">
@@ -84,20 +85,6 @@ const PrivacyPolicyPage = () => {
           </p>
         </div>
       </article>
-      <Image
-        src={"/gradient1.png"}
-        alt="gradient1"
-        width={700}
-        height={500}
-        className="fixed -left-20 -top-20 lg:top-10 -z-10"
-      />
-      <Image
-        src={"/gradient2.png"}
-        alt="gradient3"
-        width={800}
-        height={200}
-        className="fixed top-[700px] lg:top-[500px] -right-32 -z-10"
-      />
     </section>
   );
 };

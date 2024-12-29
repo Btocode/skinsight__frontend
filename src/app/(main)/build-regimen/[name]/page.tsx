@@ -36,7 +36,7 @@ const BuilderRegimen = async ({
   };
 
   return (
-    <section className="container flex justify-center items-center min-h-[85svh] relative">
+    <section className="container flex justify-center lg:items-center min-h-[85svh] py-10 relative">
       <div className="flex flex-col  items-start gap-2">
         <BackButton />
         {components[name]}

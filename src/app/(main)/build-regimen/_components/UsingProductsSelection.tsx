@@ -8,21 +8,21 @@ const items = ["Add a cleanser", "Add a SPF", "Add a moisturiser"];
 const UsingProductsSelection = () => {
   return (
     <div className="max-w-2xl w-full space-y-6">
-      <article className="space-y-4">
-        <h4 className="text-accent text-2xl font-semibold leading-[26px]">
+      <article className="lg:space-y-4">
+        <h4 className="hidden lg:block text-accent text-2xl font-semibold leading-[26px]">
           Build your personal
         </h4>
-        <HeadingPrimary className="lg:text-[50px] leading-[52px]">
-          Skin regimen
+        <HeadingPrimary className="lg:text-[50px] leading-[44px] lg:leading-[52px]">
+          <span>Build your personal</span> Skin regimen
         </HeadingPrimary>
-        <p className="text-accent text-lg font-normal leading-[27px] tracking-[-0.03em]">
+        <p className="hidden lg:block text-accent text-lg font-normal leading-[27px] tracking-[-0.03em]">
           Fill out the products you use and let us generate your new regimen
           with missing products and let you know about the products not suited
           for your skin
         </p>
       </article>
 
-      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-8">
+      <div className="grid grid-cols-2 md:grid-cols-3 gap-8">
         {items.map((item) => {
           return (
             <label

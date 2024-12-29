@@ -2,7 +2,6 @@
 import { Accordion } from "@/components/common/Accordion";
 import Button from "@/components/common/Button";
 import HeadingPrimary from "@/components/common/HeadingPrimary";
-import Image from "next/image";
 import Link from "next/link";
 import { useState } from "react";
 
@@ -48,11 +47,13 @@ const HelpPage = () => {
   return (
     <section className="container py-10">
       <div>
-        <p className="text-accent text-[24px] leading-[26px] font-semibold mb-2">
+        <p className="text-accent text-lg lg:text-[24px] leading-[26px] font-semibold mb-2">
           Learn more about
         </p>
-        <HeadingPrimary className="lg:text-4xl">Skinsight</HeadingPrimary>
-        <hr className="w-full h-px my-8 bg-[#EFEFEF]" />
+        <HeadingPrimary className="lg:text-4xl leading-[44px]">
+          Skinsight
+        </HeadingPrimary>
+        <hr className="hidden lg:block w-full h-px my-4 lg:my-8 bg-[#EFEFEF]" />
       </div>
       <article className="max-w-[1350px] mx-auto mt-10 flex flex-col gap-8">
         <div className="space-y-2">
@@ -92,7 +93,7 @@ const HelpPage = () => {
 
         <div className="space-y-4">
           <h4 className={styles.heading}>Frequently asked questions</h4>
-          <div className="flex  items-center gap-10">
+          <div className="flex flex-col lg:flex-row items-center gap-10">
             <div className="space-y-2 lg:w-2/3">
               {faqs.map((item, _idx) => (
                 <Accordion
@@ -106,7 +107,7 @@ const HelpPage = () => {
                 />
               ))}
             </div>
-            <div className="w-[222px] ml-auto space-y-2">
+            <div className="w-[222px] mr-auto lg:ml-auto space-y-2">
               <h2 className="text-[14px] font-bold leading-[26px] tracking-[2px] text-[#15143966] uppercase">
                 Have more Questions?
               </h2>
@@ -148,20 +149,6 @@ const HelpPage = () => {
           </Link>
         </p>
       </article>
-      <Image
-        src={"/gradient1.png"}
-        alt="gradient1"
-        width={700}
-        height={500}
-        className="fixed -left-20 -top-20 lg:top-10 -z-10"
-      />
-      <Image
-        src={"/gradient2.png"}
-        alt="gradient3"
-        width={800}
-        height={200}
-        className="fixed top-[700px] lg:top-[500px] -right-32 -z-10"
-      />
     </section>
   );
 };

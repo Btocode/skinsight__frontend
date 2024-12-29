@@ -41,8 +41,8 @@ const SettingsModal = () => {
         ) : state === "delete-success" ? (
           <AccountDeleteSuccess onClose={onStateClose} />
         ) : (
-          <div className="w-[550px]">
-            <h2 className="text-2xl font-semibold leading-[36px] tracking-[-0.02em] text-[#111111]">
+          <div className="w-[380px] lg:w-[550px]">
+            <h2 className="text-2xl font-semibold leading-[36px] tracking-[-0.02em] text-[#111111] mt-2 lg:mt-0">
               Account Settings
             </h2>
             <hr className="w-full h-px my-6 bg-[#EFEFEF]" />
@@ -80,7 +80,7 @@ const Step = ({ label, onClick }: { label: string; onClick: () => void }) => {
       onClick={onClick}
       className="flex items-center justify-between cursor-pointer"
     >
-      <span className="text-xl font-semibold leading-[30px] tracking-[-0.03em] text-[#575656]">
+      <span className="text-base lg:text-xl font-semibold leading-[30px] tracking-[-0.03em] text-[#575656]">
         {label}
       </span>
       <span className="inline-block -rotate-90">

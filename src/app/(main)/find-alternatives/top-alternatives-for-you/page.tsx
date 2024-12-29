@@ -6,6 +6,7 @@ import TopAlternativesProducts from "./_components/TopAlternativesProducts";
 import { notFound } from "next/navigation";
 import Advertisement from "@/components/common/Advertisement";
 import GradientImage from "@/components/common/GradientImage";
+import FindAlternativesBannerImg from "../../../../../public//find-alternatives/bannerimg.png";
 
 const getProducts = async () => {
   const response = await fetch("http://localhost:3000/api/find-alternatives");
@@ -21,31 +22,40 @@ const TopAlternativesForYouPage = async () => {
   return (
     <section className="container py-10">
       <div className="flex flex-col lg:flex-row justify-between gap-4">
-        <article className=" space-y-6">
-          <p className="text-2xl font-semibold leading-[26px]">
+        <article className="space-y-4 lg:space-y-6">
+          <p className="text-lg lg:text-2xl font-semibold leading-[26px]">
             Find alternatives
           </p>
-          <HeadingPrimary className="lg:text-[34px] leading-[34px]">
+          <HeadingPrimary className="leading-[44px] lg:text-[34px] ">
             Select your target product
           </HeadingPrimary>
-          <Combobox
-            options={[
-              { label: "Brand 1", value: "brand1" },
-              { label: "Brand 2", value: "brand2" },
-              { label: "Brand 3", value: "brand3" },
-            ]}
-            placeholder="Select brand"
+          <Image
+            src={FindAlternativesBannerImg}
+            alt="Find Products"
+            width={250}
+            height={250}
+            className="lg:hidden mx-auto rounded-lg"
           />
-          <Combobox
-            options={[
-              { label: "Product 1", value: "Product1" },
-              { label: "Product 2", value: "Product2" },
-              { label: "Product 3", value: "Product3" },
-            ]}
-            placeholder="Select product"
-          />
+          <div className="space-y-6">
+            <Combobox
+              options={[
+                { label: "Brand 1", value: "brand1" },
+                { label: "Brand 2", value: "brand2" },
+                { label: "Brand 3", value: "brand3" },
+              ]}
+              placeholder="Select brand"
+            />
+            <Combobox
+              options={[
+                { label: "Product 1", value: "Product1" },
+                { label: "Product 2", value: "Product2" },
+                { label: "Product 3", value: "Product3" },
+              ]}
+              placeholder="Select product"
+            />
+          </div>
         </article>
-        <div className="relative w-[300px] h-[250px] mt-16 lg:mt-0">
+        <div className="hidden lg:block relative w-[300px] h-[250px] mt-16 lg:mt-0">
           <Image
             src={"/find-alternatives/bannerimg.png"}
             alt="Find Products"
