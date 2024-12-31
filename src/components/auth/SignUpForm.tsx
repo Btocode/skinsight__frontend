@@ -2,34 +2,39 @@
 
 import { InputBox } from "@/components/common/InputBox";
 import Link from "next/link";
+import HeadingPrimary from "../common/HeadingPrimary";
+import { usePathname } from "next/navigation";
 
 /**
- * A form component for user sign-in.
+ * A form component for user sign up.
  *
- * This component renders a sign-in form with fields for email and password.
- * It includes a submit button for signing in and social login buttons for
- * alternative sign-in options. Additionally, it provides a link to the sign-up
- * page for users who don't have an account.
+ * This component renders a sign up form with fields for name, email address, and password.
+ * It includes a submit button for signing up and social login buttons for alternative
+ * sign up options. Additionally, it provides a link to the sign in page for users who
+ * already have an account.
  *
- * The form is styled to be responsive and visually appealing, with a gradient
- * background on the heading and hover effects on buttons.
+ * The form is styled to be responsive and visually appealing, with a gradient background
+ * on the heading and hover effects on buttons.
  *
- * @returns A JSX element containing the sign-in form.
+ * @returns A JSX element containing the sign up form.
  */
-const SignInForm = () => {
+const SignUpForm = () => {
+  const pathname = usePathname();
+
   return (
-    <div className="bg-white rounded-3xl w-full lg:w-[500px] mx-auto p-6 relative">
-      <div className="text-center mb-8">
-        <h1 className="text-4xl font-semibold mb-4 bg-gradient-to-r from-blue-400 to-violet-400 text-transparent bg-clip-text">
-          Log into your account
-        </h1>
-        <p className="text-gray-600 text-base">
-          View your saved searches, skincare routine and more
+    <div className="bg-white rounded-3xl w-full relative  lg:px-[100px] py-4 lg:py-[52px]">
+      <div className="text-center mb-8 mt-4">
+        <HeadingPrimary className="text-[28px] leading-8 lg:text-4xl lg:leading-10 lg:tracking-[-3%] ">
+          Sign up to get personalized recommendations
+        </HeadingPrimary>
+        <p className="text-gray-600 text-base leading-6 tracking-[-2%]">
+          Discover products that work for you - no more guessing!
         </p>
       </div>
 
       {/* Form */}
-      <form className="space-y-5">
+      <form className="lg:px-[32px] space-y-5 lg:space-y-7">
+        <InputBox type="text" placeholder="Your name" id="name" />
         <InputBox type="email" placeholder="Enter email address" id="email" />
         <InputBox type="password" placeholder="Enter password" id="password" />
 
@@ -39,7 +44,7 @@ const SignInForm = () => {
             type="submit"
             className="w-full bg-[#8599FE] hover:bg-blue-500 text-white rounded-xl py-3 text-lg font-medium transition-colors"
           >
-            Sign In
+            Sign up
           </button>
 
           {/* Social Login */}
@@ -76,12 +81,12 @@ const SignInForm = () => {
 
         {/* Sign In Link */}
         <p className="text-center text-lg">
-          <span className="text-blue-400">Don’t have an account? </span>
+          <span className="text-blue-400">Already have an account? </span>
           <Link
-            href="/sign-up"
+            href={`/${pathname}?auth=sign-in`}
             className="text-blue-500 hover:text-blue-600 font-medium"
           >
-            Sign Up
+            Sign in
           </Link>
         </p>
       </form>
@@ -89,4 +94,4 @@ const SignInForm = () => {
   );
 };
 
-export default SignInForm;
+export default SignUpForm;

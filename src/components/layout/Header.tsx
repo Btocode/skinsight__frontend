@@ -3,6 +3,8 @@ import Image from "next/image";
 import Link from "next/link";
 import { useCallback, useState } from "react";
 import { cn } from "@/lib/utils";
+import { usePathname, useRouter } from "next/navigation";
+import AuthActionModal from "../auth/AuthActionModal";
 
 const menuItems = [
   {
@@ -28,15 +30,26 @@ const menuItems = [
 ];
 
 export const Header: React.FC = () => {
+  const router = useRouter();
+  const pathname = usePathname();
+
+  const onOpenAuthModal = useCallback(() => {
+    router.push(`${pathname}?auth=sign-in`);
+  }, [pathname, router]);
   return (
     <header className="bg-white border-b sticky top-0 z-50">
-      <DesktopNavbar />
-      <MobileNavbar />
+      <DesktopNavbar onOpenAuthModal={onOpenAuthModal} />
+      <MobileNavbar onOpenAuthModal={onOpenAuthModal} />
+      <AuthActionModal />
     </header>
   );
 };
 
-const DesktopNavbar = () => {
+const DesktopNavbar = ({
+  onOpenAuthModal,
+}: {
+  onOpenAuthModal: () => void;
+}) => {
   return (
     <nav className="hidden container py-6 lg:flex items-center justify-between">
       <Link href="/">
@@ -56,20 +69,21 @@ const DesktopNavbar = () => {
           </Link>
         ))}
 
-        <Link href="/sign-in">
-          <button className="text-base font-medium border-2 rounded-full px-6 py-2 text-foreground">
-            Log in
-          </button>
-        </Link>
+        <button
+          onClick={onOpenAuthModal}
+          type="button"
+          className="text-base font-medium border-2 rounded-full px-6 py-2 text-foreground"
+        >
+          Log in
+        </button>
       </div>
     </nav>
   );
 };
 
-const MobileNavbar = () => {
+const MobileNavbar = ({ onOpenAuthModal }: { onOpenAuthModal: () => void }) => {
   const [isOpen, setIsOpen] = useState(false);
   const onClose = useCallback(() => setIsOpen(false), []);
-
   return (
     <nav id="menu" className="container block lg:hidden">
       <div className=" py-6 flex items-center justify-between">
@@ -109,7 +123,7 @@ const MobileNavbar = () => {
       ></div>
       <div
         className={cn(
-          `fixed inset-0 mt-20 rounded-t-lg overflow-hidden bg-white z-50 transition-transform duration-300 ease-in-out`,
+          `fixed inset-0 mt-4 rounded-t-lg overflow-hidden bg-white z-50 transition-transform duration-300 ease-in-out`,
           {
             "translate-y-0": isOpen,
             "translate-y-full": !isOpen,
@@ -162,11 +176,16 @@ const MobileNavbar = () => {
                 </li>
               ))}
               <li>
-                <Link href={"/sign-in"}>
-                  <button className="py-3 px-6 rounded-full border border-[#1E0B4B] text-[#1E0B4B] hover:bg-gray-50 transition-colors">
-                    Sign Up or Sign in
-                  </button>
-                </Link>
+                <button
+                  type="button"
+                  onClick={() => {
+                    onClose();
+                    onOpenAuthModal();
+                  }}
+                  className="py-3 px-6 rounded-full border border-[#1E0B4B] text-[#1E0B4B] hover:bg-gray-50 transition-colors"
+                >
+                  Sign Up or Sign in
+                </button>
               </li>
             </ul>
           </nav>

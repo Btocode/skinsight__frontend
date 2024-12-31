@@ -14,7 +14,7 @@ export function generateStaticParams() {
   return folderNames.map((name) => ({ name }));
 }
 
-const page = async ({ params }: { params: Promise<{ name: string }> }) => {
+const Page = async ({ params }: { params: Promise<{ name: string }> }) => {
   const name = (await params).name;
 
   if (!folderNames.includes(name)) {
@@ -24,4 +24,4 @@ const page = async ({ params }: { params: Promise<{ name: string }> }) => {
   return <SelectLayout name={name} />;
 };
 
-export default page;
+export default Page;

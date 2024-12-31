@@ -26,10 +26,11 @@ export function InputBox({
           {label}
         </label>
       )}
+
       <input
         {...props}
         className={cn(
-          "w-full px-4 py-4 rounded-xl bg-blue-50/80 border-0 focus:ring-2 focus:ring-blue-400 placeholder-gray-500",
+          "w-full px-4 py-4 rounded-xl text-xl bg-[#8599FE26] border-0 focus:ring-2 focus:ring-blue-400 placeholder-[#2C2C2C] text-[#2C2C2C]",
           props.className
         )}
       />

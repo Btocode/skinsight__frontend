@@ -1,4 +1,5 @@
 import { InputBox } from "@/components/common/InputBox";
+import HeadingPrimary from "../common/HeadingPrimary";
 
 /**
  * A form for users to enter their email address and receive a password reset link.
@@ -12,26 +13,28 @@ import { InputBox } from "@/components/common/InputBox";
  */
 const ForgotPasswordForm = () => {
   return (
-    <div className="bg-white rounded-3xl w-full lg:w-[500px] mx-auto p-6 relative">
+    <div className="bg-white rounded-3xl w-full relative lg:px-[112px] py-4 lg:py-[52px]">
       <div className="text-center mb-8">
-        <h1 className="text-4xl font-semibold mb-4 bg-gradient-to-r from-blue-400 to-violet-400 text-transparent bg-clip-text">
+        <HeadingPrimary className="text-[28px] leading-8 lg:text-4xl lg:leading-10 lg:tracking-[-3%] ">
           Enter your email address
-        </h1>
-        <p className="text-gray-600 text-base">
+        </HeadingPrimary>
+        <p className="text-gray-600 text-base leading-6 tracking-[-2%]">
           We’ll send you a password reset link
         </p>
       </div>
 
       {/* Form */}
-      <form className="space-y-5">
+      <form className=" space-y-5 lg:pace-y-7 lg:px-[20px]">
         <InputBox type="email" placeholder="Enter email address" id="email" />
 
-        <button
-          type="submit"
-          className="w-full bg-[#8599FE] hover:bg-blue-500 text-white rounded-xl py-3 text-lg font-medium transition-colors"
-        >
-          Send
-        </button>
+        <div className="lg:max-w-[240px] mx-auto">
+          <button
+            type="submit"
+            className=" w-full bg-[#8599FE] hover:bg-blue-500 text-white rounded-xl py-4 text-lg font-medium transition-colors"
+          >
+            Send
+          </button>
+        </div>
       </form>
     </div>
   );
