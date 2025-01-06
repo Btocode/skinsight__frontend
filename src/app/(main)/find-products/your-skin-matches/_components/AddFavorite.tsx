@@ -19,8 +19,11 @@ const AddFavorite = () => {
       <button
         id="add-favorite"
         type="button"
-        onClick={() => setOpen(true)}
-        className="flex flex-1 items-center justify-center gap-2 rounded-full bg-violet-100 py-3 text-violet-600 transition-colors hover:bg-violet-200"
+        onClick={(e) => {
+          e.stopPropagation();
+          setOpen(true);
+        }}
+        className="flex flex-1 items-center justify-center gap-2 rounded-[10px] bg-violet-100 py-4 text-violet-600 transition-colors hover:bg-violet-200"
       >
         <svg width="25" height="24" viewBox="0 0 25 24" fill="none">
           <path
@@ -29,8 +32,7 @@ const AddFavorite = () => {
             strokeWidth={2}
           />
         </svg>
-
-        <span>Add to routine</span>
+        Add to routine
       </button>
       <Modal isOpen={open} onClose={onClose}>
         <div className="bg-white rounded-3xl  max-w-xs lg:max-w-lg w-full mx-auto py-8 lg:p-8 relative">
@@ -80,7 +82,14 @@ const AddFavorite = () => {
             </p>
             {/* Buttons */}
             <div className="flex  gap-4 justify-center pt-4">
-              <Button onClick={onConfirm}>Yes, Let&apos;s go</Button>
+              <Button
+                onClick={(e) => {
+                  e.stopPropagation();
+                  onConfirm();
+                }}
+              >
+                Yes, Let&apos;s go
+              </Button>
               <Button variant={"outline"} onClick={onClose}>
                 No, thanks
               </Button>

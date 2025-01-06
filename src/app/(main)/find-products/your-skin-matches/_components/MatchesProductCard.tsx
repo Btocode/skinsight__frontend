@@ -3,6 +3,7 @@ import Image from "next/image";
 import AddFavorite from "./AddFavorite";
 import Tag from "@/components/common/Tag";
 import { useRouter } from "next/navigation";
+import { useRef } from "react";
 type ProductDetailsHandler = (
   e: React.MouseEvent<HTMLDivElement, MouseEvent>
 ) => void;
@@ -10,22 +11,15 @@ type ProductDetailsHandler = (
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 export function MatchesProductCard({ item }: { item: any }) {
   const router = useRouter();
-
-  const onProductDetails: ProductDetailsHandler = (e) => {
-    e.stopPropagation();
-    // check if i click on id buy-now or add-favorite return it
-    if (
-      e.target instanceof HTMLElement &&
-      (e.target.id === "buy-now" || e.target.id === "add-favorite")
-    ) {
-      return;
-    }
+  const cardRef = useRef<HTMLDivElement>(null);
+  const onProductDetails: ProductDetailsHandler = () => {
     router.push(`/find-products/your-skin-matches/${item.productTitle}`);
   };
 
   return (
     <div
       onClick={onProductDetails}
+      ref={cardRef}
       className="w-full rounded-xl bg-white p-6 shadow-[0px_5.13px_33.34px_0px_#2C2C2C17] border border-[#EFEFEF]"
     >
       <div className="flex flex-col gap-6 h-[450px]">
@@ -59,7 +53,7 @@ export function MatchesProductCard({ item }: { item: any }) {
           <button
             type="button"
             id="buy-now"
-            className="flex flex-1 items-center justify-center gap-2 rounded-full bg-pink-100 py-3 text-pink-600 transition-colors hover:bg-pink-200"
+            className="flex flex-1 items-center justify-center gap-2 rounded-[10px] bg-pink-100 py-4 text-pink-600 transition-colors hover:bg-pink-200"
           >
             <svg width="25" height="24" viewBox="0 0 25 24" fill="none">
               <path

@@ -33,6 +33,7 @@ export default function RootLayout({
           {children}
           {modal}
         </ReduxProvider>
+        <div id="modal" />
       </body>
     </html>
   );

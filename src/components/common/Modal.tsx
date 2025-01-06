@@ -10,6 +10,7 @@ interface ModalProps {
   className?: string;
   contentClassName?: string;
   closeBtnClassName?: string;
+  id?: string;
 }
 
 const Modal: React.FC<ModalProps> = ({
@@ -19,6 +20,7 @@ const Modal: React.FC<ModalProps> = ({
   className,
   contentClassName,
   closeBtnClassName,
+  id,
 }) => {
   const [isModalOpen, setIsModalOpen] = useState(isOpen);
 
@@ -55,6 +57,7 @@ const Modal: React.FC<ModalProps> = ({
 
   return (
     <div
+      id={id}
       className={cn(
         `fixed inset-0 z-50 flex items-center justify-center outline-none focus:outline-none transition-opacity duration-300`,
         className,
@@ -68,6 +71,7 @@ const Modal: React.FC<ModalProps> = ({
         className="fixed inset-0 bg-[#20293B8C] transition-opacity duration-300 ease-in-out"
         onClick={onClose}
         style={{ opacity: isModalOpen ? 0.5 : 0 }}
+        id="modal-backdrop"
       ></div>
       <div
         className={`relative w-auto  my-6 transition-all duration-300 ease-in-out ${
