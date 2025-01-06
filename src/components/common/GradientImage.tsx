@@ -1,5 +1,7 @@
+"use client";
 import { cn } from "@/lib/utils";
 import Image from "next/image";
+// import { useEffect, useState } from "react";
 
 type ImageProps = {
   className?: string;
@@ -14,6 +16,15 @@ type GradientImageProps = {
 };
 
 const GradientImage = ({ firstImage, secondImage }: GradientImageProps) => {
+  // const [mediaScreen] = useState(() =>
+  //   window.matchMedia("(min-width: 1024px)")
+  // );
+  // console.log(mediaScreen);
+
+  // useEffect(() => {
+  //   console.log(window.matchMedia("(min-width: 1024px)"));
+  // }, []);
+
   return (
     <>
       <Image

@@ -4,6 +4,7 @@ import Image from "next/image";
 import Link from "next/link";
 import FindProductImg from "../../../../public/find-products.png";
 import HeadingPrimary from "@/components/common/HeadingPrimary";
+import Button from "@/components/common/Button";
 
 const FindProductsPage = () => {
   return (
@@ -17,10 +18,11 @@ const FindProductsPage = () => {
           with the products most suitable products for your skin
         </p>
         <br />
-        <Link href={`/find-products/gender`} className="w-full block">
-          <button className="text-base font-medium rounded-lg px-12 py-3 bg-primary text-white">
-            Let&apos;s go
-          </button>
+        <Link
+          href={`/find-products/gender`}
+          className="w-full inline-block cursor-pointer"
+        >
+          <Button className="px-12">Let&apos;s go</Button>
         </Link>
       </article>
       <div className="hidden lg:block flex-1 relative h-[550px] mt-16 lg:mt-0">

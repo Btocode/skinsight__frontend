@@ -51,6 +51,7 @@ const FindAlternativesPage = () => {
       </div>
 
       <GradientImage
+        firstImage={{ url: "/gradient2.png", className: "lg:-left-[100px]" }}
         secondImage={{ url: "/gradient3.png", width: 400, height: 375 }}
       />
     </section>

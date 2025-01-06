@@ -23,7 +23,9 @@ const AuthActionModal = () => {
     "set-new-password": <SetNewPasswordForm />,
   };
 
-  const open = authAction !== null;
+  const keys = Object.keys(components);
+
+  const open = keys.includes(authAction as string);
 
   return (
     <>
