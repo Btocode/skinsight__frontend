@@ -17,6 +17,9 @@ importers:
       class-variance-authority:
         specifier: ^0.7.1
         version: 0.7.1
+      country-region-data:
+        specifier: ^3.1.0
+        version: 3.1.0
       next:
         specifier: 15.0.3
         version: 15.0.3(@babel/core@7.26.0)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
@@ -29,6 +32,9 @@ importers:
       react-redux:
         specifier: ^9.1.2
         version: 9.1.2(@types/react@18.3.12)(react@18.3.1)(redux@5.0.1)
+      redux-persist:
+        specifier: ^6.0.0
+        version: 6.0.0(react@18.3.1)(redux@5.0.1)
     devDependencies:
       '@jest/types':
         specifier: ^29.6.3
@@ -1129,6 +1135,9 @@ packages:
 
   core-util-is@1.0.2:
     resolution: {integrity: sha512-3lqz5YjWTYnW6dlDa5TLaTCcShfar1e40rmcJVwCBJC6mWlFuj0eCHIElmG1g5kyuJ/GD+8Wn4FFCcz4gJPfaQ==}
+
+  country-region-data@3.1.0:
+    resolution: {integrity: sha512-Xy5HoXk2byCS45+88ErCor/a0q6r22ur/Os69p71kfmescu3od4B1lpe7dQdAa0T9HYqqKX04QsrnZ5FmIWh9g==}
 
   create-jest@29.7.0:
     resolution: {integrity: sha512-Adz2bdH0Vq3F53KEMJOoftQFutWCukm6J24wbPWRO4k1kMY7gS7ds/uoJkNuV8wDCtWWnuwGcJwpWcih+zEW1Q==}
@@ -2575,6 +2584,15 @@ packages:
   redent@3.0.0:
     resolution: {integrity: sha512-6tDA8g98We0zd0GvVeMT9arEOnTw9qM03L9cJXaCjrip1OO764RDBLBfrB4cwzNGDj5OA5ioymC9GkizgWJDUg==}
     engines: {node: '>=8'}
+
+  redux-persist@6.0.0:
+    resolution: {integrity: sha512-71LLMbUq2r02ng2We9S215LtPu3fY0KgaGE0k8WRgl6RkqxtGfl7HUozz1Dftwsb0D/5mZ8dwAaPbtnzfvbEwQ==}
+    peerDependencies:
+      react: '>=16'
+      redux: '>4.0.0'
+    peerDependenciesMeta:
+      react:
+        optional: true
 
   redux-thunk@3.1.0:
     resolution: {integrity: sha512-NW2r5T6ksUKXCabzhL9z+h206HQw/NJkcLm1GPImRQ8IzfXwRGqjVhKJGauHirT0DAuyy6hjdnMZaRoAcy0Klw==}
@@ -4291,6 +4309,8 @@ snapshots:
   convert-source-map@2.0.0: {}
 
   core-util-is@1.0.2: {}
+
+  country-region-data@3.1.0: {}
 
   create-jest@29.7.0(@types/node@20.17.9):
     dependencies:
@@ -6073,6 +6093,12 @@ snapshots:
     dependencies:
       indent-string: 4.0.0
       strip-indent: 3.0.0
+
+  redux-persist@6.0.0(react@18.3.1)(redux@5.0.1):
+    dependencies:
+      redux: 5.0.1
+    optionalDependencies:
+      react: 18.3.1
 
   redux-thunk@3.1.0(redux@5.0.1):
     dependencies:

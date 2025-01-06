@@ -31,4 +31,12 @@
   .heading-primary {
     @apply text-4xl lg:text-6xl leading-[70px] font-semibold mb-4 bg-gradient-to-r from-blue-400 to-violet-400 text-transparent bg-clip-text;
   }
+
+  .hide-scrollbar {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+  }
+  .hide-scrollbar::-webkit-scrollbar {
+    display: none;
+  }
 }

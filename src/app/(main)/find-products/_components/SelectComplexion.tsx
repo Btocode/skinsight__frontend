@@ -1,50 +1,47 @@
-import Card from "./Card";
-
-const complexionOptions = [
-  {
-    title: "Pale",
-    description:
-      "The fairest of them all! Often delicate and prone to sunburn.",
-    icon: "👩🏻‍🦰",
-  },
-  {
-    title: "Light",
-    description:
-      "A natural brightness — usually burns but with some luck it can tan.",
-    icon: "👩🏻",
-  },
-  {
-    title: "Medium",
-    description:
-      "Burns sometimes, tans uniformly, carries the warmth of golden sunsets.",
-    icon: "👩🏼",
-  },
-  {
-    title: "Deep",
-    description:
-      "Rich and dark skin tones that radiate depth. Burns rarely, tans very easily.",
-    icon: "👩🏽",
-  },
-  {
-    title: "Dark",
-    description: "The deepest, most vibrant tones. Never burns!",
-    icon: "👩🏾‍🦱",
-  },
-];
+"use client";
+import { complexionOptions } from "@/utils/products";
+import { useAppDispatch, useAppSelector } from "@/lib/redux/hook";
+import { useRouter } from "next/navigation";
+import { setProductState } from "@/redux/slices/productSlice";
+import { cn } from "@/lib/utils";
 
 const SelectComplexion = () => {
+  const dispatch = useAppDispatch();
+  const complexion = useAppSelector((state) => state.product.complexion);
+  const router = useRouter();
+
+  const onComplexionChange = (item: string) => {
+    dispatch(setProductState({ key: "complexion", value: item }));
+    router.push("/find-products/skin-concern");
+  };
+
   return (
     <>
-      <p className="-mt-6">Select two from the options</p>
-      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-8">
+      <div className="max-w-max grid grid-cols-2 md:grid-cols-3 gap-5">
         {complexionOptions.map((item, index) => (
-          <Card key={index} className="w-[260px] h-[250px]">
-            <div className="space-y-1">
+          <div
+            key={index}
+            className={
+              "w-full lg:w-[200px] h-[180px] rounded-xl bg-[#8599FE26] relative pt-[11px] px-[13px] pb-2"
+            }
+            onClick={onComplexionChange.bind(null, item.title)}
+          >
+            <div
+              className={cn("w-6 h-6 rounded-full bg-[#FDFDFF]", {
+                "bg-green-400": complexion === item.title,
+              })}
+            />
+
+            <div className="space-y-0 mt-5">
               <span>{item.icon}</span>
-              <h2 className="text-xl font-semibold">{item.title}</h2>
-              <p className="text-lg font-normal">{item.description}</p>
+              <h2 className="text-lg font-semibold leading-[26px]">
+                {item.title}
+              </h2>
+              <p className="text-sm font-normal leading-[22px] ">
+                {item.description}
+              </p>
             </div>
-          </Card>
+          </div>
         ))}
       </div>
     </>

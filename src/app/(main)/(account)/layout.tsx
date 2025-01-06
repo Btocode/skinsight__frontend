@@ -1,6 +1,6 @@
 import Footer from "@/components/layout/Footer";
 import AccountTabs from "./_components/AccountTabs";
-import Advertisement from "./_components/Advertisement";
+import Advertisement from "@/components/common/Advertisement";
 
 const AccountLayout = ({ children }: { children: React.ReactNode }) => {
   const userName = "Miranda";

@@ -20,8 +20,11 @@ export default function AccountTabs() {
   const pathname = usePathname();
 
   return (
-    <div className="hidden lg:block w-full border-b mb-16 overflow-auto">
-      <nav className="flex justify-evenly space-x-8" aria-label="Tabs">
+    <div className="w-full border-b mb-16 overflow-auto">
+      <nav
+        className="flex justify-evenly space-x-4 lg:space-x-8"
+        aria-label="Tabs"
+      >
         {tabs.map((tab) => {
           const activeTab = pathname.startsWith(tab.id);
           return (
@@ -29,7 +32,7 @@ export default function AccountTabs() {
               key={tab.id}
               href={tab.id}
               className={cn(
-                "w-full text-center relative py-4 px-1 text-xl font-medium tracking-tight transition-colors hover:text-gray-900",
+                "w-full text-center relative py-4 lg:px-1 text-sm lg:text-xl font-medium tracking-tight transition-colors hover:text-gray-900",
                 {
                   "text-gray-900 font-semibold": activeTab,
                   "text-gray-500": !activeTab,

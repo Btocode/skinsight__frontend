@@ -1,15 +1,30 @@
+import { useAppDispatch, useAppSelector } from "@/lib/redux/hook";
 import Card from "./Card";
+import { useRouter } from "next/navigation";
+import { skinTypes } from "@/utils/products";
+import { setProductState } from "@/redux/slices/productSlice";
 
 const SelectSkinType = () => {
+  const dispatch = useAppDispatch();
+  const skinType = useAppSelector((state) => state.product.skinType);
+  const router = useRouter();
+
+  const onSkinTypeChange = (item: string) => {
+    dispatch(setProductState({ key: "skinType", value: item }));
+    router.push("/find-products/complexion");
+  };
+
   return (
-    <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-x-4 gap-y-8">
-      {["Normal", "Oily", "Dry", "Combination", "Not sure"].map(
-        (item, index) => (
-          <Card key={index}>
-            <h3 className="text-xl font-semibold">{item}</h3>
-          </Card>
-        )
-      )}
+    <div className="grid grid-cols-2 md:grid-cols-3 gap-4 lg:gap-x-4 lg:gap-y-8">
+      {skinTypes.map((item, index) => (
+        <Card
+          key={index}
+          onClick={onSkinTypeChange.bind(null, item)}
+          checked={skinType === item}
+        >
+          <h3 className="text-xl font-semibold">{item}</h3>
+        </Card>
+      ))}
     </div>
   );
 };

@@ -1,10 +1,13 @@
 import BackButton from "@/components/common/BackButton";
+import HeadingPrimary from "@/components/common/HeadingPrimary";
 
 const MatchesProductHeader = () => {
   return (
     <div>
       <BackButton />
-      <h2 className="heading-primary">Your skin matches</h2>
+      <HeadingPrimary className="leading-[44px]">
+        Your skin matches
+      </HeadingPrimary>
       <div className="flex items-center gap-2">
         <div className="flex -space-x-4">
           <Avatar

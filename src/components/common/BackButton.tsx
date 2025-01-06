@@ -2,6 +2,7 @@
 import { useRouter } from "next/navigation";
 import { ComponentProps } from "react";
 import Button from "./Button";
+import { cn } from "@/lib/utils";
 
 type BackButtonProps = {
   buttonProps?: ComponentProps<"button">;
@@ -15,7 +16,7 @@ const BackButton = (props: BackButtonProps) => {
     <Button
       variant={"back"}
       {...props.buttonProps}
-      className={props.buttonProps?.className}
+      className={cn("px-4", props.buttonProps?.className)}
       onClick={() => (props.onClick ? props.onClick() : router.back())}
       icon={
         <svg

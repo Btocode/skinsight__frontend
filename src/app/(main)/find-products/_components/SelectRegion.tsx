@@ -1,45 +1,92 @@
 "use client";
 
+import Button from "@/components/common/Button";
 import { Combobox, Option } from "@/components/common/Combobox";
 import Link from "next/link";
-import { useState } from "react";
-
-const countries = [
-  { value: "af", label: "Afghanistan" },
-  { value: "us", label: "America" },
-  { value: "al", label: "Albania" },
-  { value: "dz", label: "Algeria" },
-  { value: "as", label: "American Samoa" },
-  { value: "ao", label: "Angola" },
-  { value: "ai", label: "Anguilla" },
-  { value: "aq", label: "Antarctica" },
-  { value: "ag", label: "Antigua and Barbuda" },
-  { value: "ar", label: "Argentina" },
-  { value: "am", label: "Armenia" },
-  { value: "aw", label: "Aruba" },
-  { value: "au", label: "Australia" },
-  { value: "at", label: "Austria" },
-  { value: "az", label: "Azerbaijan" },
-];
+import { useCallback } from "react";
+import { allCountries } from "country-region-data";
+import { useAppDispatch, useAppSelector } from "@/lib/redux/hook";
+import { setProductState } from "@/redux/slices/productSlice";
+import { useRouter } from "next/navigation";
 
 const SelectRegion = () => {
-  const [value, setValue] = useState<Option>();
+  const dispatch = useAppDispatch();
+  const region = useAppSelector((state) => state.product.region);
+  const router = useRouter();
+
+  const formatCountries = useCallback(() => {
+    return allCountries.map((country) => ({
+      value: country[0],
+      label: country[0],
+    }));
+  }, []);
+
+  const formatRegions = useCallback((country: string) => {
+    const countryData = allCountries.find((c) => c[0] === country);
+    if (!countryData) return [];
+    return countryData[2].map((region) => ({
+      value: region[0],
+      label: region[0],
+    }));
+  }, []);
+
+  const getCountry = (country: string) => {
+    const countries = formatCountries();
+    return countries.find((c) => c.value === country);
+  };
+
+  const getRegion = (country: string, region: string) => {
+    const regions = formatRegions(country);
+    return regions.find((r) => r.value === region);
+  };
+
   return (
     <div className="flex flex-col gap-6">
       <Combobox
-        options={countries}
+        options={formatCountries() as Option[]}
         placeholder="Select"
-        value={value}
-        onChange={(value) => setValue(value)}
+        value={getCountry(region?.country || "")}
+        onChange={(value) =>
+          dispatch(
+            setProductState({
+              key: "region",
+              value: { country: value.value, city: "" },
+            })
+          )
+        }
       />
+
+      {region?.country && getCountry(region?.country || "") && (
+        <Combobox
+          options={formatRegions(region.country) as Option[]}
+          placeholder="Select"
+          value={getRegion(region?.country || "", region?.city || "")}
+          onChange={(value) =>
+            dispatch(
+              setProductState({
+                key: "region",
+                value: { city: value.value, country: region.country },
+              })
+            )
+          }
+        />
+      )}
+
       <div className="flex items-center gap-4">
+        <Button
+          className="px-8"
+          onClick={() => {
+            if (region?.country && region?.city) {
+              router.push("/find-products/find-perfect-match");
+            }
+          }}
+        >
+          Next
+        </Button>
         <Link href={"/find-products/find-perfect-match"}>
-          <button className="btn-primary">Next</button>
-        </Link>
-        <Link href={"/find-products/find-perfect-match"}>
-          <button className="outline-none border border-primary text-primary  px-8 py-3 rounded-lg">
+          <Button variant={"outline"} className="px-8 border">
             Skip
-          </button>
+          </Button>
         </Link>
       </div>
     </div>

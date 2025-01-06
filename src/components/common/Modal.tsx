@@ -9,6 +9,8 @@ interface ModalProps {
   children: React.ReactNode;
   className?: string;
   contentClassName?: string;
+  closeBtnClassName?: string;
+  id?: string;
 }
 
 const Modal: React.FC<ModalProps> = ({
@@ -17,6 +19,8 @@ const Modal: React.FC<ModalProps> = ({
   children,
   className,
   contentClassName,
+  closeBtnClassName,
+  id,
 }) => {
   const [isModalOpen, setIsModalOpen] = useState(isOpen);
 
@@ -40,12 +44,22 @@ const Modal: React.FC<ModalProps> = ({
     };
   }, [isModalOpen, onClose]);
 
+  // disabled scrolling
+  useEffect(() => {
+    if (isOpen) {
+      document.body.style.overflow = "hidden";
+    } else {
+      document.body.style.overflow = "unset";
+    }
+  }, [isOpen]);
+
   if (!isOpen) return null;
 
   return (
     <div
+      id={id}
       className={cn(
-        `fixed inset-0 z-50 flex items-center justify-center overflow-x-hidden overflow-y-auto outline-none focus:outline-none transition-opacity duration-300`,
+        `fixed inset-0 z-50 flex items-center justify-center outline-none focus:outline-none transition-opacity duration-300`,
         className,
         {
           "opacity-0 pointer-events-none": !isModalOpen,
@@ -54,25 +68,28 @@ const Modal: React.FC<ModalProps> = ({
       )}
     >
       <div
-        className="fixed inset-0 bg-black transition-opacity duration-300 ease-in-out"
+        className="fixed inset-0 bg-[#20293B8C] transition-opacity duration-300 ease-in-out"
         onClick={onClose}
         style={{ opacity: isModalOpen ? 0.5 : 0 }}
+        id="modal-backdrop"
       ></div>
       <div
-        className={`relative w-auto max-w-3xl mx-auto my-6 transition-all duration-300 ease-in-out ${
+        className={`relative w-auto  my-6 transition-all duration-300 ease-in-out ${
           isModalOpen ? "scale-100 translate-y-0" : "scale-95 translate-y-4"
         }`}
       >
         <div className="relative flex flex-col w-full bg-white border-0 rounded-lg shadow-lg outline-none focus:outline-none">
           <button
-            className="absolute top-0 right-0 p-2 m-2 text-gray-600 hover:text-gray-900 transition-colors duration-200 focus:outline-none cursor-pointer z-20"
+            className={cn(
+              "absolute top-0 right-0 p-2 m-2 text-gray-600 hover:text-gray-900 transition-colors duration-200 focus:outline-none cursor-pointer z-20",
+              closeBtnClassName
+            )}
             onClick={onClose}
           >
             <svg
-              className="h-6 w-6"
+              className="h-7 w-7 stroke-slate-400"
               fill="none"
               viewBox="0 0 24 24"
-              stroke="currentColor"
             >
               <path
                 strokeLinecap="round"
@@ -82,7 +99,9 @@ const Modal: React.FC<ModalProps> = ({
               />
             </svg>
           </button>
-          <div className={cn("relative p-6 flex-auto", contentClassName)}>
+          <div
+            className={cn("relative p-2 lg:p-6 flex-auto", contentClassName)}
+          >
             {children}
           </div>
         </div>

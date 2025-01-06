@@ -12,7 +12,7 @@ const FindPerfectMatch = () => {
     return () => clearTimeout(timer);
   }, [router]);
 
-  return <p className="-mt-6">This will only take a few seconds</p>;
+  return <p className="mt-0 lg:-mt-6">This will only take a few seconds</p>;
 };
 
 export default FindPerfectMatch;

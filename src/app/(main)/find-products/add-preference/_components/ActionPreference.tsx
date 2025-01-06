@@ -9,7 +9,7 @@ const ActionPreference = () => {
   const router = useRouter();
   return (
     <>
-      <div className="flex items-center gap-4">
+      <div className="flex items-center gap-4 mt-2 lg:mt-0">
         <Button onClick={() => setOpen(true)} className="px-8">
           Add
         </Button>
