@@ -5,6 +5,8 @@ import { useCallback, useState } from "react";
 import { cn } from "@/lib/utils";
 import { usePathname, useRouter } from "next/navigation";
 import AuthActionModal from "../auth/AuthActionModal";
+import UserMenu from "../common/UserMenu";
+import { useAppSelector } from "@/lib/redux/hook";
 
 const menuItems = [
   {
@@ -50,6 +52,8 @@ const DesktopNavbar = ({
 }: {
   onOpenAuthModal: () => void;
 }) => {
+  const isAuthenticated = useAppSelector((state) => state.auth.token);
+
   return (
     <nav className="hidden container py-6 lg:flex items-center justify-between">
       <Link href="/">
@@ -69,13 +73,17 @@ const DesktopNavbar = ({
           </Link>
         ))}
 
-        <button
-          onClick={onOpenAuthModal}
-          type="button"
-          className="text-base font-medium border-2 rounded-full px-6 py-2 text-foreground"
-        >
-          Log in
-        </button>
+        {isAuthenticated ? (
+          <UserMenu />
+        ) : (
+          <button
+            onClick={onOpenAuthModal}
+            type="button"
+            className="text-base font-medium border-2 rounded-full px-6 py-2 text-foreground"
+          >
+            Log in
+          </button>
+        )}
       </div>
     </nav>
   );
@@ -84,6 +92,27 @@ const DesktopNavbar = ({
 const MobileNavbar = ({ onOpenAuthModal }: { onOpenAuthModal: () => void }) => {
   const [isOpen, setIsOpen] = useState(false);
   const onClose = useCallback(() => setIsOpen(false), []);
+  const isAuthenticated = useAppSelector((state) => state.auth.token);
+
+  const authenticatedUserMenu = [
+    {
+      label: "My Profile",
+      href: "/my-profile",
+    },
+    {
+      label: "Saved Items",
+      href: "/saved-items",
+    },
+    {
+      label: "My Reviews",
+      href: "/my-reviews",
+    },
+    {
+      label: "My Regimen",
+      href: "/my-regimen",
+    },
+  ];
+
   return (
     <nav id="menu" className="container block lg:hidden">
       <div className=" py-6 flex items-center justify-between">
@@ -163,9 +192,13 @@ const MobileNavbar = ({ onOpenAuthModal }: { onOpenAuthModal: () => void }) => {
           </div>
 
           {/* Navigation Links */}
-          <nav className="mt-12 flex-1">
-            <ul className="space-y-6">
-              {[{ label: "Home", href: "/" }, ...menuItems].map((item) => (
+          <nav className="mt-10 flex-1">
+            <ul className="space-y-5">
+              {[
+                { label: "Home", href: "/" },
+                ...menuItems,
+                ...(isAuthenticated ? authenticatedUserMenu : []),
+              ].map((item) => (
                 <li key={item.href}>
                   <Link
                     href={item.href}
@@ -176,18 +209,20 @@ const MobileNavbar = ({ onOpenAuthModal }: { onOpenAuthModal: () => void }) => {
                   </Link>
                 </li>
               ))}
-              <li>
-                <button
-                  type="button"
-                  onClick={() => {
-                    onClose();
-                    onOpenAuthModal();
-                  }}
-                  className="py-3 px-6 rounded-full border border-[#1E0B4B] text-[#1E0B4B] hover:bg-gray-50 transition-colors"
-                >
-                  Sign Up or Sign in
-                </button>
-              </li>
+              {isAuthenticated ? null : (
+                <li>
+                  <button
+                    type="button"
+                    onClick={() => {
+                      onClose();
+                      onOpenAuthModal();
+                    }}
+                    className="py-3 px-6 rounded-full border border-[#1E0B4B] text-[#1E0B4B] hover:bg-gray-50 transition-colors"
+                  >
+                    Sign Up or Sign in
+                  </button>
+                </li>
+              )}
             </ul>
           </nav>
 

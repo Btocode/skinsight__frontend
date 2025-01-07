@@ -1,54 +1,31 @@
 "use client";
-
-import { useState, useEffect } from "react";
-import { useDispatch, useSelector } from "react-redux";
-import { useRouter } from "next/navigation";
 import HeadingPrimary from "@/components/common/HeadingPrimary";
 import { InputBox } from "@/components/common/InputBox";
+import { useLoginMutation } from "@/redux/apis/authApi";
+import { loginSchema } from "@/schema/auth";
+import { LoginSchema } from "@/types/auth";
+import { setStorageItem } from "@/utils/storage";
+import { zodResolver } from "@hookform/resolvers/zod";
 import Link from "next/link";
-import { usePathname } from "next/navigation";
-import { loginUser, clearError } from "@/redux/slices/authSlice";
-import type { AppDispatch, RootState } from "@/lib/redux/store";
+import { usePathname, useRouter } from "next/navigation";
+import { Controller, useForm } from "react-hook-form";
 
 const SignInForm = () => {
-  const dispatch = useDispatch<AppDispatch>();
-  const router = useRouter();
   const pathname = usePathname();
-
-  const { loading, error, isAuthenticated } = useSelector(
-    (state: RootState) => state.auth
-  );
-
-  const [formData, setFormData] = useState({
-    email: "",
-    password: "",
+  const router = useRouter();
+  const { control, handleSubmit } = useForm<LoginSchema>({
+    resolver: zodResolver(loginSchema),
+    defaultValues: {
+      email: "",
+      password: "",
+    },
   });
+  const [loginUser, { isLoading, isError, error }] = useLoginMutation();
 
-  useEffect(() => {
-    // Redirect if already authenticated
-    if (isAuthenticated) {
-      router.push("/");
-    }
-
-    // Clear any existing errors when component mounts
-    dispatch(clearError());
-  }, [isAuthenticated, router, dispatch]);
-
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    dispatch(clearError()); // Clear error when user types
-    setFormData({
-      ...formData,
-      [e.target.id]: e.target.value,
-    });
-  };
-
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    dispatch(loginUser(formData));
-  };
-
-  const handleSocialLogin = (provider: string) => {
-    dispatch(socialLogin(provider));
+  const onSubmit = async (data: LoginSchema) => {
+    const response = await loginUser(data).unwrap();
+    setStorageItem("token", response?.access_token);
+    router.push(pathname);
   };
 
   return (
@@ -62,41 +39,57 @@ const SignInForm = () => {
         </p>
       </div>
 
-      <form onSubmit={handleSubmit} className="space-y-5 lg:space-y-7">
-        <InputBox
-          type="email"
-          placeholder="Enter email address"
-          id="email"
-          value={formData.email}
-          onChange={handleChange}
-          required
-          disabled={loading}
-          error={error ? " " : undefined}
-        />
-        <InputBox
-          type="password"
-          placeholder="Enter password"
-          id="password"
-          value={formData.password}
-          onChange={handleChange}
-          required
-          disabled={loading}
-          error={error ? " " : undefined}
+      <form
+        onSubmit={handleSubmit(onSubmit)}
+        className="space-y-5 lg:space-y-7"
+      >
+        <Controller
+          name="email"
+          control={control}
+          render={({ field, fieldState: { error } }) => (
+            <InputBox
+              type="email"
+              placeholder="Enter email address"
+              id="email"
+              value={field.value}
+              onChange={field.onChange}
+              required
+              disabled={isLoading}
+              error={error ? " " : undefined}
+            />
+          )}
         />
 
-        {error && (
-          <span className=" text-red-600">
-            {error}
+        <Controller
+          name="password"
+          control={control}
+          render={({ field, fieldState: { error } }) => (
+            <InputBox
+              type="password"
+              placeholder="Enter password"
+              id="password"
+              value={field.value}
+              onChange={field.onChange}
+              required
+              disabled={isLoading}
+              error={error ? " " : undefined}
+            />
+          )}
+        />
+
+        {isError && (
+          <span className="text-red-600">
+            {(error as { data: { detail: string } })?.data?.detail}
           </span>
         )}
 
         <div className="flex items-center gap-4">
           <button
             type="submit"
-            disabled={loading}
+            disabled={isLoading}
             className="w-full bg-[#8599FE] hover:bg-blue-500 text-white rounded-xl py-3 text-lg font-medium transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
           >
-            {loading ? "Signing in..." : "Sign In"}
+            {isLoading ? "Signing in..." : "Sign In"}
           </button>
 
           {/* Social Login */}
@@ -133,7 +126,7 @@ const SignInForm = () => {
 
         {/* Sign In Link */}
         <p className="text-center text-lg">
-          <span className="text-blue-400">Don't have an account? </span>
+          <span className="text-blue-400">Don&apos;t have an account? </span>
           <Link
             href={`/${pathname}?auth=sign-up`}
             className="text-blue-500 hover:text-blue-600 font-medium"
