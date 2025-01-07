@@ -1,25 +1,56 @@
 "use client";
 
+import { useState, useEffect } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { useRouter } from "next/navigation";
 import HeadingPrimary from "@/components/common/HeadingPrimary";
 import { InputBox } from "@/components/common/InputBox";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
+import { loginUser, clearError } from "@/redux/slices/authSlice";
+import type { AppDispatch, RootState } from "@/lib/redux/store";
 
-/**
- * A form component for user sign-in.
- *
- * This component renders a sign-in form with fields for email and password.
- * It includes a submit button for signing in and social login buttons for
- * alternative sign-in options. Additionally, it provides a link to the sign-up
- * page for users who don't have an account.
- *
- * The form is styled to be responsive and visually appealing, with a gradient
- * background on the heading and hover effects on buttons.
- *
- * @returns A JSX element containing the sign-in form.
- */
 const SignInForm = () => {
+  const dispatch = useDispatch<AppDispatch>();
+  const router = useRouter();
   const pathname = usePathname();
+
+  const { loading, error, isAuthenticated } = useSelector(
+    (state: RootState) => state.auth
+  );
+
+  const [formData, setFormData] = useState({
+    email: "",
+    password: "",
+  });
+
+  useEffect(() => {
+    // Redirect if already authenticated
+    if (isAuthenticated) {
+      router.push("/");
+    }
+
+    // Clear any existing errors when component mounts
+    dispatch(clearError());
+  }, [isAuthenticated, router, dispatch]);
+
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    dispatch(clearError()); // Clear error when user types
+    setFormData({
+      ...formData,
+      [e.target.id]: e.target.value,
+    });
+  };
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    dispatch(loginUser(formData));
+  };
+
+  const handleSocialLogin = (provider: string) => {
+    dispatch(socialLogin(provider));
+  };
+
   return (
     <div className="bg-white rounded-3xl w-full relative lg:px-[136px] py-4 lg:py-[52px]">
       <div className="text-center mb-8">
@@ -31,18 +62,41 @@ const SignInForm = () => {
         </p>
       </div>
 
-      {/* Form */}
-      <form className="space-y-5 lg:space-y-7">
-        <InputBox type="email" placeholder="Enter email address" id="email" />
-        <InputBox type="password" placeholder="Enter password" id="password" />
+      <form onSubmit={handleSubmit} className="space-y-5 lg:space-y-7">
+        <InputBox
+          type="email"
+          placeholder="Enter email address"
+          id="email"
+          value={formData.email}
+          onChange={handleChange}
+          required
+          disabled={loading}
+          error={error ? " " : undefined}
+        />
+        <InputBox
+          type="password"
+          placeholder="Enter password"
+          id="password"
+          value={formData.password}
+          onChange={handleChange}
+          required
+          disabled={loading}
+          error={error ? " " : undefined}
+        />
+
+        {error && (
+          <span className=" text-red-600">
+            {error}
+          </span>
+        )}
 
         <div className="flex items-center gap-4">
-          {/* Sign Up Button */}
           <button
             type="submit"
-            className="w-full bg-[#8599FE] hover:bg-blue-500 text-white rounded-xl py-3 text-lg font-medium transition-colors"
+            disabled={loading}
+            className="w-full bg-[#8599FE] hover:bg-blue-500 text-white rounded-xl py-3 text-lg font-medium transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
           >
-            Sign In
+            {loading ? "Signing in..." : "Sign In"}
           </button>
 
           {/* Social Login */}
@@ -79,7 +133,7 @@ const SignInForm = () => {
 
         {/* Sign In Link */}
         <p className="text-center text-lg">
-          <span className="text-blue-400">Don’t have an account? </span>
+          <span className="text-blue-400">Don't have an account? </span>
           <Link
             href={`/${pathname}?auth=sign-up`}
             className="text-blue-500 hover:text-blue-600 font-medium"
