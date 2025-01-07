@@ -3,12 +3,12 @@ import { ComponentProps } from "react";
 import { cva, type VariantProps } from "class-variance-authority";
 
 const buttonVariants = cva(
-  "inline-flex items-center justify-center rounded-xl font-medium transition-all duration-300 ease-in-out",
+  "inline-flex items-center justify-center rounded-xl font-medium disabled:bg-opacity-10 disabled:cursor-default transition-all duration-300 ease-in-out",
   {
     variants: {
       variant: {
         primary:
-          "bg-primary text-white hover:bg-primary/80 border-2 border-primary",
+          "bg-primary text-white hover:bg-primary/80 border-2 border-primary ",
         secondary: "bg-gray-200 text-gray-800 hover:bg-gray-300",
         back: "rounded-md hover:bg-gray-400 hover:bg-clip-padding hover:backdrop-filter hover:backdrop-blur-sm hover:bg-opacity-10",
         outline:

@@ -13,6 +13,10 @@ const initialState: ProductState = {
   skinConcern: [],
   age: null,
   region: null,
+  addPreference: {
+    brand: "",
+    product: "",
+  },
 };
 
 const productSlice = createSlice({
@@ -39,8 +43,15 @@ const productSlice = createSlice({
       }
       state[key] = value;
     },
+    setAddPreference: (
+      state,
+      action: PayloadAction<{ key: string; value: string }>
+    ) => {
+      const { key, value } = action.payload;
+      state.addPreference[key] = value;
+    },
   },
 });
 
-export const { setProductState } = productSlice.actions;
+export const { setProductState, setAddPreference } = productSlice.actions;
 export const productReducer = productSlice.reducer;

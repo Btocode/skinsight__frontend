@@ -5,6 +5,7 @@ import { useAppDispatch, useAppSelector } from "@/lib/redux/hook";
 import { useRouter } from "next/navigation";
 import { skinConcerns } from "@/utils/products";
 import Button from "@/components/common/Button";
+import { useCallback } from "react";
 
 const SelectSkinConcern = () => {
   const dispatch = useAppDispatch();
@@ -15,46 +16,64 @@ const SelectSkinConcern = () => {
     dispatch(setProductState({ key: "skinConcern", value: item }));
   };
 
+  const isChecked = useCallback(
+    (item: string) => {
+      return skinConcern?.includes(item);
+    },
+    [skinConcern]
+  );
+
   return (
     <>
       <div className="grid grid-cols-2 md:grid-cols-3 gap-4 lg:gap-x-4 lg:gap-y-8">
         {skinConcerns.map((item, index) => (
           <div
             key={index}
-            className={
-              "w-full lg:w-[200px] h-[180px] rounded-xl bg-[#8599FE26] relative pt-[11px] px-[13px] pb-[13px]"
-            }
+            className={cn(
+              "w-full lg:w-[200px] h-[180px] rounded-xl bg-[#8599FE26] relative pt-[11px] px-[13px] pb-[13px]",
+              {
+                "bg-primary": isChecked(item.join(" & ")),
+              }
+            )}
             onClick={onSkinConcernChange.bind(null, item.join(" & "))}
           >
             <div
-              className={cn("w-6 h-6 rounded-[3px] bg-[#FDFDFF]", {
-                "bg-green-400": skinConcern?.includes(item.join(" & ")),
-              })}
+              className={cn(
+                "w-6 h-6 flex items-center justify-center rounded-[3px] bg-[#FDFDFF]",
+                {
+                  "bg-white": skinConcern?.includes(item.join(" & ")),
+                }
+              )}
             >
               {/* generate custom checkbox */}
-              {skinConcern.includes(item.join(" & ")) && (
+              {isChecked(item.join(" & ")) && (
                 <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  width="24"
-                  height="24"
-                  viewBox="0 0 24 24"
+                  width="12"
+                  height="9"
+                  viewBox="0 0 12 9"
                   fill="none"
-                  stroke="currentColor"
-                  strokeWidth="2"
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
+                  xmlns="http://www.w3.org/2000/svg"
                   className={`${
                     skinConcern?.includes(item.join(" & "))
-                      ? "stroke-gray-50"
+                      ? "stroke-primary"
                       : "stroke-current"
                   }`}
                 >
-                  <path d="M20 6 9 17l-5-5" />
+                  <path
+                    d="M11 1L4.33333 7.75L1 4.375"
+                    strokeWidth="2"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                  />
                 </svg>
               )}
             </div>
 
-            <div className="mt-[80.5px]">
+            <div
+              className={cn("mt-[80.5px]", {
+                "text-white": isChecked(item.join(" & ")),
+              })}
+            >
               <h3 className="text-xl font-semibold">{item[0]} &</h3>
               <h3 className="text-xl font-semibold">{item[1]}</h3>
             </div>
@@ -63,9 +82,10 @@ const SelectSkinConcern = () => {
       </div>
       <Button
         onClick={() => router.push("/find-products/age")}
-        className="px-8"
+        className="px-10 lg:px-8 mt-4 lg:mt-0"
       >
-        <span>Next</span>
+        <span className="hidden lg:block">Next</span>
+        <span className="lg:hidden">Let&apos;s go</span>
       </Button>
     </>
   );

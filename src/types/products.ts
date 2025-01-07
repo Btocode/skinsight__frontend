@@ -4,6 +4,11 @@ export type Region = {
   city: string;
 };
 
+export type AddPreferenceType = {
+  brand: string;
+  product: string;
+};
+
 export type ProductState = {
   gender: Gender | null;
   skinType: string | null;
@@ -11,6 +16,7 @@ export type ProductState = {
   skinConcern: string[];
   age: string | null;
   region: Region | null;
+  addPreference: AddPreferenceType;
 };
 
 export type ProductStateKeyType = keyof ProductState;

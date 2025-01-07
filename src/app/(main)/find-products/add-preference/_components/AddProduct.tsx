@@ -1,8 +1,13 @@
+"use client";
 import BackButton from "@/components/common/BackButton";
 import Button from "@/components/common/Button";
 import { Combobox } from "@/components/common/Combobox";
 import HeadingPrimary from "@/components/common/HeadingPrimary";
 import Modal from "@/components/common/Modal";
+import { useAppDispatch, useAppSelector } from "@/lib/redux/hook";
+import { setAddPreference } from "@/redux/slices/productSlice";
+import Image from "next/image";
+import { useState } from "react";
 
 type AddProductProps = {
   open: boolean;
@@ -10,6 +15,11 @@ type AddProductProps = {
 };
 
 const AddProduct = ({ open, onClose }: AddProductProps) => {
+  const [attachments, setAttachments] = useState<File[]>([]);
+  const [file, setFile] = useState<File | null>(null);
+  const preference = useAppSelector((state) => state.product.addPreference);
+  const dispatch = useAppDispatch();
+
   return (
     <Modal isOpen={open} onClose={onClose}>
       <div className="max-w-2xl flex items-center justify-center min-h-[450px] gap-6">
@@ -57,9 +67,47 @@ const AddProduct = ({ open, onClose }: AddProductProps) => {
             </Button>
           </div>
         </div>
-        <div className="hidden  w-[200px] h-[260px] border border-primary lg:flex items-center justify-center rounded-xl mt-4 cursor-pointer">
-          <span className="inline-block text-4xl text-primary">+</span>
-        </div>
+        <label
+          htmlFor={"add-product-image"}
+          id="add-product-image"
+          className="hidden  w-[200px] h-[260px] border border-primary lg:flex items-center justify-center rounded-xl mt-4 cursor-pointer"
+        >
+          <input
+            type="file"
+            id="add-product-image"
+            className="absolute opacity-0"
+            onChange={(e) => {
+              if (e.target.files) {
+                setFile(e.target.files[0]);
+              }
+            }}
+          />
+          {file ? (
+            <Image
+              src={URL.createObjectURL(file)}
+              alt="product"
+              width={200}
+              height={260}
+              className="p-2"
+            />
+          ) : (
+            <svg
+              width="41"
+              height="40"
+              viewBox="0 0 41 40"
+              fill="none"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <path
+                d="M12.1667 20H20.5M20.5 20H28.8333M20.5 20V28.3333M20.5 20V11.6667M20.5 38.75C10.1447 38.75 1.75 30.3553 1.75 20C1.75 9.64466 10.1447 1.25 20.5 1.25C30.8553 1.25 39.25 9.64466 39.25 20C39.25 30.3553 30.8553 38.75 20.5 38.75Z"
+                stroke="#8599FE"
+                strokeWidth="2"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+              />
+            </svg>
+          )}
+        </label>
       </div>
     </Modal>
   );
