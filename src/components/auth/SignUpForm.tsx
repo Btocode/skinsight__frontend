@@ -14,11 +14,14 @@ import HeadingPrimary from "../common/HeadingPrimary";
 const SignUpForm = () => {
   const router = useRouter();
   const pathname = usePathname();
-  const router = useRouter();
   const [mounted, setMounted] = useState(false);
-  const [register, { isLoading, error }] = useRegisterMutation();
+  const [register, { isLoading, isError, error: apiError }] = useRegisterMutation();
 
-  const { control, handleSubmit } = useForm<RegisterSchema>({
+  const { 
+    control, 
+    handleSubmit,
+    formState: { errors: formErrors } 
+  } = useForm<RegisterSchema>({
     resolver: zodResolver(registerSchema),
     defaultValues: {
       display_name: "",
@@ -26,6 +29,36 @@ const SignUpForm = () => {
       password: "",
     },
   });
+
+  const renderError = () => {
+    // Show form validation errors first
+    if (formErrors.display_name?.message || formErrors.email?.message || formErrors.password?.message) {
+      return (
+        <span className="text-red-600">
+          {formErrors.display_name?.message || formErrors.email?.message || formErrors.password?.message}
+        </span>
+      );
+    }
+
+    // Then show API errors
+    if (!isError) return null;
+
+    const is422 = (apiError as any)?.status === 422;
+
+    if (is422) {
+      return (
+        <span className="text-red-600">
+          {(apiError as { data: { detail: string } })?.data?.detail}
+        </span>
+      );
+    }
+
+    return (
+      <span className="text-red-600">
+        {(apiError as { data: { detail: string } })?.data?.detail || "Registration failed"}
+      </span>
+    );
+  };
 
   useEffect(() => {
     setMounted(true);
@@ -107,11 +140,7 @@ const SignUpForm = () => {
           )}
         />
 
-        {error && (
-          <span className="text-red-600">
-            {(error as any)?.data?.detail || "Registration failed"}
-          </span>
-        )}
+        {isError && renderError()}
 
         <div className="flex items-center gap-4">
           <button

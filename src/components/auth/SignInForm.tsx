@@ -9,24 +9,74 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
 import { Controller, useForm } from "react-hook-form";
+import { useEffect, useState } from "react";
 
 const SignInForm = () => {
   const pathname = usePathname();
   const router = useRouter();
-  const { control, handleSubmit } = useForm<LoginSchema>({
+  const [mounted, setMounted] = useState(false);
+  const { 
+    control, 
+    handleSubmit,
+    formState: { errors: formErrors } 
+  } = useForm<LoginSchema>({
     resolver: zodResolver(loginSchema),
     defaultValues: {
       email: "",
       password: "",
     },
   });
-  const [loginUser, { isLoading, isError, error }] = useLoginMutation();
+  const [loginUser, { isLoading, isError, error: apiError }] = useLoginMutation();
 
   const onSubmit = async (data: LoginSchema) => {
     const response = await loginUser(data).unwrap();
     setStorageItem("token", response?.access_token);
     router.push(pathname);
   };
+
+  const renderError = () => {
+    // Show form validation errors first
+    if (formErrors.email?.message || formErrors.password?.message) {
+      return (
+        <span className="text-red-600">
+          {formErrors.email?.message || formErrors.password?.message}
+        </span>
+      );
+    }
+
+    // Then show API errors
+    if (!isError) return null;
+
+    const is401 = (apiError as any)?.status === 401;
+
+    if (is401) {
+      return (
+        <span className="text-red-600">
+          Oops! that is not the right password.{" "}
+          <Link
+            href="/?auth=forgot-password"
+            className="font-bold hover:text-red-700"
+          >
+            Want to reset?
+          </Link>
+        </span>
+      );
+    }
+
+    return (
+      <span className="text-red-600">
+        {(apiError as { data: { detail: string } })?.data?.detail || "Login failed"}
+      </span>
+    );
+  };
+
+  useEffect(() => {
+    setMounted(true);
+  }, []);
+
+  if (!mounted) {
+    return null;
+  }
 
   return (
     <div className="bg-white rounded-3xl w-full relative lg:px-[136px] py-4 lg:py-[52px]">
@@ -55,7 +105,7 @@ const SignInForm = () => {
               onChange={field.onChange}
               required
               disabled={isLoading}
-              error={error ? " " : undefined}
+              error={error?.message}
             />
           )}
         />
@@ -72,16 +122,12 @@ const SignInForm = () => {
               onChange={field.onChange}
               required
               disabled={isLoading}
-              error={error ? " " : undefined}
+              error={error?.message}
             />
           )}
         />
 
-        {isError && (
-          <span className="text-red-600">
-            {(error as { data: { detail: string } })?.data?.detail}
-          </span>
-        )}
+        {isError && renderError()}
 
         <div className="flex items-center gap-4">
           <button
