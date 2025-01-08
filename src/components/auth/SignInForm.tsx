@@ -10,11 +10,15 @@ import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
 import { Controller, useForm } from "react-hook-form";
 import { useEffect, useState } from "react";
+import { setCredentials } from "@/redux/slices/authSlice";
+import { useDispatch } from "react-redux";
 
 const SignInForm = () => {
   const pathname = usePathname();
   const router = useRouter();
   const [mounted, setMounted] = useState(false);
+  const dispatch = useDispatch();
+  const [isSuccess, setIsSuccess] = useState(false);
   const { 
     control, 
     handleSubmit,
@@ -29,9 +33,19 @@ const SignInForm = () => {
   const [loginUser, { isLoading, isError, error: apiError }] = useLoginMutation();
 
   const onSubmit = async (data: LoginSchema) => {
-    const response = await loginUser(data).unwrap();
-    setStorageItem("token", response?.access_token);
-    router.push(pathname);
+    try {
+      const response = await loginUser(data).unwrap();
+      setIsSuccess(true);
+      dispatch(setCredentials(response));
+      setStorageItem("token", response?.access_token);
+      
+      // Wait for 500ms before redirecting
+      setTimeout(() => {
+        router.push(pathname);
+      }, 500);
+    } catch (err) {
+      setIsSuccess(false);
+    }
   };
 
   const renderError = () => {
@@ -106,6 +120,7 @@ const SignInForm = () => {
               required
               disabled={isLoading}
               error={error?.message}
+              className={isSuccess ? "bg-green-50" : ""}
             />
           )}
         />
@@ -123,6 +138,7 @@ const SignInForm = () => {
               required
               disabled={isLoading}
               error={error?.message}
+              className={isSuccess ? "bg-green-50" : ""}
             />
           )}
         />

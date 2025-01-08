@@ -3,6 +3,7 @@
 import React, { useState, useRef, useEffect } from "react";
 import Link from "next/link";
 import { cn } from "@/lib/utils";
+import { useAppSelector } from "@/lib/redux/hook";
 
 const MENU_ITEMS = [
   {
@@ -91,7 +92,8 @@ const MENU_ITEMS = [
   },
 ];
 
-export default function UserMenu() {
+const UserMenu = () => {
+  const { user } = useAppSelector((state) => state.auth);
   const [isOpen, setIsOpen] = useState(false);
   const [activeIndex, setActiveIndex] = useState(-1);
   const menuRef = useRef<HTMLDivElement>(null);
@@ -178,7 +180,7 @@ export default function UserMenu() {
         aria-expanded={isOpen}
         aria-haspopup="true"
         aria-controls="user-menu"
-        className="flex justify-between items-center gap-2 border-2 px-2 border-[#EBEAED] rounded-[100px] w-[168px] h-[40px]"
+        className="flex justify-between items-center gap-2 border-2 px-4 border-[#EBEAED] rounded-[100px] w-[168px] h-[40px]"
       >
         <svg
           width="18"
@@ -197,7 +199,7 @@ export default function UserMenu() {
         </svg>
 
         <span className="text-base font-medium leading-[22px]">
-          Hi, Miranda!
+          Hi, {user?.display_name || 'User'}
         </span>
         <svg
           width="24"
@@ -251,7 +253,7 @@ export default function UserMenu() {
       </div>
     </div>
   );
-}
+};
 
 const MenuItem = React.forwardRef<
   HTMLAnchorElement,
@@ -270,9 +272,7 @@ const MenuItem = React.forwardRef<
       href={href}
       role="menuitem"
       tabIndex={isActive ? 0 : -1}
-      className={`flex items-center flex-shrink-0 gap-4 pl-[40px] py-2 text-sm text-gray-700 hover:bg-gray-100 focus:bg-gray-100 focus:outline-none ${
-        isActive ? "bg-gray-100" : ""
-      }`}
+      className={`flex items-center flex-shrink-0 gap-4 pl-[40px] py-2 text-sm text-gray-700 hover:bg-gray-100 focus:bg-gray-100 focus:outline-none `}
       onKeyDown={onKeyDown}
       onClick={onClick}
     >
@@ -283,3 +283,5 @@ const MenuItem = React.forwardRef<
 });
 
 MenuItem.displayName = "MenuItem";
+
+export default UserMenu;

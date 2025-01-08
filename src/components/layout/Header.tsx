@@ -52,7 +52,7 @@ const DesktopNavbar = ({
 }: {
   onOpenAuthModal: () => void;
 }) => {
-  const isAuthenticated = useAppSelector((state) => state.auth.token);
+  const { isAuthenticated } = useAppSelector((state) => state.auth);
 
   return (
     <nav className="hidden container py-6 lg:flex items-center justify-between">
