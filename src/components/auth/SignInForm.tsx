@@ -1,65 +1,31 @@
 "use client";
-
-import { useState } from "react";
-import { useRouter } from "next/navigation";
 import HeadingPrimary from "@/components/common/HeadingPrimary";
 import { InputBox } from "@/components/common/InputBox";
+import { useLoginMutation } from "@/redux/apis/authApi";
+import { loginSchema } from "@/schema/auth";
+import { LoginSchema } from "@/types/auth";
+import { setStorageItem } from "@/utils/storage";
+import { zodResolver } from "@hookform/resolvers/zod";
 import Link from "next/link";
-import { usePathname } from "next/navigation";
-import { useLoginMutation } from "@/lib/services/authApi";
+import { usePathname, useRouter } from "next/navigation";
+import { Controller, useForm } from "react-hook-form";
 
 const SignInForm = () => {
-  const router = useRouter();
   const pathname = usePathname();
-  
-  const [login, { isLoading, error: loginError }] = useLoginMutation();
-
-  const [formData, setFormData] = useState({
-    email: "",
-    password: "",
+  const router = useRouter();
+  const { control, handleSubmit } = useForm<LoginSchema>({
+    resolver: zodResolver(loginSchema),
+    defaultValues: {
+      email: "",
+      password: "",
+    },
   });
+  const [loginUser, { isLoading, isError, error }] = useLoginMutation();
 
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setFormData({
-      ...formData,
-      [e.target.id]: e.target.value,
-    });
-  };
-
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    try {
-      await login(formData).unwrap();
-      router.push("/");
-    } catch (err) {
-      // Error handling done by RTK Query
-    }
-  };
-
-  const renderError = () => {
-    if (!loginError) return null;
-
-    const is401 = (loginError as any)?.status === 401;
-    
-    if (is401) {
-      return (
-        <span className="text-red-600">
-          Oops! that is not the right password.{" "}
-          <Link
-            href="/?auth=forgot-password"
-            className="font-bold hover:text-red-700"
-          >
-            Want to reset?
-          </Link>
-        </span>
-      );
-    }
-
-    return (
-      <span className="text-red-600">
-        {(loginError as any)?.data?.message || "Invalid credentials"}
-      </span>
-    );
+  const onSubmit = async (data: LoginSchema) => {
+    const response = await loginUser(data).unwrap();
+    setStorageItem("token", response?.access_token);
+    router.push(pathname);
   };
 
   return (
@@ -73,37 +39,57 @@ const SignInForm = () => {
         </p>
       </div>
 
-      <form onSubmit={handleSubmit} className="space-y-5 lg:space-y-7">
-        <InputBox
-          type="email"
-          placeholder="Enter email address"
-          id="email"
-          value={formData.email}
-          onChange={handleChange}
-          required
-          disabled={isLoading}
-          error={loginError ? " " : undefined}
-        />
-        <InputBox
-          type="password"
-          placeholder="Enter password"
-          id="password"
-          value={formData.password}
-          onChange={handleChange}
-          required
-          disabled={isLoading}
-          error={loginError ? " " : undefined}
+      <form
+        onSubmit={handleSubmit(onSubmit)}
+        className="space-y-5 lg:space-y-7"
+      >
+        <Controller
+          name="email"
+          control={control}
+          render={({ field, fieldState: { error } }) => (
+            <InputBox
+              type="email"
+              placeholder="Enter email address"
+              id="email"
+              value={field.value}
+              onChange={field.onChange}
+              required
+              disabled={isLoading}
+              error={error ? " " : undefined}
+            />
+          )}
         />
 
-        {renderError()}
+        <Controller
+          name="password"
+          control={control}
+          render={({ field, fieldState: { error } }) => (
+            <InputBox
+              type="password"
+              placeholder="Enter password"
+              id="password"
+              value={field.value}
+              onChange={field.onChange}
+              required
+              disabled={isLoading}
+              error={error ? " " : undefined}
+            />
+          )}
+        />
+
+        {isError && (
+          <span className="text-red-600">
+            {(error as { data: { detail: string } })?.data?.detail}
+          </span>
+        )}
 
         <div className="flex items-center gap-4">
           <button
             type="submit"
             disabled={isLoading}
-            className="w-full bg-[#8599FE] hover:bg-blue-500 text-white rounded-xl py-3 text-lg font-medium transition-colors disabled:opacity-50"
+            className="w-full bg-[#8599FE] hover:bg-blue-500 text-white rounded-xl py-3 text-lg font-medium transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
           >
-            {isLoading ? "Signing In..." : "Sign In"}
+            {isLoading ? "Signing in..." : "Sign In"}
           </button>
         </div>
 

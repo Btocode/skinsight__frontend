@@ -10,7 +10,9 @@ interface AuthState {
 const initialState: AuthState = {
   isAuthenticated: !!getStorageItem("token"),
   user: null,
-  token: getStorageItem("token"),
+  token: typeof window !== "undefined" ? getStorageItem("token") : null,
+  loading: false,
+  error: null,
 };
 
 const authSlice = createSlice({
@@ -22,8 +24,18 @@ const authSlice = createSlice({
       state.user = null;
       state.token = null;
     },
+    setCredentials: (state, action) => {
+      state.user = action.payload.user;
+      state.token = action.payload.token;
+      state.isAuthenticated = true;
+    },
+    logout: (state) => {
+      state.user = null;
+      state.token = null;
+      state.isAuthenticated = false;
+    },
   },
 });
 
-export const { clearAuth } = authSlice.actions;
+export const { clearError, setCredentials, logout } = authSlice.actions;
 export default authSlice.reducer;

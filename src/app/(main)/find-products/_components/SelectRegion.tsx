@@ -40,6 +40,16 @@ const SelectRegion = () => {
     return regions.find((r) => r.value === region);
   };
 
+  const onSkip = () => {
+    dispatch(
+      setProductState({
+        key: "region",
+        value: { country: "", city: "" },
+      })
+    );
+    router.push("/find-products/find-perfect-match");
+  };
+
   return (
     <div className="flex flex-col gap-6">
       <Combobox
@@ -75,19 +85,16 @@ const SelectRegion = () => {
       <div className="flex items-center gap-4">
         <Button
           className="px-8"
+          disabled={!region?.country || !region?.city}
           onClick={() => {
-            if (region?.country && region?.city) {
-              router.push("/find-products/find-perfect-match");
-            }
+            router.push("/find-products/find-perfect-match");
           }}
         >
           Next
         </Button>
-        <Link href={"/find-products/find-perfect-match"}>
-          <Button variant={"outline"} className="px-8 border">
-            Skip
-          </Button>
-        </Link>
+        <Button onClick={onSkip} variant={"outline"} className="px-8 border">
+          Skip
+        </Button>
       </div>
     </div>
   );
