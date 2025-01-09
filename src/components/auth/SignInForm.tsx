@@ -3,7 +3,7 @@ import HeadingPrimary from "@/components/common/HeadingPrimary";
 import { InputBox } from "@/components/common/InputBox";
 import { useAppDispatch } from "@/lib/redux/hook";
 import { useLoginMutation } from "@/redux/apis/authApi";
-import { setAuth } from "@/redux/slices/authSlice";
+import { setCredentials } from "@/redux/slices/authSlice";
 import { loginSchema } from "@/schema/auth";
 import { LoginSchema } from "@/types/auth";
 import { setStorageItem } from "@/utils/storage";
@@ -27,7 +27,9 @@ const SignInForm = () => {
 
   const onSubmit = async (data: LoginSchema) => {
     const response = await loginUser(data).unwrap();
-    dispatch(setAuth(response?.access_token));
+    dispatch(
+      setCredentials({ user: response?.user, token: response?.access_token })
+    );
     setStorageItem("token", response?.access_token);
     router.push(pathname);
     // router.refresh();
