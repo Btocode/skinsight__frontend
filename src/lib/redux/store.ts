@@ -1,17 +1,14 @@
-// src/lib/redux/store.ts
 import { configureStore } from "@reduxjs/toolkit";
 import authReducer from "../../redux/slices/authSlice";
-import userReducer from "../../redux/slices/userSlice";
-import { productReducer } from "@/redux/slices/productSlice";
 import { baseApi } from "./baseApi";
 import { regimenReducer } from "@/redux/slices/regimenSlice";
+import { productReducer } from "@/redux/slices/productSlice";
 
 export const store = configureStore({
   reducer: {
     auth: authReducer,
-    user: userReducer,
-    product: productReducer,
     regimen: regimenReducer,
+    product: productReducer,
     [baseApi.reducerPath]: baseApi.reducer,
   },
   middleware: (getDefaultMiddleware) =>
