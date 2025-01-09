@@ -1,14 +1,13 @@
-const loading = () => {
+import Skeleton from "@/components/common/Skeleton";
+
+const Loading = () => {
   return (
     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
       {Array.from({ length: 4 }).map((_, index) => (
-        <div
-          key={index}
-          className="animate-pulse bg-gradient-to-t from-blue-200 to-purple-100 h-72 w-full rounded"
-        ></div>
+        <Skeleton className="w-full h-[320px]" key={index} />
       ))}
     </div>
   );
 };
 
-export default loading;
+export default Loading;

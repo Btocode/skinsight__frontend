@@ -16,7 +16,7 @@ export type ProductState = {
   skinConcern: string[];
   age: string | null;
   region: Region | null;
-  addPreference: AddPreferenceType;
+  findAlternatives: FindAlternativesState;
 };
 
 export type ProductStateKeyType = keyof ProductState;
@@ -26,4 +26,9 @@ export type Complexion = {
   title: string;
   description: string;
   icon: string;
+};
+
+export type FindAlternativesState = {
+  brand: string;
+  product: string;
 };

@@ -1,9 +1,8 @@
-"use client";
-import { Combobox } from "@/components/common/Combobox";
 import GradientImage from "@/components/common/GradientImage";
 import HeadingPrimary from "@/components/common/HeadingPrimary";
 import Image from "next/image";
 import FindAlternativeImg from "../../../../public/find-alternatives.png";
+import SelectYourTargetProduct from "./_components/SelectYourTargetProduct";
 
 const FindAlternativesPage = () => {
   return (
@@ -20,24 +19,7 @@ const FindAlternativesPage = () => {
           alt="Find Products"
           className="lg:hidden"
         />
-        <div className="space-y-6">
-          <Combobox
-            options={[
-              { label: "Brand 1", value: "brand1" },
-              { label: "Brand 2", value: "brand2" },
-              { label: "Brand 3", value: "brand3" },
-            ]}
-            placeholder="Select brand"
-          />
-          <Combobox
-            options={[
-              { label: "Product 1", value: "Product1" },
-              { label: "Product 2", value: "Product2" },
-              { label: "Product 3", value: "Product3" },
-            ]}
-            placeholder="Select product"
-          />
-        </div>
+        <SelectYourTargetProduct />
       </article>
       <div className="hidden lg:block flex-1 relative h-[550px] mt-16 lg:mt-0">
         <Image

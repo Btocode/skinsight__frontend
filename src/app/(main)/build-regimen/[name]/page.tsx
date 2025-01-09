@@ -36,9 +36,9 @@ const BuilderRegimen = async ({
   };
 
   return (
-    <section className="container flex justify-center lg:items-center min-h-[85svh] py-10 relative">
+    <section className="container flex justify-center lg:items-center min-h-[85svh] py-4 lg:py-10 relative">
       <div className="flex flex-col  items-start gap-2">
-        <BackButton />
+        {name === "comfortable-products-count" && <BackButton />}
         {components[name]}
       </div>
     </section>

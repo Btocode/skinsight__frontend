@@ -1,12 +1,11 @@
-import { Combobox } from "@/components/common/Combobox";
 import HeadingPrimary from "@/components/common/HeadingPrimary";
 import Image from "next/image";
-import React from "react";
 import TopAlternativesProducts from "./_components/TopAlternativesProducts";
 import { notFound } from "next/navigation";
 import Advertisement from "@/components/common/Advertisement";
 import GradientImage from "@/components/common/GradientImage";
 import FindAlternativesBannerImg from "../../../../../public//find-alternatives/bannerimg.png";
+import SelectYourTargetProduct from "../_components/SelectYourTargetProduct";
 
 const getProducts = async () => {
   const response = await fetch("http://localhost:3000/api/find-alternatives");
@@ -36,24 +35,7 @@ const TopAlternativesForYouPage = async () => {
             height={250}
             className="lg:hidden mx-auto rounded-lg"
           />
-          <div className="space-y-6">
-            <Combobox
-              options={[
-                { label: "Brand 1", value: "brand1" },
-                { label: "Brand 2", value: "brand2" },
-                { label: "Brand 3", value: "brand3" },
-              ]}
-              placeholder="Select brand"
-            />
-            <Combobox
-              options={[
-                { label: "Product 1", value: "Product1" },
-                { label: "Product 2", value: "Product2" },
-                { label: "Product 3", value: "Product3" },
-              ]}
-              placeholder="Select product"
-            />
-          </div>
+          <SelectYourTargetProduct />
         </article>
         <div className="hidden lg:block relative w-[300px] h-[250px] mt-16 lg:mt-0">
           <Image

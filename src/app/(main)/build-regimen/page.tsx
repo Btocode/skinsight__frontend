@@ -27,7 +27,7 @@ const BuildRegimenPage = () => {
           href={"/build-regimen/comfortable-products-count"}
           className="w-full inline-block"
         >
-          <Button>Let&apos;s go</Button>
+          <Button className="px-12">Let&apos;s go</Button>
         </Link>
       </article>
       <div className="hidden lg:block flex-1 relative h-[550px] mt-16 lg:mt-0">

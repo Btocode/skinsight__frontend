@@ -36,6 +36,7 @@ const GradientImage = ({ firstImage, secondImage }: GradientImageProps) => {
           "fixed -left-32 top-10 lg:left-0 lg:top-20 -z-10",
           firstImage?.className
         )}
+        priority
       />
       <Image
         src={secondImage?.url ?? "/gradient2.png"}
@@ -46,6 +47,7 @@ const GradientImage = ({ firstImage, secondImage }: GradientImageProps) => {
           "fixed top-[500px] -right-36 lg:right-52 lg:top-[520px]  -z-10",
           secondImage?.className
         )}
+        priority
       />
     </>
   );

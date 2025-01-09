@@ -13,7 +13,7 @@ const initialState: ProductState = {
   skinConcern: [],
   age: null,
   region: null,
-  addPreference: {
+  findAlternatives: {
     brand: "",
     product: "",
   },
@@ -43,15 +43,18 @@ const productSlice = createSlice({
       }
       state[key] = value;
     },
-    setAddPreference: (
+    setFindAlternatives: (
       state,
-      action: PayloadAction<{ key: string; value: string }>
+      action: PayloadAction<{
+        key: string;
+        value: string;
+      }>
     ) => {
       const { key, value } = action.payload;
-      state.addPreference[key] = value;
+      state.findAlternatives[key] = value;
     },
   },
 });
 
-export const { setProductState, setAddPreference } = productSlice.actions;
+export const { setProductState, setFindAlternatives } = productSlice.actions;
 export const productReducer = productSlice.reducer;

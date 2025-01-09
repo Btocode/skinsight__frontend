@@ -1,7 +1,11 @@
 // authSlice.ts
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import { authApi } from "@/lib/services/api";
-import { getStorageItem, removeStorageItem, setStorageItem } from "@/utils/storage";
+import {
+  getStorageItem,
+  removeStorageItem,
+  setStorageItem,
+} from "@/utils/storage";
 
 interface AuthState {
   isAuthenticated: boolean;
@@ -14,7 +18,7 @@ interface AuthState {
 const initialState: AuthState = {
   isAuthenticated: false,
   user: null,
-  token: typeof window !== 'undefined' ? getStorageItem("token") : null,
+  token: typeof window !== "undefined" ? getStorageItem("token") : null,
   loading: false,
   error: null,
 };
@@ -22,7 +26,10 @@ const initialState: AuthState = {
 // Async thunks using the API service
 export const loginUser = createAsyncThunk(
   "auth/login",
-  async (credentials: { email: string; password: string }, { rejectWithValue }) => {
+  async (
+    credentials: { email: string; password: string },
+    { rejectWithValue }
+  ) => {
     try {
       const data = await authApi.login(credentials.email, credentials.password);
       // Save token to storage
@@ -72,6 +79,9 @@ const authSlice = createSlice({
   name: "auth",
   initialState,
   reducers: {
+    setAuth: (state, action) => {
+      state.token = action.payload;
+    },
     clearError: (state) => {
       state.error = null;
     },
@@ -130,5 +140,5 @@ const authSlice = createSlice({
   },
 });
 
-export const { clearError } = authSlice.actions;
+export const { clearError, setAuth } = authSlice.actions;
 export default authSlice.reducer;
