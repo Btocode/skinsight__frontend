@@ -5,8 +5,10 @@ import { useCallback, useState } from "react";
 import { cn } from "@/lib/utils";
 import { usePathname, useRouter } from "next/navigation";
 import AuthActionModal from "../auth/AuthActionModal";
-import UserMenu from "../common/UserMenu";
-import { useAppSelector } from "@/lib/redux/hook";
+import UserMenu, { MENU_ITEMS } from "../common/UserMenu";
+import { useAppDispatch, useAppSelector } from "@/lib/redux/hook";
+// import { useLogoutMutation } from "@/redux/apis/authApi";
+import { setAuth } from "@/redux/slices/authSlice";
 
 const menuItems = [
   {
@@ -57,7 +59,14 @@ const DesktopNavbar = ({
   return (
     <nav className="hidden container py-6 lg:flex items-center justify-between">
       <Link href="/">
-        <Image src="/logo.png" alt="Skinsight Logo" width={180} height={40} />
+        <Image
+          src="/logo.png"
+          alt="Skinsight Logo"
+          width={180}
+          height={40}
+          priority
+          style={{ width: "auto", height: "auto" }}
+        />
       </Link>
       <div className="flex items-center gap-8">
         {menuItems.slice(0, 3).map((item) => (
@@ -91,33 +100,37 @@ const DesktopNavbar = ({
 
 const MobileNavbar = ({ onOpenAuthModal }: { onOpenAuthModal: () => void }) => {
   const [isOpen, setIsOpen] = useState(false);
+  const [isAccountOpen, setIsAccountOpen] = useState(false);
+  // const onCloseAccount = useCallback(() => setIsAccountOpen(false), []);
   const onClose = useCallback(() => setIsOpen(false), []);
   const isAuthenticated = useAppSelector((state) => state.auth.token);
+  const dispatch = useAppDispatch();
+  const router = useRouter();
+  // const [logOutUser, { isLoading }] = useLogoutMutation();
 
-  const authenticatedUserMenu = [
-    {
-      label: "My Profile",
-      href: "/my-profile",
-    },
-    {
-      label: "Saved Items",
-      href: "/saved-items",
-    },
-    {
-      label: "My Reviews",
-      href: "/my-reviews",
-    },
-    {
-      label: "My Regimen",
-      href: "/my-regimen",
-    },
-  ];
+  const onLogOut = async () => {
+    // try {
+    // await logOutUser(null).unwrap();
+    dispatch(setAuth(null));
+    localStorage.removeItem("token");
+    router.refresh();
+    // } catch (error) {
+    //   console.log(error);
+    // }
+  };
 
   return (
     <nav id="menu" className="container block lg:hidden">
       <div className=" py-6 flex items-center justify-between">
         <Link href="/">
-          <Image src="/logo.png" alt="Skinsight Logo" width={140} height={60} />
+          <Image
+            src="/logo.png"
+            alt="Skinsight Logo"
+            width={140}
+            height={60}
+            priority
+            style={{ width: "auto", height: "auto" }}
+          />
         </Link>
         <button
           onClick={() => setIsOpen(!isOpen)}
@@ -169,6 +182,8 @@ const MobileNavbar = ({ onOpenAuthModal }: { onOpenAuthModal: () => void }) => {
                 alt="Skinsight Logo"
                 width={180}
                 height={80}
+                style={{ width: "auto", height: "auto" }}
+                sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
               />
             </Link>
             <button
@@ -194,11 +209,64 @@ const MobileNavbar = ({ onOpenAuthModal }: { onOpenAuthModal: () => void }) => {
           {/* Navigation Links */}
           <nav className="mt-10 flex-1">
             <ul className="space-y-5">
-              {[
-                { label: "Home", href: "/" },
-                ...menuItems,
-                ...(isAuthenticated ? authenticatedUserMenu : []),
-              ].map((item) => (
+              <li>
+                <Link
+                  href={"/"}
+                  onClick={onClose}
+                  className="text-accent text-xl hover:opacity-70 transition-opacity"
+                >
+                  Home
+                </Link>
+              </li>
+              {isAuthenticated && (
+                <li className="text-accent text-xl hover:opacity-70 transition-opacity relative">
+                  <div
+                    onClick={() => setIsAccountOpen(!isAccountOpen)}
+                    className="flex items-center gap-2 "
+                  >
+                    Account{" "}
+                    <svg
+                      width="24"
+                      height="25"
+                      viewBox="0 0 24 25"
+                      fill="none"
+                      xmlns="http://www.w3.org/2000/svg"
+                      className="w-5 h-5"
+                    >
+                      <path
+                        d="M19 9.5L12 16.5L5 9.5"
+                        stroke="#2C2C2C"
+                        strokeWidth="2"
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                      />
+                    </svg>
+                  </div>
+                  <ul
+                    className={cn(
+                      "pl-2 space-y-5 h-[0px] overflow-hidden transition-all duration-300 ease-in-out ",
+                      {
+                        "mt-4 h-[200px]": isAccountOpen,
+                      }
+                    )}
+                  >
+                    {MENU_ITEMS.map((item) => (
+                      <li key={item.href} className="flex items-center gap-4">
+                        {item.icon}
+                        <Link
+                          href={item.href}
+                          onClick={onClose}
+                          className="text-accent text-xl hover:opacity-70 transition-opacity"
+                        >
+                          {item.text}
+                        </Link>
+                      </li>
+                    ))}
+                  </ul>
+                </li>
+              )}
+
+              {[...menuItems].map((item) => (
                 <li key={item.href}>
                   <Link
                     href={item.href}
@@ -209,7 +277,16 @@ const MobileNavbar = ({ onOpenAuthModal }: { onOpenAuthModal: () => void }) => {
                   </Link>
                 </li>
               ))}
-              {isAuthenticated ? null : (
+              {isAuthenticated ? (
+                <li
+                  // {...(isLoading ? {} : { onClick: onLogOut })}
+                  onClick={onLogOut}
+                  className="text-accent text-xl hover:opacity-70 transition-opacity"
+                >
+                  {/* {isLoading ? "Loading..." : "Log out"} */}
+                  Log out
+                </li>
+              ) : (
                 <li>
                   <button
                     type="button"

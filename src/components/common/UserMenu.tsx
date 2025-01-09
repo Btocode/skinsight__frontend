@@ -3,8 +3,12 @@
 import React, { useState, useRef, useEffect } from "react";
 import Link from "next/link";
 import { cn } from "@/lib/utils";
+import { useLogoutMutation } from "@/redux/apis/authApi";
+import { useRouter } from "next/navigation";
+import { useAppDispatch } from "@/lib/redux/hook";
+import { setAuth } from "@/redux/slices/authSlice";
 
-const MENU_ITEMS = [
+export const MENU_ITEMS = [
   {
     icon: (
       <svg
@@ -97,6 +101,21 @@ export default function UserMenu() {
   const menuRef = useRef<HTMLDivElement>(null);
   const buttonRef = useRef<HTMLButtonElement>(null);
   const menuItemsRef = useRef<(HTMLAnchorElement | null)[]>([]);
+  const router = useRouter();
+  // const [logOutUser, { isLoading }] = useLogoutMutation();
+  const dispatch = useAppDispatch();
+
+  const onLogOut = async () => {
+    // try {
+    // await logOutUser(null).unwrap();
+    dispatch(setAuth(null));
+    localStorage.removeItem("token");
+    setIsOpen(false);
+    router.refresh();
+    // } catch (error) {
+    //   console.log(error);
+    // }
+  };
 
   useEffect(() => {
     function handleClickOutside(event: MouseEvent) {
@@ -225,7 +244,7 @@ export default function UserMenu() {
         role="menu"
         aria-orientation="vertical"
         aria-labelledby="user-menu-button"
-        className={`absolute right-0 mt-2 w-[248px] h-[280px] origin-top-right transform rounded-lg bg-white shadow-lg ring-1 ring-black ring-opacity-5 transition-all duration-200 ease-in-out ${
+        className={`absolute right-0 mt-2 w-[248px] h-[330px] origin-top-right transform rounded-lg bg-white shadow-lg ring-1 ring-black ring-opacity-5 transition-all duration-200 ease-in-out ${
           isOpen
             ? "visible scale-100 opacity-100"
             : "invisible scale-95 opacity-0"
@@ -247,6 +266,28 @@ export default function UserMenu() {
               }}
             />
           ))}
+          <button
+            // disabled={isLoading}
+            onClick={onLogOut}
+            className={`border-0 outline-none inset-0 w-full flex items-center flex-shrink-0 gap-4 pl-[40px] py-2 text-sm text-gray-700 hover:bg-gray-100 focus:bg-gray-100 focus:outline-none`}
+          >
+            <svg
+              width="18"
+              height="18"
+              viewBox="0 0 18 18"
+              fill="none"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <path
+                d="M9 12L12 9M12 9L9 6M12 9H1M6 4.24859V4.2002C6 3.08009 6 2.51962 6.21799 2.0918C6.40973 1.71547 6.71547 1.40973 7.0918 1.21799C7.51962 1 8.08009 1 9.2002 1H13.8002C14.9203 1 15.4796 1 15.9074 1.21799C16.2837 1.40973 16.5905 1.71547 16.7822 2.0918C17 2.5192 17 3.07899 17 4.19691V13.8036C17 14.9215 17 15.4805 16.7822 15.9079C16.5905 16.2842 16.2837 16.5905 15.9074 16.7822C15.48 17 14.921 17 13.8031 17H9.19691C8.07899 17 7.5192 17 7.0918 16.7822C6.71547 16.5905 6.40973 16.2839 6.21799 15.9076C6 15.4798 6 14.9201 6 13.8V13.75"
+                stroke="#8599FE"
+                strokeWidth="2"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+              />
+            </svg>
+            <span className="text-lg font-medium leading-[26px]">Log out</span>
+          </button>
         </div>
       </div>
     </div>
