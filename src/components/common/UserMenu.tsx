@@ -3,10 +3,10 @@
 import React, { useState, useRef, useEffect } from "react";
 import Link from "next/link";
 import { cn } from "@/lib/utils";
-import { useLogoutMutation } from "@/redux/apis/authApi";
+// import { useLogoutMutation } from "@/redux/apis/authApi";
 import { useRouter } from "next/navigation";
 import { useAppDispatch } from "@/lib/redux/hook";
-import { setAuth } from "@/redux/slices/authSlice";
+import { logout } from "@/redux/slices/authSlice";
 
 export const MENU_ITEMS = [
   {
@@ -108,7 +108,7 @@ export default function UserMenu() {
   const onLogOut = async () => {
     // try {
     // await logOutUser(null).unwrap();
-    dispatch(setAuth(null));
+    dispatch(logout());
     localStorage.removeItem("token");
     setIsOpen(false);
     router.refresh();

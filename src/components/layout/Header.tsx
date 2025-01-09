@@ -7,8 +7,8 @@ import { usePathname, useRouter } from "next/navigation";
 import AuthActionModal from "../auth/AuthActionModal";
 import UserMenu, { MENU_ITEMS } from "../common/UserMenu";
 import { useAppDispatch, useAppSelector } from "@/lib/redux/hook";
+import { logout } from "@/redux/slices/authSlice";
 // import { useLogoutMutation } from "@/redux/apis/authApi";
-import { setAuth } from "@/redux/slices/authSlice";
 
 const menuItems = [
   {
@@ -111,7 +111,7 @@ const MobileNavbar = ({ onOpenAuthModal }: { onOpenAuthModal: () => void }) => {
   const onLogOut = async () => {
     // try {
     // await logOutUser(null).unwrap();
-    dispatch(setAuth(null));
+    dispatch(logout());
     localStorage.removeItem("token");
     router.refresh();
     // } catch (error) {
