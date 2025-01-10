@@ -12,7 +12,10 @@ const SelectAge = () => {
 
   const onSkinConcernChange = (item: string) => {
     dispatch(setProductState({ key: "age", value: item }));
-    router.push("/find-products/region");
+    // router.push("/find-products/region");
+    setTimeout(() => {
+      router.push("/find-products/region");
+    }, 1000);
   };
 
   return (

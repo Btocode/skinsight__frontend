@@ -11,7 +11,10 @@ const SelectSkinType = () => {
 
   const onSkinTypeChange = (item: string) => {
     dispatch(setProductState({ key: "skinType", value: item }));
-    router.push("/find-products/complexion");
+    // router.push("/find-products/complexion");
+    setTimeout(() => {
+      router.push("/find-products/complexion");
+    }, 1000);
   };
 
   return (

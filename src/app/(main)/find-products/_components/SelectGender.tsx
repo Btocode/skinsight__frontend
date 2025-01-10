@@ -13,7 +13,10 @@ const SelectGender = () => {
 
   const onGenderChange = (item: Gender) => {
     dispatch(setProductState({ key: "gender", value: item }));
-    router.push("/find-products/skin-type");
+    // push it after 1 second
+    setTimeout(() => {
+      router.push("/find-products/skin-type");
+    }, 1000);
   };
 
   return (

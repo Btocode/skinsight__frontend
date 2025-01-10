@@ -13,7 +13,11 @@ const SelectComplexion = () => {
 
   const onComplexionChange = (item: string) => {
     dispatch(setProductState({ key: "complexion", value: item }));
-    router.push("/find-products/skin-concern");
+    // push it after 1 second
+    // router.push("/find-products/skin-concern");
+    setTimeout(() => {
+      router.push("/find-products/skin-concern");
+    }, 1000);
   };
 
   const isChecked = useCallback(

@@ -31,10 +31,10 @@ export const authApi = {
     }
   },
   logout: async () => {
-    await api.post("/auth/logout");
+    await api.post("/auth/sign_out");
   },
   getUser: async () => {
-    const response = await api.get("/auth/user");
+    const response = await api.get("/auth/me");
     return response.data; // { user }
   },
 };
