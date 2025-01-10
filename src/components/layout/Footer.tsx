@@ -10,7 +10,7 @@ const Footer = () => {
           <Image src="/logo.png" alt="Skinsight Logo" width={180} height={40} />
         </Link>
         <div className="flex flex-col lg:flex-row lg:items-center gap-2 lg:gap-8 ">
-          <Link href="/recommend-products" className="menu-link">
+          <Link href="/find-products" className="menu-link">
             Recommend Products
           </Link>
           <Link href="/find-alternatives" className="menu-link">

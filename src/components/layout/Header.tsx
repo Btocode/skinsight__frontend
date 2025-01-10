@@ -13,7 +13,7 @@ import { logout } from "@/redux/slices/authSlice";
 const menuItems = [
   {
     label: "Recommend Products",
-    href: "/recommend-products",
+    href: "/find-products",
   },
   {
     label: "Find Alternatives",
@@ -65,7 +65,7 @@ const DesktopNavbar = ({
           width={180}
           height={40}
           priority
-          style={{ width: "auto", height: "auto" }}
+          style={{ width: "200px", height: "auto" }}
         />
       </Link>
       <div className="flex items-center gap-8">

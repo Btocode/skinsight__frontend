@@ -7,8 +7,8 @@ const HomePage = () => {
     <section className="container min-h-[85svh] lg:flex items-center justify-between py-10 relative">
       <article className="flex-1 space-y-4 lg:space-y-6">
         <div className="bg-[#8F80E829] px-4 py-3 rounded-lg flex items-center gap-2 max-w-max">
-          <Image src={"/heart.png"} alt="heart" width={20} height={20} />
-          <p>Hi! this is skinsight</p>
+          <Image src={"/heart.png"} alt="heart" width={25} height={25} />
+          <p className="font-medium">Hi! this is skinsight</p>
         </div>
         <h2 className="text-4xl lg:text-6xl leading-[50px] lg:leading-[70px] font-semibold mb-4 bg-gradient-to-r from-blue-400 to-violet-400 text-transparent bg-clip-text">
           Your AI guide to finding your perfect skin match

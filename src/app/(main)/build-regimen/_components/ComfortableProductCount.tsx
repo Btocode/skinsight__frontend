@@ -13,7 +13,10 @@ const ComfortableProductCount = () => {
 
   const onSelectProductCount = (item: string) => {
     dispatch(setRegimenState({ productCount: item }));
-    router.push(`/build-regimen/using-products-selection`);
+    // router.push(`/build-regimen/using-products-selection`);
+    setTimeout(() => {
+      router.push(`/build-regimen/using-products-selection`);
+    }, 1000);
   };
 
   return (
