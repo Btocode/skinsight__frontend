@@ -1,52 +1,18 @@
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
-import {
-  getStorageItem,
-  setStorageItem,
-  removeStorageItem,
-} from "@/utils/storage";
-
-interface LoginRequest {
-  email: string;
-  password: string;
-}
-
-interface RegisterRequest {
-  display_name: string;
-  email: string;
-  password: string;
-}
-
-interface AuthUser {
-  email: string;
-  display_name: string;
-}
-
-interface AuthResponse {
-  user: AuthUser;
-  access_token: string;
-  token_type: string;
-}
-
-interface MessageResponse {
-  message: string;
-}
-
-interface ErrorResponse {
-  detail: string;
-}
+import { AuthResponse, LoginRequest, MessageResponse, RegisterRequest } from "@/types/auth";
+import { setCredentials } from "@/redux/slices/authSlice";
 
 export const authApi = createApi({
   reducerPath: "authApi",
   baseQuery: fetchBaseQuery({
     baseUrl: process.env.NEXT_PUBLIC_API_URL,
+    credentials: "include",
     prepareHeaders: (headers) => {
-      const token = getStorageItem("token");
-      if (token) {
-        headers.set("Authorization", `Bearer ${token}`);
-      }
+      headers.set("Content-Type", "application/json");
       return headers;
     },
   }),
+  tagTypes: ['Auth'],
   endpoints: (builder) => ({
     login: builder.mutation<AuthResponse, LoginRequest>({
       query: (credentials) => ({
@@ -54,15 +20,15 @@ export const authApi = createApi({
         method: "POST",
         body: credentials,
       }),
-      onQueryStarted: async (args, { queryFulfilled }) => {
+      async onQueryStarted(_, { dispatch, queryFulfilled }) {
         try {
           const { data } = await queryFulfilled;
-          console.log("Login successful:", data);
-          setStorageItem("token", data.access_token);
-        } catch (error) {
-          console.error("Login failed:", error);
+          dispatch(setCredentials({ user: data.user }));
+        } catch (err) {
+          console.error('Login failed:', err);
         }
       },
+      invalidatesTags: ['Auth'],
     }),
     register: builder.mutation<MessageResponse, RegisterRequest>({
       query: (userData) => ({
@@ -70,33 +36,20 @@ export const authApi = createApi({
         method: "POST",
         body: userData,
       }),
-      onQueryStarted: async (args, { queryFulfilled }) => {
-        try {
-          const response = await queryFulfilled;
-          if (response.meta?.response?.status === 201) {
-            console.log("Registration successful");
-          }
-        } catch (error) {
-          console.error("Registration failed:", error);
-        }
-      },
     }),
     logout: builder.mutation<void, void>({
       query: () => ({
-        url: "/auth/logout",
+        url: "/auth/sign_out",
         method: "POST",
       }),
-      onQueryStarted: async (args, { queryFulfilled }) => {
-        try {
-          await queryFulfilled;
-          removeStorageItem("token");
-        } catch (error) {
-          console.error("Logout failed:", error);
-        }
-      },
+      invalidatesTags: ['Auth'],
     }),
-    fetchCurrentUser: builder.query<{ user: any }, void>({
-      query: () => "/auth/user",
+    checkAuth: builder.query<AuthResponse, void>({
+      query: () => ({
+        url: "/auth/me",
+        method: "GET",
+      }),
+      providesTags: ['Auth'],
     }),
   }),
 });
@@ -105,5 +58,5 @@ export const {
   useLoginMutation,
   useRegisterMutation,
   useLogoutMutation,
-  useFetchCurrentUserQuery,
+  useCheckAuthQuery,
 } = authApi;

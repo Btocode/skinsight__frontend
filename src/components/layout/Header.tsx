@@ -1,7 +1,7 @@
 "use client";
 import Image from "next/image";
 import Link from "next/link";
-import { useCallback, useState } from "react";
+import { useCallback, useState, useEffect } from "react";
 import { cn } from "@/lib/utils";
 import { usePathname, useRouter } from "next/navigation";
 import AuthActionModal from "../auth/AuthActionModal";
@@ -52,7 +52,38 @@ const DesktopNavbar = ({
 }: {
   onOpenAuthModal: () => void;
 }) => {
+  const [mounted, setMounted] = useState(false);
   const { isAuthenticated } = useAppSelector((state) => state.auth);
+
+  useEffect(() => {
+    setMounted(true);
+  }, []);
+
+  // Return null or loading state on initial render
+  if (!mounted) {
+    return (
+      <nav className="hidden container py-6 lg:flex items-center justify-between">
+        <Link href="/">
+          <Image src="/logo.png" alt="Skinsight Logo" width={180} height={40} />
+        </Link>
+        <div className="flex items-center gap-8">
+          {menuItems.slice(0, 3).map((item) => (
+            <Link href={item.href} key={item.href} className="menu-link">
+              {item.label}
+            </Link>
+          ))}
+        </div>
+        <div className="flex items-center gap-8">
+          {menuItems.slice(3).map((item) => (
+            <Link href={item.href} key={item.href} className="menu-link">
+              {item.label}
+            </Link>
+          ))}
+          <div className="w-[168px] h-[40px]" /> {/* Placeholder */}
+        </div>
+      </nav>
+    );
+  }
 
   return (
     <nav className="hidden container py-6 lg:flex items-center justify-between">
@@ -73,7 +104,7 @@ const DesktopNavbar = ({
           </Link>
         ))}
 
-        {isAuthenticated ? (
+        {mounted && isAuthenticated ? (
           <UserMenu />
         ) : (
           <button

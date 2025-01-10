@@ -36,14 +36,14 @@ const SignInForm = () => {
     try {
       const response = await loginUser(data).unwrap();
       setIsSuccess(true);
-      dispatch(setCredentials(response));
-      setStorageItem("token", response?.access_token);
+      dispatch(setCredentials({ user: response.user }));
       
       // Wait for 500ms before redirecting
       setTimeout(() => {
         router.push(pathname);
       }, 500);
     } catch (err) {
+      console.error(err);
       setIsSuccess(false);
     }
   };
