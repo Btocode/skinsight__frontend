@@ -67,8 +67,14 @@ const SignUpForm = () => {
   const onSubmit = async (data: RegisterSchema) => {
     try {
       await register(data).unwrap();
-      router.push(`/${pathname}?auth=sign-in`);
+
+      setTimeout(() => { 
+        router.push(`/${pathname}?auth=sign-in`);
+      }
+      , 1000
+      );
     } catch (err) {
+      console.error("Registration failed:", err);
       // Error handled by RTK Query
     }
   };

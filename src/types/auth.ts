@@ -27,8 +27,6 @@ export interface AuthResponse {
     email: string;
     display_name: string;
   };
-  access_token: string;
-  refresh_token: string;
   token_type: string;
 }
 

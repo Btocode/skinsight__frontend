@@ -34,14 +34,29 @@ const menuItems = [
 export const Header: React.FC = () => {
   const router = useRouter();
   const pathname = usePathname();
+  // Move auth state to parent component
+  const { isAuthenticated } = useAppSelector((state) => state.auth);
+  const [mounted, setMounted] = useState(false);
+
+  useEffect(() => {
+    setMounted(true);
+  }, []);
 
   const onOpenAuthModal = useCallback(() => {
     router.push(`${pathname}?auth=sign-in`);
   }, [pathname, router]);
+
   return (
     <header className="bg-white border-b sticky top-0 z-50">
-      <DesktopNavbar onOpenAuthModal={onOpenAuthModal} />
-      <MobileNavbar onOpenAuthModal={onOpenAuthModal} />
+      <DesktopNavbar
+        onOpenAuthModal={onOpenAuthModal}
+        isAuthenticated={isAuthenticated}
+        mounted={mounted}
+      />
+      <MobileNavbar
+        onOpenAuthModal={onOpenAuthModal}
+        isAuthenticated={isAuthenticated}
+      />
       <AuthActionModal />
     </header>
   );
@@ -49,16 +64,13 @@ export const Header: React.FC = () => {
 
 const DesktopNavbar = ({
   onOpenAuthModal,
+  isAuthenticated,
+  mounted,
 }: {
   onOpenAuthModal: () => void;
+  isAuthenticated: boolean;
+  mounted: boolean;
 }) => {
-  const [mounted, setMounted] = useState(false);
-  const { isAuthenticated } = useAppSelector((state) => state.auth);
-
-  useEffect(() => {
-    setMounted(true);
-  }, []);
-
   // Return null or loading state on initial render
   if (!mounted) {
     return (
@@ -120,10 +132,15 @@ const DesktopNavbar = ({
   );
 };
 
-const MobileNavbar = ({ onOpenAuthModal }: { onOpenAuthModal: () => void }) => {
+const MobileNavbar = ({
+  onOpenAuthModal,
+  isAuthenticated,
+}: {
+  onOpenAuthModal: () => void;
+  isAuthenticated: boolean;
+}) => {
   const [isOpen, setIsOpen] = useState(false);
   const onClose = useCallback(() => setIsOpen(false), []);
-  const isAuthenticated = useAppSelector((state) => state.auth.token);
 
   const authenticatedUserMenu = [
     {
@@ -146,7 +163,7 @@ const MobileNavbar = ({ onOpenAuthModal }: { onOpenAuthModal: () => void }) => {
 
   return (
     <nav id="menu" className="container block lg:hidden">
-      <div className=" py-6 flex items-center justify-between">
+      <div className="py-6 flex items-center justify-between">
         <Link href="/">
           <Image src="/logo.png" alt="Skinsight Logo" width={140} height={60} />
         </Link>
@@ -240,7 +257,7 @@ const MobileNavbar = ({ onOpenAuthModal }: { onOpenAuthModal: () => void }) => {
                   </Link>
                 </li>
               ))}
-              {isAuthenticated ? null : (
+              {!isAuthenticated && (
                 <li>
                   <button
                     type="button"
@@ -258,7 +275,7 @@ const MobileNavbar = ({ onOpenAuthModal }: { onOpenAuthModal: () => void }) => {
           </nav>
 
           {/* Sign Up Button */}
-          <p className=" text-accent text-sm">
+          <p className="text-accent text-sm">
             Skinsight 2024 • All rights reserved.
           </p>
         </div>

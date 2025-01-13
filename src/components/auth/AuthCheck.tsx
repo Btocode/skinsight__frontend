@@ -22,6 +22,7 @@ export const AuthCheck = () => {
     } else if (error) {
       dispatch(logout());
     }
+
   }, [data, error, dispatch]);
 
   return null;
