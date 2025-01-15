@@ -11,26 +11,17 @@ import { InputBox } from "@/components/common/InputBox";
 import Link from "next/link";
 import HeadingPrimary from "../common/HeadingPrimary";
 
-/**
- * A form component for user sign up.
- *
- * This component renders a sign up form with fields for name, email address, and password.
- * It includes a submit button for signing up and social login buttons for alternative
- * sign up options. Additionally, it provides a link to the sign in page for users who
- * already have an account.
- *
- * The form is styled to be responsive and visually appealing, with a gradient background
- * on the heading and hover effects on buttons.
- *
- * @returns A JSX element containing the sign up form.
- */
 const SignUpForm = () => {
-  const pathname = usePathname();
   const router = useRouter();
+  const pathname = usePathname();
   const [mounted, setMounted] = useState(false);
-  const [register, { isLoading, error }] = useRegisterMutation();
+  const [register, { isLoading, isError, error: apiError }] = useRegisterMutation();
 
-  const { control, handleSubmit } = useForm<RegisterSchema>({
+  const { 
+    control, 
+    handleSubmit,
+    formState: { errors: formErrors } 
+  } = useForm<RegisterSchema>({
     resolver: zodResolver(registerSchema),
     defaultValues: {
       display_name: "",
@@ -39,6 +30,36 @@ const SignUpForm = () => {
     },
   });
 
+  const renderError = () => {
+    // Show form validation errors first
+    if (formErrors.display_name?.message || formErrors.email?.message || formErrors.password?.message) {
+      return (
+        <span className="text-red-600">
+          {formErrors.display_name?.message || formErrors.email?.message || formErrors.password?.message}
+        </span>
+      );
+    }
+
+    // Then show API errors
+    if (!isError) return null;
+
+    const is422 = (apiError as any)?.status === 422;
+
+    if (is422) {
+      return (
+        <span className="text-red-600">
+          {(apiError as { data: { detail: string } })?.data?.detail}
+        </span>
+      );
+    }
+
+    return (
+      <span className="text-red-600">
+        {(apiError as { data: { detail: string } })?.data?.detail || "Registration failed"}
+      </span>
+    );
+  };
+
   useEffect(() => {
     setMounted(true);
   }, []);
@@ -46,8 +67,14 @@ const SignUpForm = () => {
   const onSubmit = async (data: RegisterSchema) => {
     try {
       await register(data).unwrap();
-      router.push(`/${pathname}?auth=sign-in`);
+
+      setTimeout(() => { 
+        router.push(`/${pathname}?auth=sign-in`);
+      }
+      , 1000
+      );
     } catch (err) {
+      console.error("Registration failed:", err);
       // Error handled by RTK Query
     }
   };
@@ -63,7 +90,7 @@ const SignUpForm = () => {
           Sign up to get personalized recommendations
         </HeadingPrimary>
         <p className="text-gray-600 text-base leading-6 tracking-[-2%]">
-          Discover products that work for you - no more guessing!
+          Join us to start your skincare journey
         </p>
       </div>
 
@@ -119,11 +146,7 @@ const SignUpForm = () => {
           )}
         />
 
-        {error && (
-          <span className="text-red-600">
-            {(error as any)?.data?.detail || "Registration failed"}
-          </span>
-        )}
+        {isError && renderError()}
 
         <div className="flex items-center gap-4">
           <button
@@ -135,14 +158,13 @@ const SignUpForm = () => {
           </button>
         </div>
 
-        {/* Sign In Link */}
         <p className="text-center text-lg">
           <span className="text-blue-400">Already have an account? </span>
           <Link
             href={`/${pathname}?auth=sign-in`}
             className="text-blue-500 hover:text-blue-600 font-medium"
           >
-            Sign in
+            Sign In
           </Link>
         </p>
       </form>

@@ -1,7 +1,7 @@
 "use client";
 import Image from "next/image";
 import Link from "next/link";
-import { useCallback, useState } from "react";
+import { useCallback, useState, useEffect } from "react";
 import { cn } from "@/lib/utils";
 import { usePathname, useRouter } from "next/navigation";
 import AuthActionModal from "../auth/AuthActionModal";
@@ -37,14 +37,29 @@ const menuItems = [
 export const Header: React.FC = () => {
   const router = useRouter();
   const pathname = usePathname();
+  // Move auth state to parent component
+  const { isAuthenticated } = useAppSelector((state) => state.auth);
+  const [mounted, setMounted] = useState(false);
+
+  useEffect(() => {
+    setMounted(true);
+  }, []);
 
   const onOpenAuthModal = useCallback(() => {
     router.push(`${pathname}?auth=sign-in`);
   }, [pathname, router]);
+
   return (
-    <header className="bg-white border-b border-[#E1E1E1] sticky top-0 z-50">
-      <DesktopNavbar onOpenAuthModal={onOpenAuthModal} />
-      <MobileNavbar onOpenAuthModal={onOpenAuthModal} />
+    <header className="bg-white border-b sticky top-0 z-50">
+      <DesktopNavbar
+        onOpenAuthModal={onOpenAuthModal}
+        isAuthenticated={isAuthenticated}
+        mounted={mounted}
+      />
+      <MobileNavbar
+        onOpenAuthModal={onOpenAuthModal}
+        isAuthenticated={isAuthenticated}
+      />
       <AuthActionModal />
     </header>
   );
@@ -52,45 +67,59 @@ export const Header: React.FC = () => {
 
 const DesktopNavbar = ({
   onOpenAuthModal,
+  isAuthenticated,
+  mounted,
 }: {
   onOpenAuthModal: () => void;
+  isAuthenticated: boolean;
+  mounted: boolean;
 }) => {
-  const isAuthenticated = useAppSelector((state) => state.auth.token);
+  // Return null or loading state on initial render
+  if (!mounted) {
+    return (
+      <nav className="hidden container py-6 lg:flex items-center justify-between">
+        <Link href="/">
+          <Image src="/logo.png" alt="Skinsight Logo" width={180} height={40} />
+        </Link>
+        <div className="flex items-center gap-8">
+          {menuItems.slice(0, 3).map((item) => (
+            <Link href={item.href} key={item.href} className="menu-link">
+              {item.label}
+            </Link>
+          ))}
+        </div>
+        <div className="flex items-center gap-8">
+          {menuItems.slice(3).map((item) => (
+            <Link href={item.href} key={item.href} className="menu-link">
+              {item.label}
+            </Link>
+          ))}
+          <div className="w-[168px] h-[40px]" /> {/* Placeholder */}
+        </div>
+      </nav>
+    );
+  }
 
   return (
-    <nav className="hidden container h-[100px] lg:flex items-center justify-between">
+    <nav className="hidden container py-6 lg:flex items-center justify-between">
       <Link href="/">
-        <Image
-          src={Logo}
-          alt="Skinsight Logo"
-          width={162.13}
-          height={48}
-          priority
-        />
+        <Image src="/logo.png" alt="Skinsight Logo" width={180} height={40} />
       </Link>
-      <div className="flex items-center gap-[40px]">
+      <div className="flex items-center gap-8">
         {menuItems.slice(0, 3).map((item) => (
-          <Link
-            href={item.href}
-            key={item.href}
-            className="text-base leading-[26px] font-normal text-foreground"
-          >
+          <Link href={item.href} key={item.href} className="menu-link">
             {item.label}
           </Link>
         ))}
       </div>
-      <div className="flex items-center gap-[40px]">
+      <div className="flex items-center gap-8">
         {menuItems.slice(3).map((item) => (
-          <Link
-            href={item.href}
-            key={item.href}
-            className="text-base leading-[26px] font-normal text-foreground"
-          >
+          <Link href={item.href} key={item.href} className="menu-link">
             {item.label}
           </Link>
         ))}
 
-        {isAuthenticated ? (
+        {mounted && isAuthenticated ? (
           <UserMenu />
         ) : (
           <button
@@ -106,30 +135,40 @@ const DesktopNavbar = ({
   );
 };
 
-const MobileNavbar = ({ onOpenAuthModal }: { onOpenAuthModal: () => void }) => {
+const MobileNavbar = ({
+  onOpenAuthModal,
+  isAuthenticated,
+}: {
+  onOpenAuthModal: () => void;
+  isAuthenticated: boolean;
+}) => {
   const [isOpen, setIsOpen] = useState(false);
   const [isAccountOpen, setIsAccountOpen] = useState(false);
   // const onCloseAccount = useCallback(() => setIsAccountOpen(false), []);
   const onClose = useCallback(() => setIsOpen(false), []);
-  const isAuthenticated = useAppSelector((state) => state.auth.token);
-  const dispatch = useAppDispatch();
-  const router = useRouter();
-  // const [logOutUser, { isLoading }] = useLogoutMutation();
 
-  const onLogOut = async () => {
-    // try {
-    // await logOutUser(null).unwrap();
-    dispatch(logout());
-    localStorage.removeItem("token");
-    router.refresh();
-    // } catch (error) {
-    //   console.log(error);
-    // }
-  };
+  const authenticatedUserMenu = [
+    {
+      label: "My Profile",
+      href: "/my-profile",
+    },
+    {
+      label: "Saved Items",
+      href: "/saved-items",
+    },
+    {
+      label: "My Reviews",
+      href: "/my-reviews",
+    },
+    {
+      label: "My Regimen",
+      href: "/my-regimen",
+    },
+  ];
 
   return (
     <nav id="menu" className="container block lg:hidden">
-      <div className="h-[119px] flex items-center justify-between">
+      <div className="py-6 flex items-center justify-between">
         <Link href="/">
           <Image
             src={Logo}
@@ -284,16 +323,7 @@ const MobileNavbar = ({ onOpenAuthModal }: { onOpenAuthModal: () => void }) => {
                   </Link>
                 </li>
               ))}
-              {isAuthenticated ? (
-                <li
-                  // {...(isLoading ? {} : { onClick: onLogOut })}
-                  onClick={onLogOut}
-                  className="text-accent text-xl hover:opacity-70 transition-opacity"
-                >
-                  {/* {isLoading ? "Loading..." : "Log out"} */}
-                  Log out
-                </li>
-              ) : (
+              {!isAuthenticated && (
                 <li>
                   <button
                     type="button"
@@ -311,7 +341,7 @@ const MobileNavbar = ({ onOpenAuthModal }: { onOpenAuthModal: () => void }) => {
           </nav>
 
           {/* Sign Up Button */}
-          <p className=" text-accent text-sm">
+          <p className="text-accent text-sm">
             Skinsight 2024 • All rights reserved.
           </p>
         </div>
