@@ -23,7 +23,7 @@ const ProductImageCarousel = () => {
   }, []);
 
   return (
-    <div className="w-full lg:mx-0 lg:w-[600px] bg-white border rounded-xl p-4 space-y-4">
+    <div className="w-full lg:mx-0 lg:w-[591px] h-[358px] lg:h-[509px] bg-white border rounded-xl p-4 space-y-4">
       <div className="flex items-center gap-2">
         <Tag variant="matched">99% matched</Tag>
         <Tag variant="best_rated">Most loved by your skintwins</Tag>
@@ -36,12 +36,12 @@ const ProductImageCarousel = () => {
         >
           {images.map((src, i) => (
             <div key={i} className="w-full flex-shrink-0">
-              <div className="relative mx-auto w-[300px] h-[320px] lg:h-[500px]">
+              <div className="relative mx-auto lg:w-[300px] h-[240px] lg:h-[380px]">
                 <Image
                   src={src}
                   alt={`product ${i + 1}`}
                   fill
-                  className="object-cover rounded-xl"
+                  className="w-full h-full object-contain"
                 />
               </div>
             </div>
@@ -108,29 +108,6 @@ const ProductImageCarousel = () => {
           />
         ))}
       </div>
-
-      <button
-        type="button"
-        className="flex px-6 py-4  items-center justify-center gap-2 rounded-xl font-medium bg-[#EDAFDF29] text-[#E77CCF]"
-      >
-        <svg
-          width="25"
-          height="24"
-          viewBox="0 0 25 24"
-          fill="none"
-          xmlns="http://www.w3.org/2000/svg"
-        >
-          <path
-            d="M12.5 7.69334C10.5 2.9989 3.5 3.4989 3.5 9.49893C3.5 15.499 12.5 20.4991 12.5 20.4991C12.5 20.4991 21.5 15.499 21.5 9.49893C21.5 3.4989 14.5 2.9989 12.5 7.69334Z"
-            stroke="#E77CCF"
-            strokeWidth="2"
-            strokeLinecap="round"
-            strokeLinejoin="round"
-          />
-        </svg>
-
-        <span className="font-medium">Save for later</span>
-      </button>
     </div>
   );
 };

@@ -7,7 +7,7 @@ const HeadingPrimary = ({ className, children }: HeadingPrimaryProps) => {
   return (
     <h2
       className={cn(
-        "text-4xl lg:text-6xl lg:leading-[70px] font-semibold mb-4 bg-gradient-to-r from-blue-400 to-violet-400 text-transparent bg-clip-text",
+        "text-4xl lg:text-6xl lg:leading-[70px] font-semibold mb-4 bg-[linear-gradient(90deg,#8F80E8_0%,#80ADE8_100%)] text-transparent bg-clip-text",
         className
       )}
     >

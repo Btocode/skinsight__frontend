@@ -9,30 +9,30 @@ const complexionOptions: Complexion[] = [
     title: "Pale",
     description:
       "The fairest of them all! Often delicate and prone to sunburn.",
-    icon: "👩🏻‍🦰",
+    icon: "/icons/pale.png",
   },
   {
     title: "Light",
     description:
       "A natural brightness — usually burns but with some luck it can tan.",
-    icon: "👩🏻",
+    icon: "/icons/light.png",
   },
   {
     title: "Medium",
     description:
       "Burns sometimes, tans uniformly, carries the warmth of golden sunsets.",
-    icon: "👩🏼",
+    icon: "/icons/medium.png",
   },
   {
     title: "Deep",
     description:
       "Rich and dark skin tones that radiate depth. Burns rarely, tans very easily.",
-    icon: "👩🏽",
+    icon: "/icons/deep.png",
   },
   {
     title: "Dark",
     description: "The deepest, most vibrant tones. Never burns!",
-    icon: "👩🏾‍🦱",
+    icon: "/icons/dark.png",
   },
 ];
 

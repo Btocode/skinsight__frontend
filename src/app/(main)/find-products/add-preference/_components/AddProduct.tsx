@@ -21,15 +21,18 @@ const AddProduct = ({ open, onClose }: AddProductProps) => {
   const dispatch = useAppDispatch();
 
   return (
-    <Modal isOpen={open} onClose={onClose}>
-      <div className="max-w-2xl flex items-center justify-center min-h-[450px] gap-6">
-        <div className="flex-1 flex flex-col gap-4">
-          <div className="flex flex-col lg:gap-4">
-            <BackButton buttonProps={{ className: "self-start" }} />
-            <HeadingPrimary className="leading-[44px] text-[22px] lg:text-4xl">
-              Select a product you currently use
-            </HeadingPrimary>
-          </div>
+    <Modal
+      isOpen={open}
+      onClose={onClose}
+      isCloseIconVisible={false}
+      contentClassName="p-0 lg:p-0"
+    >
+      <div className="max-w-[690px] flex items-center justify-center gap-[25px] lg:px-[25px] lg:py-[36px]">
+        <div className="flex-1 flex flex-col gap-[28px]">
+          <BackButton buttonProps={{ className: "self-start -mb-[18px]" }} />
+          <HeadingPrimary className="lg:text-[38px] font-semibold lg:leading-[45.22px] tracking-[-0.02em] -mb-2">
+            Select a product you currently use
+          </HeadingPrimary>
           <label
             htmlFor="add-product-image"
             className="w-[150px] lg:w-[200px] mx-auto h-[200px] lg:h-[260px] border border-dashed border-primary lg:hidden flex items-center justify-center rounded-xl cursor-pointer"
@@ -49,6 +52,8 @@ const AddProduct = ({ open, onClose }: AddProductProps) => {
             ]}
             placeholder="Select brand"
             className="max-w-full"
+            buttonClassName="border-0"
+            valueClassName="text-xl font-normal leading-[26px] text-accent"
           />
           <Combobox
             options={[
@@ -59,29 +64,23 @@ const AddProduct = ({ open, onClose }: AddProductProps) => {
             ]}
             placeholder="Select product"
             className="max-w-full"
+            buttonClassName="border-0"
+            valueClassName="text-xl font-normal leading-[26px] text-accent"
           />
           <div className="flex items-center gap-4">
-            <Button className="px-8">Next</Button>
-            <Button onClick={onClose} className="px-8" variant="outline">
+            <Button className="w-[126px] h-[60px] rounded-xl text-xl font-medium leading-[26px]">
+              Next
+            </Button>
+            <Button
+              onClick={onClose}
+              className="w-[126px] h-[60px] border rounded-xl text-xl font-medium leading-[26px]"
+              variant="outline"
+            >
               Cancel
             </Button>
           </div>
         </div>
-        <label
-          htmlFor={"add-product-image"}
-          id="add-product-image"
-          className="hidden  w-[200px] h-[260px] border border-primary lg:flex items-center justify-center rounded-xl mt-4 cursor-pointer"
-        >
-          <input
-            type="file"
-            id="add-product-image"
-            className="absolute opacity-0"
-            onChange={(e) => {
-              if (e.target.files) {
-                setFile(e.target.files[0]);
-              }
-            }}
-          />
+        <div className="hidden px-4 w-[182px] h-[224px] border border-dashed border-primary lg:flex items-center justify-center rounded-xl">
           {file ? (
             <Image
               src={URL.createObjectURL(file)}
@@ -107,7 +106,7 @@ const AddProduct = ({ open, onClose }: AddProductProps) => {
               />
             </svg>
           )}
-        </label>
+        </div>
       </div>
     </Modal>
   );

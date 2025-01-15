@@ -25,7 +25,7 @@ const SelectSkinConcern = () => {
 
   return (
     <>
-      <div className="grid grid-cols-2 md:grid-cols-3 gap-4 lg:gap-x-4 lg:gap-y-8">
+      <div className="grid grid-cols-2 md:grid-cols-3 mt-[32px] lg:mt-0 gap-5">
         {skinConcerns.map((item, index) => (
           <div
             key={index}
@@ -82,10 +82,14 @@ const SelectSkinConcern = () => {
       </div>
       <Button
         onClick={() => router.push("/find-products/age")}
-        className="px-10 lg:px-8 mt-4 lg:mt-0"
+        className="w-[126px] h-[60px] p-0 mt-4 lg:mt-0"
       >
-        <span className="hidden lg:block">Next</span>
-        <span className="lg:hidden">Let&apos;s go</span>
+        <span className="hidden lg:block text-xl font-medium leading-[26px]">
+          Next
+        </span>
+        <span className="lg:hidden text-xl font-medium leading-[26px]">
+          Let&apos;s go
+        </span>
       </Button>
     </>
   );

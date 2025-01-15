@@ -2,7 +2,6 @@
 
 import Button from "@/components/common/Button";
 import { Combobox, Option } from "@/components/common/Combobox";
-import Link from "next/link";
 import { useCallback } from "react";
 import { allCountries } from "country-region-data";
 import { useAppDispatch, useAppSelector } from "@/lib/redux/hook";
@@ -51,7 +50,7 @@ const SelectRegion = () => {
   };
 
   return (
-    <div className="flex flex-col gap-6">
+    <div className="flex flex-col mt-[32px] lg:mt-0 gap-5">
       <Combobox
         options={formatCountries() as Option[]}
         placeholder="Select"
@@ -82,9 +81,9 @@ const SelectRegion = () => {
         />
       )}
 
-      <div className="flex items-center gap-4">
+      <div className="flex items-center gap-5">
         <Button
-          className="px-8"
+          className="w-[126px] h-[60px] p-0 text-xl font-medium leading-[26px]"
           disabled={!region?.country || !region?.city}
           onClick={() => {
             router.push("/find-products/find-perfect-match");
@@ -92,7 +91,11 @@ const SelectRegion = () => {
         >
           Next
         </Button>
-        <Button onClick={onSkip} variant={"outline"} className="px-8 border">
+        <Button
+          onClick={onSkip}
+          variant={"outline"}
+          className="w-[126px] h-[60px] border"
+        >
           Skip
         </Button>
       </div>

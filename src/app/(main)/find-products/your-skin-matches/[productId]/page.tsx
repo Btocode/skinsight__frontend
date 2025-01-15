@@ -11,17 +11,17 @@ import Advertisement from "@/components/common/Advertisement";
 
 const ProductDetails = () => {
   return (
-    <section className="container py-10">
+    <section className="container mt-4 lg:mt-[74px]">
       <div className="lg:flex items-center justify-between gap-4">
         <div className="space-y-2">
           <BackButton />
-          <p className="text-base lg:text-xl font-medium leading-[24px] tracking-[-0.02em]">
+          <p className="text-[15px] lg:text-xl font-medium leading-[17.85px] lg:leading-[23.8px] tracking-[-0.02em]">
             Glow Recipe
           </p>
-          <h2 className="text-3xl lg:text-[42px] font-semibold leading-[36px] lg:leading-[49.98px] tracking-[-0.02em]">
+          <h2 className="text-[28px] lg:text-[42px] font-semibold leading-[33.32px] lg:leading-[49.98px] tracking-[-0.02em]">
             Watermelon Glow PHA+BHA
           </h2>
-          <p className="text-base lg:text-xl font-medium leading-[26px]">
+          <p className="text-[15px] lg:text-xl font-medium leading-[17.85px] lg:leading-[26px] tracking-[-0.02em] lg:tracking-normal">
             Price{" "}
             <span className="text-xl lg:text-2xl font-semibold leading-[26px]">
               $565
@@ -31,17 +31,19 @@ const ProductDetails = () => {
         <div className="flex items-center gap-4 mt-4 lg:mt-0">
           <button
             type="button"
-            className="flex px-6 items-center justify-center gap-2 rounded-xl lg:rounded-full bg-violet-100 py-4 text-violet-600 transition-colors hover:bg-violet-200"
+            className="w-[141px] h-[48px] rounded-xl bg-[#8F80E833] flex items-center justify-center gap-2"
           >
             <svg width="25" height="24" viewBox="0 0 25 24" fill="none">
               <path
                 d="M6.5 7.2002V16.6854C6.5 18.0464 6.5 18.7268 6.70412 19.1433C7.08245 19.9151 7.91157 20.3588 8.76367 20.2454C9.2234 20.1842 9.78964 19.8067 10.9221 19.0518L10.9248 19.0499C11.3737 18.7507 11.5981 18.6011 11.833 18.5181C12.2642 18.3656 12.7348 18.3656 13.166 18.5181C13.4013 18.6012 13.6266 18.7515 14.0773 19.0519C15.2098 19.8069 15.7767 20.1841 16.2364 20.2452C17.0885 20.3586 17.9176 19.9151 18.2959 19.1433C18.5 18.7269 18.5 18.0462 18.5 16.6854V7.19691C18.5 6.07899 18.5 5.5192 18.2822 5.0918C18.0905 4.71547 17.7837 4.40973 17.4074 4.21799C16.9796 4 16.4203 4 15.3002 4H9.7002C8.58009 4 8.01962 4 7.5918 4.21799C7.21547 4.40973 6.90973 4.71547 6.71799 5.0918C6.5 5.51962 6.5 6.08009 6.5 7.2002Z"
-                stroke="currentColor"
+                stroke="#8F80E8"
                 strokeWidth={2}
               />
             </svg>
 
-            <span>Add to routine</span>
+            <span className="text-sm font-medium leading-[21px] tracking-[-0.03em] text-[#8F80E8]">
+              Save for later
+            </span>
           </button>
           <Button
             icon={
@@ -61,13 +63,15 @@ const ProductDetails = () => {
                 />
               </svg>
             }
-            className="lg:rounded-full"
+            className="p-0 w-[141px] h-[48px] rounded-xl flex items-center justify-center gap-2"
           >
-            <span>Buy now</span>
+            <span className="text-sm font-medium leading-[21px] tracking-[-3%] text-white">
+              Buy now
+            </span>
           </Button>
         </div>
       </div>
-      <div className="lg:flex justify-between gap-8">
+      <div className="flex flex-col-reverse lg:flex-row justify-between mt-6 lg:mt-0 gap-4 lg:gap-8">
         <div className="mb-8 lg:mb-0">
           <ProductAccordion />
           <ProductGallery />

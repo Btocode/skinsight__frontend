@@ -10,7 +10,7 @@ const ProductAccordion = () => {
   };
 
   return (
-    <div className="max-w-[800px] flex flex-col gap-4 py-4">
+    <div className="max-w-[800px] flex flex-col gap-3 lg:gap-4 py-4">
       <Accordion
         title="Formulation and Key Ingredients"
         content="Houttuynia Cordata Extract (77%), Water, 1,2- Hexanediol, Glycerin, Betaine, Panthenol, Saccha- rum Officinarum (Sugarcane) Extract, Portulaca Oleracea Extract, Butylene Glycol, Vitex Agnus -Castus Extract, Chamomilla Recutita (Matricar- ia) Flower Extract, Arctium Lappa Root Extract, Phellinus Linteus Extract, Vitis Vinifera (Grape) Fruit Extract, Pyrus Malus (Apple) Fruit Extract, Centella Asiatica Extract, Isopentyldiol, Methylpro- panediol, Acrylates/C10-30 AlkyI Acrylate Cross- polymer, Tromethamine, Disodium EDTA"

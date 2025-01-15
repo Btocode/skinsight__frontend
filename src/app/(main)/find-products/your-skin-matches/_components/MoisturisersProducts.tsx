@@ -2,15 +2,16 @@ import { MatchesProductCard } from "./MatchesProductCard";
 
 const MoisturisersProducts = ({ products }) => {
   return (
-    <section
-      id="moisturisers"
-      className="max-w-[1420px] mx-auto py-4 space-y-4"
-    >
-      <div className="flex items-center justify-between mt-[36px] mb-[48px]">
-        <h4 className="text-2xl font-semibold text-accent">Moisturisers</h4>
-        <span className="inline-block text-4xl">+</span>
+    <section id="moisturisers" className="lg:container mt-[27px] lg:mt-[46px]">
+      <div className="flex items-center justify-between lg:px-[40px] mb-[17px] lg:mb-[48px]">
+        <h4 className="text-base lg:text-2xl font-semibold leading-[19.04px] lg:leading-[26px] tracking-[-0.02em] lg:tracking-normal text-accent">
+          Moisturisers
+        </h4>
+        <span className="inline-block text-4xl text-primary cursor-pointer">
+          +
+        </span>
       </div>
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 lg:gap-8">
+      <div className="lg:px-[43px] grid grid-cols-2 md:grid-cols-2 lg:grid-cols-3 gap-4 lg:gap-[40px]">
         {products?.map((item, index) => (
           <MatchesProductCard key={index} item={item} />
         ))}

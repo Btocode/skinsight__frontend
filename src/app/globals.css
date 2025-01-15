@@ -8,6 +8,29 @@
   --foreground: #1e0e62;
 }
 
+/* Scrollbar style */
+::-webkit-scrollbar {
+  width: 8px;
+}
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+::-webkit-scrollbar-thumb {
+  background: linear-gradient(
+    90deg,
+    rgba(143, 128, 232, 0.6),
+    rgba(128, 173, 232, 0.6)
+  );
+  border-radius: 10px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: linear-gradient(
+    90deg,
+    rgba(143, 128, 232, 0.8),
+    rgba(128, 173, 232, 0.8)
+  );
+}
+
 @layer utilities {
   .menu-link {
     @apply text-base font-normal leading-[26px]  text-foreground;

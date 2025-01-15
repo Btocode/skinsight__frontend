@@ -9,13 +9,15 @@ const SelectSkinType = () => {
   const skinType = useAppSelector((state) => state.product.skinType);
   const router = useRouter();
 
-  const onSkinTypeChange = (item: string) => {
+  const onSkinTypeChange = async (item: string) => {
     dispatch(setProductState({ key: "skinType", value: item }));
+    await new Promise((resolve) => setTimeout(resolve, 1000));
+
     router.push("/find-products/complexion");
   };
 
   return (
-    <div className="grid grid-cols-2 md:grid-cols-3 gap-4 lg:gap-x-4 lg:gap-y-8">
+    <div className="grid grid-cols-2 md:grid-cols-3 mt-[32px] lg:mt-0 gap-5">
       {skinTypes.map((item, index) => (
         <Card
           key={index}

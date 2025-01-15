@@ -10,13 +10,15 @@ const SelectAge = () => {
   const age = useAppSelector((state) => state.product.age);
   const router = useRouter();
 
-  const onSkinConcernChange = (item: string) => {
+  const onSkinConcernChange = async (item: string) => {
     dispatch(setProductState({ key: "age", value: item }));
+    await new Promise((resolve) => setTimeout(resolve, 1000));
+
     router.push("/find-products/region");
   };
 
   return (
-    <div className="grid grid-cols-2 md:grid-cols-3 gap-5">
+    <div className="grid grid-cols-2 md:grid-cols-3 mt-[32px] lg:mt-0 gap-5">
       {ages.map((item, index) => (
         <Card
           key={index}

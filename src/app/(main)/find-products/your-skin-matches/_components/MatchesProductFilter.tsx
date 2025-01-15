@@ -12,6 +12,7 @@ const MatchesProductFilter = () => {
       <Button
         onClick={() => setIsOpen(true)}
         variant={"outline"}
+        className="w-[87px] lg:w-[102px] h-[40px] text-base lg:text-xl font-medium leading-[26px] p-0 border"
         icon={
           <svg
             width="18"
@@ -26,6 +27,7 @@ const MatchesProductFilter = () => {
               strokeWidth="2"
               strokeLinecap="round"
               strokeLinejoin="round"
+              className="w-4 h-4"
             />
           </svg>
         }
@@ -35,7 +37,8 @@ const MatchesProductFilter = () => {
       <Modal
         isOpen={isOpen}
         onClose={() => setIsOpen(false)}
-        contentClassName="px-0"
+        contentClassName="p-0 lg:p-0"
+        isCloseIconVisible={false}
       >
         <FilterModal />
       </Modal>
@@ -98,12 +101,13 @@ function FilterModal() {
   };
 
   return (
-    <div className="bg-white w-[380px] lg:w-[500px] py-4 mt-2 overflow-hidden space-y-4">
+    <div className="bg-white w-[380px] lg:w-[402px] overflow-hidden rounded-xl py-[18px]">
       {/* Sort Section */}
-      <div className="w-full space-y-2">
-        <div className="flex items-center justify-between px-6">
-          <h2 className="text-2xl font-medium text-gray-900">Sort by</h2>
-
+      <div className="w-full">
+        <div className="pl-3 flex items-center justify-between">
+          <h2 className="text-base font-semibold leading-[24px] tracking-[-0.03em] text-accent">
+            Sort by
+          </h2>
           <Button
             variant={"ghost"}
             onClick={() => setSortExpanded(!sortExpanded)}
@@ -123,10 +127,10 @@ function FilterModal() {
             >
               <path
                 d="M19 9.5L12 16.5L5 9.5"
-                stroke="#2C2C2C"
                 strokeWidth="2"
                 strokeLinecap="round"
                 strokeLinejoin="round"
+                className="opacity-50 stroke-accent w-6 h-6"
               />
             </svg>
           </Button>
@@ -135,7 +139,7 @@ function FilterModal() {
 
         <div
           className={cn(
-            "space-y-3 px-8 py-2 transition-all duration-200 ease-in-out h-[0px] -z-10 opacity-0",
+            "space-y-4 pt-3 px-[29.5px] transition-all duration-200 ease-in-out h-[0px] -z-10 opacity-0",
             {
               "h-[150px] opacity-100": sortExpanded,
             }
@@ -147,15 +151,19 @@ function FilterModal() {
               label={option.label}
               checked={option.checked}
               onChange={() => handleSortChange(option.id)}
+              iconClassName="w-[18px] h-[18px] rounded flex items-center justify-center"
+              labelClassName="text-base font-normal leading-[24px] tracking-[-0.03em] text-accent ml-[15px]"
             />
           ))}
         </div>
       </div>
 
       {/* Filter Section */}
-      <div className="w-full space-y-2">
-        <div className="flex justify-between items-center px-6">
-          <h2 className="text-2xl font-medium text-gray-900">Filter</h2>
+      <div className="w-full mt-[25px]">
+        <div className="pl-3 flex items-center justify-between">
+          <h2 className="text-base font-semibold leading-[24px] tracking-[-0.03em] text-accent">
+            Filter
+          </h2>
           <Button
             variant={"ghost"}
             onClick={() => setFilterExpanded(!filterExpanded)}
@@ -175,10 +183,10 @@ function FilterModal() {
             >
               <path
                 d="M19 9.5L12 16.5L5 9.5"
-                stroke="#2C2C2C"
                 strokeWidth="2"
                 strokeLinecap="round"
                 strokeLinejoin="round"
+                className="opacity-50 stroke-accent w-6 h-6"
               />
             </svg>
           </Button>
@@ -187,7 +195,7 @@ function FilterModal() {
 
         <div
           className={cn(
-            "space-y-3 px-8 py-2 transition-all duration-200 ease-in-out h-[0px] -z-10 opacity-0",
+            "space-y-4 pt-3 px-[29.5px] transition-all duration-200 ease-in-out h-[0px] -z-10 opacity-0",
             {
               "h-[200px] opacity-100": filterExpanded,
             }
@@ -199,25 +207,27 @@ function FilterModal() {
               label={option.label}
               checked={option.checked}
               onChange={() => handleFilterChange(option.id)}
+              iconClassName="w-[18px] h-[18px] rounded flex items-center justify-center"
+              labelClassName="text-base font-normal leading-[24px] tracking-[-0.03em] text-accent ml-[15px]"
             />
           ))}
         </div>
       </div>
 
       {/* Action Buttons */}
-      <div className="px-8 flex justify-start gap-4">
+      <div className="px-[18px] flex justify-start gap-3 mt-[25px]">
         <Button
           onClick={() =>
             console.log("Applied:", { sortOptions, filterOptions })
           }
-          className="lg:flex-1 rounded-full"
+          className="w-[101px] h-[44px] rounded-xl text-base font-medium leading-[26px]"
         >
           Apply
         </Button>
         <Button
           variant={"outline"}
           onClick={handleClear}
-          className="lg:flex-1 rounded-full"
+          className="w-[101px] h-[44px] rounded-xl border text-base font-medium leading-[26px]"
         >
           Clear
         </Button>

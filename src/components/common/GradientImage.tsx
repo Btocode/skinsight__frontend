@@ -30,24 +30,26 @@ const GradientImage = ({ firstImage, secondImage }: GradientImageProps) => {
       <Image
         src={firstImage?.url ?? "/gradient1.png"}
         alt="gradient1"
-        width={firstImage?.width ?? 600}
-        height={firstImage?.height ?? 420}
+        width={firstImage?.width ?? 1000}
+        height={firstImage?.height ?? 620}
         className={cn(
-          "fixed -left-32 top-10 lg:left-0 lg:top-20 -z-10",
+          "fixed -left-32 top-10 lg:-left-60 lg:-top-12 -z-10",
           firstImage?.className
         )}
         priority
+        style={{ opacity: 0.8, width: "auto", height: "auto" }}
       />
       <Image
         src={secondImage?.url ?? "/gradient2.png"}
         alt="gradient2"
-        width={secondImage?.width ?? 800}
-        height={secondImage?.height ?? 475}
+        width={secondImage?.width ?? 1200}
+        height={secondImage?.height ?? 675}
         className={cn(
-          "fixed top-[500px] -right-36 lg:right-52 lg:top-[520px]  -z-10",
+          "fixed top-[500px] -right-36 lg:right-56 lg:top-[420px]  -z-10",
           secondImage?.className
         )}
         priority
+        style={{ opacity: 0.8, width: "auto", height: "auto" }}
       />
     </>
   );

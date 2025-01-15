@@ -20,10 +20,10 @@ const YourSkinMatchesPage = async () => {
   }
 
   return (
-    <div className="container py-10 relative">
+    <div className="container relative mt-4 lg:mt-[40px]">
       <MatchesProductHeader />
-      <div className="flex items-center justify-between mt-[30px] lg:mt-[56px]">
-        <h4 className="text-lg lg:text-2xl font-semibold leading-[26px] text-accent">
+      <div className="flex items-center justify-between mt-[30px] lg:mt-[54px]">
+        <h4 className="text-base lg:text-2xl font-semibold leading-[19.04px] lg:leading-[26px] tracking-[-0.02em] lg:tracking-normal text-accent">
           Top products for you
         </h4>
         <MatchesProductFilter />

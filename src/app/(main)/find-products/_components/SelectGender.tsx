@@ -11,13 +11,14 @@ const SelectGender = () => {
   const gender = useAppSelector((state) => state.product.gender);
   const router = useRouter();
 
-  const onGenderChange = (item: Gender) => {
+  const onGenderChange = async (item: Gender) => {
     dispatch(setProductState({ key: "gender", value: item }));
+    await new Promise((resolve) => setTimeout(resolve, 1000));
     router.push("/find-products/skin-type");
   };
 
   return (
-    <div className="grid grid-cols-2 md:grid-cols-3 gap-4 lg:gap-x-4 lg:gap-y-8">
+    <div className="w-full grid grid-cols-2 md:grid-cols-3 mt-[32px] lg:mt-0 gap-5">
       {genders.map((item, index) => (
         <Card
           key={index}

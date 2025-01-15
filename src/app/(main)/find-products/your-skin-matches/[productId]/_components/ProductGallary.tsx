@@ -31,16 +31,16 @@ export default function ProductGallery() {
       behavior: "smooth",
     });
   };
-
   return (
     <>
-      <div className="max-w-[800px] pt-4">
-        <h2 className="text-2xl font-semibold mb-6">See it in action</h2>
-
+      <div className="max-w-[573px] pt-4">
+        <h2 className="text-base leading-[24px] tracking-[-0.02em] lg:text-2xl font-semibold mb-4 lg:mb-6 text-accent">
+          See it in action
+        </h2>
         <div className="relative flex items-center justify-between gap-2">
           <div
             ref={scrollContainerRef}
-            className="flex gap-4 overflow-x-auto scroll-smooth hide-scrollbar"
+            className="flex gap-2 lg:gap-4 overflow-x-auto scroll-smooth hide-scrollbar"
           >
             {galleryItems.map((item) => (
               <div
@@ -49,9 +49,9 @@ export default function ProductGallery() {
               >
                 <div
                   onClick={() => setGalleryItem(item.image)}
-                  className="w-16 h-16 lg:w-[86px] lg:h-[86px] rounded-full border-2 border-rose-300 flex items-center justify-center overflow-hidden mb-2"
+                  className="w-[50px] h-[50px] lg:w-[60px] lg:h-[60px] rounded-full border-2 border-rose-300 flex items-center justify-center overflow-hidden mb-2"
                 >
-                  <div className="w-20 h-20 rounded-full border-2 border-gray-50 overflow-hidden relative">
+                  <div className="w-[45px] lg:w-[55px] h-[45px] lg:h-[55px] rounded-full border-2 border-gray-50 overflow-hidden relative">
                     <Image
                       src={item.image}
                       alt={item.label}

@@ -46,8 +46,8 @@ board-write; encrypted-media; gyroscope; picture-in-picture; web-share"
               key={item.id}
               className="flex flex-col items-center flex-shrink-0"
             >
-              <div className="w-[70px] h-[70px] rounded-full border-2 border-rose-300 flex items-center justify-center overflow-hidden mb-2">
-                <div className="w-[64px] h-[64px] rounded-full border-2 border-gray-50 overflow-hidden relative">
+              <div className="w-[50px] lg:w-[60px] h-[50px] lg:h-[60px] rounded-full border-2 border-rose-300 flex items-center justify-center overflow-hidden mb-2">
+                <div className="w-[45px] lg:w-[55px] h-[45px] lg:h-[55px] rounded-full border-2 border-gray-50 overflow-hidden relative">
                   <Image
                     src={item.image}
                     alt={item.label}

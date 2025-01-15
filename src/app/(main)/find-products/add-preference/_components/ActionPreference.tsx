@@ -9,12 +9,15 @@ const ActionPreference = () => {
   const router = useRouter();
   return (
     <>
-      <div className="flex items-center gap-4 mt-2 lg:mt-0">
-        <Button onClick={() => setOpen(true)} className="px-8">
+      <div className="flex items-center gap-5 pt-2">
+        <Button
+          onClick={() => setOpen(true)}
+          className="w-[126px] h-[60px] text-xl font-medium leading-[26px]"
+        >
           Add
         </Button>
         <Button
-          className="px-8"
+          className="w-[126px] h-[60px] border text-xl font-medium leading-[26px]"
           variant={"outline"}
           onClick={() => router.back()}
         >

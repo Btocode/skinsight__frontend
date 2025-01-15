@@ -14,6 +14,8 @@ export interface ComboboxProps {
   onChange?: (value: Option) => void;
   placeholder?: string;
   className?: string;
+  buttonClassName?: string;
+  valueClassName?: string;
 }
 
 export function Combobox({
@@ -22,6 +24,8 @@ export function Combobox({
   onChange,
   placeholder = "Select...",
   className,
+  buttonClassName,
+  valueClassName,
 }: ComboboxProps) {
   const [open, setOpen] = useState(false);
   const [highlightedIndex, setHighlightedIndex] = useState(-1);
@@ -115,15 +119,16 @@ export function Combobox({
         onClick={() => setOpen(!open)}
         onKeyDown={handleKeyDown}
         className={cn(
-          "flex h-14 w-full items-center justify-between rounded-md border border-input bg-[#8599FE26] px-3 py-3 text-sm ring-offset-[#8599FE26] placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-1 disabled:cursor-not-allowed disabled:opacity-50",
-          open && "ring-1 ring-ring ring-offset-1"
+          "flex h-[60px] w-full items-center justify-between rounded-md border border-input bg-[#8599FE26] px-3 py-3 text-sm ring-offset-[#8599FE26] placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-1 disabled:cursor-not-allowed disabled:opacity-50",
+          open && "ring-1 ring-ring ring-offset-1",
+          buttonClassName
         )}
         aria-expanded={open}
         aria-haspopup="listbox"
         aria-controls={open ? "dropdown-list" : undefined}
         type="button"
       >
-        <span className="truncate text-lg">
+        <span className={cn("truncate text-lg", valueClassName)}>
           {value ? value.label : placeholder}
         </span>
         <div

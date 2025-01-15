@@ -9,11 +9,12 @@ import UserMenu, { MENU_ITEMS } from "../common/UserMenu";
 import { useAppDispatch, useAppSelector } from "@/lib/redux/hook";
 import { logout } from "@/redux/slices/authSlice";
 // import { useLogoutMutation } from "@/redux/apis/authApi";
+import Logo from "../../../public/logo.png";
 
 const menuItems = [
   {
     label: "Recommend Products",
-    href: "/recommend-products",
+    href: "/find-products",
   },
   {
     label: "Find Alternatives",
@@ -41,7 +42,7 @@ export const Header: React.FC = () => {
     router.push(`${pathname}?auth=sign-in`);
   }, [pathname, router]);
   return (
-    <header className="bg-white border-b sticky top-0 z-50">
+    <header className="bg-white border-b border-[#E1E1E1] sticky top-0 z-50">
       <DesktopNavbar onOpenAuthModal={onOpenAuthModal} />
       <MobileNavbar onOpenAuthModal={onOpenAuthModal} />
       <AuthActionModal />
@@ -57,27 +58,34 @@ const DesktopNavbar = ({
   const isAuthenticated = useAppSelector((state) => state.auth.token);
 
   return (
-    <nav className="hidden container py-6 lg:flex items-center justify-between">
+    <nav className="hidden container h-[100px] lg:flex items-center justify-between">
       <Link href="/">
         <Image
-          src="/logo.png"
+          src={Logo}
           alt="Skinsight Logo"
-          width={180}
-          height={40}
+          width={162.13}
+          height={48}
           priority
-          style={{ width: "auto", height: "auto" }}
         />
       </Link>
-      <div className="flex items-center gap-8">
+      <div className="flex items-center gap-[40px]">
         {menuItems.slice(0, 3).map((item) => (
-          <Link href={item.href} key={item.href} className="menu-link">
+          <Link
+            href={item.href}
+            key={item.href}
+            className="text-base leading-[26px] font-normal text-foreground"
+          >
             {item.label}
           </Link>
         ))}
       </div>
-      <div className="flex items-center gap-8">
+      <div className="flex items-center gap-[40px]">
         {menuItems.slice(3).map((item) => (
-          <Link href={item.href} key={item.href} className="menu-link">
+          <Link
+            href={item.href}
+            key={item.href}
+            className="text-base leading-[26px] font-normal text-foreground"
+          >
             {item.label}
           </Link>
         ))}
@@ -121,20 +129,19 @@ const MobileNavbar = ({ onOpenAuthModal }: { onOpenAuthModal: () => void }) => {
 
   return (
     <nav id="menu" className="container block lg:hidden">
-      <div className=" py-6 flex items-center justify-between">
+      <div className="h-[119px] flex items-center justify-between">
         <Link href="/">
           <Image
-            src="/logo.png"
+            src={Logo}
             alt="Skinsight Logo"
-            width={140}
-            height={60}
+            width={162.13}
+            height={48}
             priority
-            style={{ width: "auto", height: "auto" }}
           />
         </Link>
         <button
           onClick={() => setIsOpen(!isOpen)}
-          className="border-2 border-gray-200 w-[100px] h-[40px] flex items-center justify-center rounded-full"
+          className="border-2 border-[#EBEAED] w-[100px] h-[40px] flex items-center justify-center rounded-full"
         >
           <svg
             xmlns="http://www.w3.org/2000/svg"
