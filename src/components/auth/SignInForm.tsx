@@ -1,12 +1,9 @@
 "use client";
 import HeadingPrimary from "@/components/common/HeadingPrimary";
 import { InputBox } from "@/components/common/InputBox";
-import { useAppDispatch } from "@/lib/redux/hook";
 import { useLoginMutation } from "@/redux/apis/authApi";
-import { setCredentials } from "@/redux/slices/authSlice";
 import { loginSchema } from "@/schema/auth";
 import { LoginSchema } from "@/types/auth";
-import { setStorageItem } from "@/utils/storage";
 import { zodResolver } from "@hookform/resolvers/zod";
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
@@ -64,7 +61,7 @@ const SignInForm = () => {
     // Then show API errors
     if (!isError) return null;
 
-    const is401 = (apiError as any)?.status === 401;
+    const is401 = (apiError as { status: number })?.status === 401;
 
     if (is401) {
       return (

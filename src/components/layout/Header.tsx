@@ -6,9 +6,7 @@ import { cn } from "@/lib/utils";
 import { usePathname, useRouter } from "next/navigation";
 import AuthActionModal from "../auth/AuthActionModal";
 import UserMenu, { MENU_ITEMS } from "../common/UserMenu";
-import { useAppDispatch, useAppSelector } from "@/lib/redux/hook";
-import { logout } from "@/redux/slices/authSlice";
-// import { useLogoutMutation } from "@/redux/apis/authApi";
+import { useAppSelector } from "@/lib/redux/hook";
 import Logo from "../../../public/logo.png";
 
 const menuItems = [
@@ -50,7 +48,7 @@ export const Header: React.FC = () => {
   }, [pathname, router]);
 
   return (
-    <header className="bg-white border-b sticky top-0 z-50">
+    <header className="bg-white border-b border-[#E1E1E1] sticky top-0 z-50">
       <DesktopNavbar
         onOpenAuthModal={onOpenAuthModal}
         isAuthenticated={isAuthenticated}
@@ -77,24 +75,44 @@ const DesktopNavbar = ({
   // Return null or loading state on initial render
   if (!mounted) {
     return (
-      <nav className="hidden container py-6 lg:flex items-center justify-between">
+      <nav className="hidden container h-[100px] lg:flex items-center justify-between">
         <Link href="/">
-          <Image src="/logo.png" alt="Skinsight Logo" width={180} height={40} />
+          <Image
+            src={Logo}
+            alt="Skinsight Logo"
+            width={162.13}
+            height={48}
+            priority
+          />
         </Link>
-        <div className="flex items-center gap-8">
+        <div className="flex items-center gap-[40px]">
           {menuItems.slice(0, 3).map((item) => (
-            <Link href={item.href} key={item.href} className="menu-link">
+            <Link
+              href={item.href}
+              key={item.href}
+              className="text-base leading-[26px] font-normal text-foreground"
+            >
               {item.label}
             </Link>
           ))}
         </div>
-        <div className="flex items-center gap-8">
+        <div className="flex items-center gap-[40px]">
           {menuItems.slice(3).map((item) => (
             <Link href={item.href} key={item.href} className="menu-link">
               {item.label}
             </Link>
           ))}
-          <div className="w-[168px] h-[40px]" /> {/* Placeholder */}
+          {isAuthenticated ? (
+            <UserMenu />
+          ) : (
+            <button
+              onClick={onOpenAuthModal}
+              type="button"
+              className="text-base font-medium border-2 rounded-full px-6 py-2 text-foreground"
+            >
+              Log in
+            </button>
+          )}
         </div>
       </nav>
     );
@@ -144,27 +162,7 @@ const MobileNavbar = ({
 }) => {
   const [isOpen, setIsOpen] = useState(false);
   const [isAccountOpen, setIsAccountOpen] = useState(false);
-  // const onCloseAccount = useCallback(() => setIsAccountOpen(false), []);
   const onClose = useCallback(() => setIsOpen(false), []);
-
-  const authenticatedUserMenu = [
-    {
-      label: "My Profile",
-      href: "/my-profile",
-    },
-    {
-      label: "Saved Items",
-      href: "/saved-items",
-    },
-    {
-      label: "My Reviews",
-      href: "/my-reviews",
-    },
-    {
-      label: "My Regimen",
-      href: "/my-regimen",
-    },
-  ];
 
   return (
     <nav id="menu" className="container block lg:hidden">
