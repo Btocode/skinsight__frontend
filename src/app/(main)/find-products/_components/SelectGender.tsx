@@ -13,8 +13,10 @@ const SelectGender = () => {
 
   const onGenderChange = async (item: Gender) => {
     dispatch(setProductState({ key: "gender", value: item }));
-    await new Promise((resolve) => setTimeout(resolve, 1000));
-    router.push("/find-products/skin-type");
+    // push it after 1 second
+    setTimeout(() => {
+      router.push("/find-products/skin-type");
+    }, 1000);
   };
 
   return (

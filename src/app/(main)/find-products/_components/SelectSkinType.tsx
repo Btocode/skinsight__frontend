@@ -11,9 +11,10 @@ const SelectSkinType = () => {
 
   const onSkinTypeChange = async (item: string) => {
     dispatch(setProductState({ key: "skinType", value: item }));
-    await new Promise((resolve) => setTimeout(resolve, 1000));
-
-    router.push("/find-products/complexion");
+    // router.push("/find-products/complexion");
+    setTimeout(() => {
+      router.push("/find-products/complexion");
+    }, 1000);
   };
 
   return (
