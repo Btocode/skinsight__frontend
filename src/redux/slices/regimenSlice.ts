@@ -1,9 +1,9 @@
-// src/redux/slices/authSlice.ts
-import { RegimenState } from "@/types/regimen";
+import { RegimenState, SelectedRegimen } from "@/types/regimen";
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 
 const initialState: RegimenState = {
   productCount: "",
+  personalRegimen: {},
 };
 
 const regimenSlice = createSlice({
@@ -13,8 +13,28 @@ const regimenSlice = createSlice({
     setRegimenState(state, action: PayloadAction<RegimenState>) {
       state.productCount = action.payload.productCount;
     },
+    updatePersonalRegimen(
+      state,
+      action: PayloadAction<{
+        type: string;
+        regimen: SelectedRegimen;
+      }>
+    ) {
+      const { type, regimen } = action.payload;
+      state.personalRegimen[type] = regimen;
+    },
+    onClearPersonalRegimen(state, action: PayloadAction<string>) {
+      const type = action.payload;
+      // check if type exists
+      if (!state.personalRegimen[type]) return;
+      delete state.personalRegimen[type];
+    },
   },
 });
 
-export const { setRegimenState } = regimenSlice.actions;
+export const {
+  setRegimenState,
+  updatePersonalRegimen,
+  onClearPersonalRegimen,
+} = regimenSlice.actions;
 export const regimenReducer = regimenSlice.reducer;

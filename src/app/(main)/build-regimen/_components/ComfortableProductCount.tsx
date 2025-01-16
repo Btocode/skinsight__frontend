@@ -11,19 +11,19 @@ const ComfortableProductCount = () => {
   const dispatch = useAppDispatch();
   const router = useRouter();
 
-  const onSelectProductCount = (item: string) => {
+  const onSelectProductCount = async (item: string) => {
     dispatch(setRegimenState({ productCount: item }));
+    await new Promise((resolve) => setTimeout(resolve, 1000));
     router.push(`/build-regimen/using-products-selection`);
   };
 
   return (
-    <div className="max-w-2xl w-full space-y-6">
-      <HeadingPrimary className="lg:text-[50px] leading-[44px] lg:leading-[62px]">
+    <div className="max-w-2xl w-full mt-3">
+      <HeadingPrimary className="text-[38px] lg:text-[48px] leading-[45.22px] lg:leading-[57.12px] font-semibold tracking-[-0.02em]">
         How many products are you comfortable using{" "}
         <br className="hidden lg:block" /> in a regimen?
       </HeadingPrimary>
-
-      <div className="grid grid-cols-2 md:grid-cols-3 gap-x-4 gap-y-8">
+      <div className="grid grid-cols-2 md:grid-cols-3 mt-5 gap-5">
         {["3-4", "5-6", "7+"].map((i) => {
           const checked = productCount === i;
           return (

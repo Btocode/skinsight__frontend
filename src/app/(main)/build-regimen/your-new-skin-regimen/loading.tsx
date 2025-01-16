@@ -10,9 +10,13 @@ const Loading = () => {
         <Skeleton className="w-[220px] h-[20px]" />
         <Skeleton className="w-[420px] h-[40px]" />
 
-        <div className="max-w-[1420px] mx-auto grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 lg:gap-8">
+        {/* Three square skeletons */}
+        <div className="lg:px-[43px] grid grid-cols-2 md:grid-cols-2 lg:grid-cols-3 gap-4 lg:gap-[40px]">
           {[...Array(6)].map((_, i) => (
-            <Skeleton key={i} className="w-full h-[450px]" />
+            <Skeleton
+              key={i}
+              className="w-full lg:w-[340px] h-[260px] lg:h-[420px]"
+            />
           ))}
         </div>
 

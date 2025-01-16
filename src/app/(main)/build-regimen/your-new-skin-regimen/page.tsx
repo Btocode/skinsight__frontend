@@ -5,10 +5,10 @@ import HeadingPrimary from "@/components/common/HeadingPrimary";
 import Footer from "@/components/layout/Footer";
 import Image from "next/image";
 import { notFound } from "next/navigation";
-import AddFavorite from "../../find-products/your-skin-matches/_components/AddFavorite";
 import SkinRegimenTabs from "./_components/SkinRegimenTabs";
+import { RegimenProduct } from "@/types/regimen";
 
-const getYourSkinRegimen = async () => {
+const getYourSkinRegimen = async (): Promise<RegimenProduct[]> => {
   const response = await fetch("http://localhost:3000/api/build-regimen");
   return response.json();
 };
@@ -23,19 +23,19 @@ const YourNewSkinRegimenPage = async () => {
     <div className="container py-10 relative">
       <div className="space-y-4">
         <BackButton />
-        <h4 className="text-2xl font-semibold leading-[26px]">
+        <h4 className="text-2xl font-semibold leading-[26px] text-accent">
           Here&apos;s your new
         </h4>
-        <HeadingPrimary className="lg:text-[48px] lg:leading-[57.12px] leading-[44px]">
+        <HeadingPrimary className="lg:text-[48px] lg:leading-[57.12px] tracking-[-0.02em] leading-[44px]">
           Skin regimen
         </HeadingPrimary>
-        <p className="max-w-[720px] text-[#2C2C2C] text-lg font-normal leading-[27px] tracking-[-0.03em]">
+        <p className="max-w-[755px] text-accent text-lg font-normal leading-[27px] tracking-[-3%]">
           Fill out the products you use and let us generate your new regimen
           with missing products and let you know about the products not suited
           for your skin
         </p>
         <div className="flex items-center gap-4">
-          <button className="flex items-center justify-center gap-2 rounded-xl px-4  bg-violet-200 py-3 text-violet-600 transition-colors hover:bg-violet-200">
+          <button className="w-[141px] h-[48px] flex items-center justify-center gap-[10px] rounded-xl bg-[#8F80E833]">
             <svg
               width="20"
               height="16"
@@ -51,10 +51,11 @@ const YourNewSkinRegimenPage = async () => {
                 strokeLinejoin="round"
               />
             </svg>
-
-            <span>Email results</span>
+            <span className="text-sm font-medium leading-[21px] tracking-[-0.03em] text-[#8F80E8]">
+              Email results
+            </span>
           </button>
-          <button className="flex items-center justify-center gap-2 rounded-xl px-4  bg-pink-100 py-3 text-pink-500 transition-colors hover:bg-pink-200">
+          <button className="w-[141px] h-[48px] flex items-center justify-center gap-[10px] rounded-xl bg-[#EDAFDF4D]">
             <svg
               width="17"
               height="20"
@@ -64,31 +65,30 @@ const YourNewSkinRegimenPage = async () => {
             >
               <path
                 d="M6.5 14H1.5V19M10.5 6H15.5V1M1.08301 7.0034C1.64369 5.61566 2.58244 4.41304 3.79255 3.53223C5.00266 2.65141 6.43686 2.12752 7.92975 2.02051C9.42265 1.9135 10.9147 2.2274 12.2381 2.92661C13.5615 3.62582 14.6612 4.68254 15.4141 5.97612M15.9176 12.9971C15.3569 14.3848 14.4181 15.5874 13.208 16.4682C11.9979 17.3491 10.5652 17.8723 9.07227 17.9793C7.57937 18.0863 6.08606 17.7725 4.7627 17.0732C3.43933 16.374 2.33882 15.3175 1.58594 14.0239"
-                stroke="currentColor"
+                stroke="#E77CCF"
                 strokeWidth="2"
                 strokeLinecap="round"
                 strokeLinejoin="round"
               />
             </svg>
-
-            <span>Regenerate</span>
+            <span className="text-sm font-medium leading-[21px] tracking-[-0.03em] text-[#E77CCF]">
+              Regenerate
+            </span>
           </button>
         </div>
       </div>
-
       <SkinRegimenTabs />
-
-      <div className="max-w-[1420px] mx-auto py-10 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 lg:gap-8">
+      <div className="max-w-[1116px] mx-auto  grid grid-cols-2 md:grid-cols-2 lg:grid-cols-3 gap-5">
         {skinRegimens?.map((item, index) => (
           <div
             key={index}
-            className="w-full rounded-xl bg-white p-6 shadow-[0px_5.13px_33.34px_0px_#2C2C2C17] border border-[#EFEFEF]"
+            className="w-full lg:w-[340px] lg:h-[397px] rounded-xl bg-white p-[9px] lg:p-5 shadow-[0px_5.13px_33.34px_0px_#2C2C2C17] border border-[#EFEFEF]"
           >
-            <div className="flex flex-col gap-6 h-[450px]">
-              <h5 className="text-[#575656] text-xl font-semibold leading-[30px] tracking-[-0.03em]">
+            <div className="flex flex-col">
+              <h5 className="text-[#575656] text-base lg:text-xl font-semibold leading-[24px] lg:leading-[30px] tracking-[-0.03em]">
                 {item?.guide}
               </h5>
-              <div className="h-60 w-48 relative mx-auto">
+              <div className="w-[108px] lg:w-[300px] h-[100px] lg:h-[204px] relative mx-auto">
                 <Image
                   src={item.productImage}
                   alt={item.productTitle}
@@ -97,40 +97,62 @@ const YourNewSkinRegimenPage = async () => {
                 />
               </div>
               {/* Product Info */}
-              <div className="flex-1 w-full space-y-2">
-                <h2 className="text-xs font-normal leading-[18px] tracking-[-0.03em] text-accent">
+              <div className="w-full space-y-[2px]">
+                <h2 className="text-xs lg:text-[11.54px] font-normal leading-[18px] lg:leading-[17.31px] tracking-[-0.03em] text-[#575656]">
                   {item.brand}
                 </h2>
-                <h3 className="text-base font-semibold leading-[24px] tracking-[-0.03em] text-accent">
+                <h3 className="text-[15px] lg:text-[15.39px] font-semibold leading-[22.5px] lg:leading-[23.08px] tracking-[-0.03em] text-[#575656]">
                   {item.productTitle}
                 </h3>
-                <p className="text-xs font-normal leading-[18px] tracking-[-0.03em] text-accent">
+                <p className="text-xs lg:text-[11.54px] font-normal leading-[18px] lg:leading-[17.31px] tracking-[-0.03em] text-accent">
                   {item?.desc}
                 </p>
               </div>
               {/* Buttons */}
-              <div className="flex w-full gap-4">
-                <AddFavorite />
+              <div className="flex w-full mt-2 gap-3">
+                <button
+                  id="add-favorite"
+                  type="button"
+                  className="w-[50px] lg:w-[141px] h-[48px] flex items-center justify-center gap-[10px] rounded-[10px] lg:rounded-xl bg-[#8F80E833]"
+                >
+                  <svg
+                    width="25"
+                    height="24"
+                    viewBox="0 0 25 24"
+                    fill="none"
+                    className="w-[24px] h-[24px]"
+                  >
+                    <path
+                      d="M6.5 7.2002V16.6854C6.5 18.0464 6.5 18.7268 6.70412 19.1433C7.08245 19.9151 7.91157 20.3588 8.76367 20.2454C9.2234 20.1842 9.78964 19.8067 10.9221 19.0518L10.9248 19.0499C11.3737 18.7507 11.5981 18.6011 11.833 18.5181C12.2642 18.3656 12.7348 18.3656 13.166 18.5181C13.4013 18.6012 13.6266 18.7515 14.0773 19.0519C15.2098 19.8069 15.7767 20.1841 16.2364 20.2452C17.0885 20.3586 17.9176 19.9151 18.2959 19.1433C18.5 18.7269 18.5 18.0462 18.5 16.6854V7.19691C18.5 6.07899 18.5 5.5192 18.2822 5.0918C18.0905 4.71547 17.7837 4.40973 17.4074 4.21799C16.9796 4 16.4203 4 15.3002 4H9.7002C8.58009 4 8.01962 4 7.5918 4.21799C7.21547 4.40973 6.90973 4.71547 6.71799 5.0918C6.5 5.51962 6.5 6.08009 6.5 7.2002Z"
+                      stroke="#8F80E8"
+                      strokeWidth={2}
+                    />
+                  </svg>
+                  <span className="hidden lg:block text-sm font-medium leading-[21px] tracking-[-0.03em] text-[#8F80E8]">
+                    Add to routine
+                  </span>
+                </button>
                 <button
                   type="button"
                   id="buy-now"
-                  className="flex flex-1 items-center justify-center gap-2 rounded-[10px] bg-pink-100 py-4 text-pink-600 transition-colors hover:bg-pink-200"
+                  className="w-[112px] lg:w-[141px] h-[48px] flex items-center justify-center gap-[10px] rounded-[10px] lg:rounded-xl bg-[#EDAFDF4D]"
                 >
                   <svg width="25" height="24" viewBox="0 0 25 24" fill="none">
                     <path
                       d="M9.5 8C9.5 9.65685 10.8431 11 12.5 11C14.1569 11 15.5 9.65685 15.5 8M3.5 16.8002V7.2002C3.5 6.08009 3.5 5.51962 3.71799 5.0918C3.90973 4.71547 4.21547 4.40973 4.5918 4.21799C5.01962 4 5.58009 4 6.7002 4H18.3002C19.4203 4 19.9796 4 20.4074 4.21799C20.7837 4.40973 21.0905 4.71547 21.2822 5.0918C21.5 5.5192 21.5 6.07899 21.5 7.19691V16.8036C21.5 17.9215 21.5 18.4805 21.2822 18.9079C21.0905 19.2842 20.7837 19.5905 20.4074 19.7822C19.98 20 19.421 20 18.3031 20H6.69691C5.57899 20 5.0192 20 4.5918 19.7822C4.21547 19.5905 3.90973 19.2842 3.71799 18.9079C3.5 18.4801 3.5 17.9203 3.5 16.8002Z"
-                      stroke="currentColor"
+                      stroke="#E77CCF"
                       strokeWidth={2}
                     />
                   </svg>
-                  <span>Buy now</span>
+                  <span className="text-sm font-medium leading-[21px] tracking-[-0.03em] text-[#E77CCF]">
+                    Buy now
+                  </span>
                 </button>
               </div>
             </div>
           </div>
         ))}
       </div>
-
       <Advertisement />
       <Footer />
       <GradientImage />

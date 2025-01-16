@@ -108,6 +108,9 @@ import GradientImage from "@/components/common/GradientImage";
 import HeadingPrimary from "@/components/common/HeadingPrimary";
 import { useRouter } from "next/navigation";
 import BackButton from "@/components/common/BackButton";
+import { useAppDispatch, useAppSelector } from "@/lib/redux/hook";
+import SelectProductForSkinRegimen from "./SelectProductForSkinRegimen";
+import { onClearPersonalRegimen } from "@/redux/slices/regimenSlice";
 
 const items = [
   { id: "cleanser", label: "Add a cleanser" },
@@ -116,78 +119,56 @@ const items = [
 ];
 
 const UsingProductsSelection = () => {
-  const [attachments, setAttachments] = useState<
-    { id: string; label: string; value: File; preview: string }[]
-  >([]);
+  const [regimenType, setRegimenType] = useState<string | null>(null);
   const router = useRouter();
-
-  const onFileChange = async (
-    e: React.ChangeEvent<HTMLInputElement>,
-    itemId: string
-  ) => {
-    const file = e.target.files?.[0];
-    if (file) {
-      const preview = URL.createObjectURL(file);
-      setAttachments((prev) => {
-        // Remove any existing attachment with the same id
-        const filtered = prev.filter((a) => a.id !== itemId);
-        return [
-          ...filtered,
-          { id: itemId, label: file.name, value: file, preview },
-        ];
-      });
-    }
-  };
-
-  const onRemoveAttachment = (id: string) => {
-    setAttachments((prev) => {
-      const filtered = prev.filter((a) => a.id !== id);
-      const attachment = prev.find((a) => a.id === id);
-      if (attachment) {
-        URL.revokeObjectURL(attachment.preview);
-      }
-      return filtered;
-    });
-  };
+  const selectedRegimens = useAppSelector(
+    (regimen) => regimen.regimen.personalRegimen
+  );
+  const dispatch = useAppDispatch();
 
   const onGenerateRegimen = () => {
     router.push("/build-regimen/your-new-skin-regimen");
   };
 
   return (
-    <div className="max-w-2xl w-full space-y-6">
-      <article className="lg:space-y-4">
-        <BackButton buttonProps={{ className: "flex lg:hidden" }} />
+    <div className="lg:container space-y-8">
+      <article className="lg:space-y-2">
+        <BackButton />
         <h4 className="hidden lg:block text-accent text-2xl font-semibold leading-[26px]">
           Build your personal
         </h4>
-        <HeadingPrimary className="lg:text-[50px] leading-[44px] lg:leading-[62px]">
-          <span>Build your personal</span>{" "}
-          <span className="text-[#8599FE]">Skin regimen</span>
+        <HeadingPrimary className="hidden lg:block lg:text-[48px] lg:leading-[57.12px] font-semibold tracking-[-0.02em]">
+          Skin regimen
         </HeadingPrimary>
-        <p className="hidden lg:block text-accent text-lg font-normal leading-[27px] tracking-[-0.03em]">
+        <HeadingPrimary className="block lg:hidden text-[38px] font-semibold leading-[45.22px] tracking-[-0.02em]">
+          Build your <br /> personal skin regimen
+        </HeadingPrimary>
+        <p className="hidden lg:block max-w-[755px] text-accent text-lg font-normal leading-[27px] tracking-[-0.03em]">
           Fill out the products you use and let us generate your new regimen
           with missing products and let you know about the products not suited
           for your skin
         </p>
       </article>
 
-      <div className="grid grid-cols-2 md:grid-cols-3 gap-8">
+      <div className="max-w-max grid grid-cols-2 md:grid-cols-3 gap-6 lg:gap-9">
         {items.map((item) => {
-          const attachment = attachments.find((a) => a.id === item.id);
+          const attachment = selectedRegimens[item.id];
 
           return attachment ? (
-            <div className="relative h-[224px] lg:h-[250px] rounded-lg flex items-center justify-center">
+            <div
+              key={item.id}
+              className="relative w-[182px] h-[224px] rounded-xl border border-[#E1E1E1] flex items-center justify-center"
+            >
               <Image
-                src={attachment.preview}
-                alt={attachment.label}
+                src={attachment.productImage}
+                alt={attachment.productId}
                 fill
-                className="object-cover"
+                className="object-cover p-2"
               />
               <button
                 onClick={(e) => {
                   e.preventDefault();
-                  onRemoveAttachment(item.id);
+                  dispatch(onClearPersonalRegimen(item.id));
                 }}
                 className="absolute -top-2 -right-2 w-[23px] h-[23px] cursor-pointer rounded-[6px] bg-[#E1E1E1] flex items-center justify-center"
               >
@@ -205,23 +186,14 @@ const UsingProductsSelection = () => {
               </button>
             </div>
           ) : (
-            <label
-              htmlFor={item.id}
+            <button
               key={item.id}
               className={cn(
-                "relative h-[224px] lg:h-[250px] rounded-lg flex items-center justify-center overflow-hidden",
+                "relative inset-0 w-[182px] h-[224px] rounded-lg flex items-center justify-center overflow-hidden",
                 "bg-[#8599FE26] bg-clip-padding backdrop-filter backdrop-blur-sm bg-opacity-10"
               )}
+              onClick={() => setRegimenType(item.id)}
             >
-              <input
-                type="file"
-                name="using-products"
-                id={item.id}
-                hidden
-                accept="image/*"
-                onChange={(e) => onFileChange(e, item.id)}
-              />
-
               <div className="flex flex-col items-center gap-4">
                 <svg
                   width="41"
@@ -242,16 +214,22 @@ const UsingProductsSelection = () => {
                   {attachment ? "Missing something?" : item.label}
                 </p>
               </div>
-            </label>
+            </button>
           );
         })}
       </div>
       <Button
         onClick={onGenerateRegimen}
-        disabled={attachments.length !== items.length}
+        disabled={Object.keys(selectedRegimens).length === 0}
       >
         Generate
       </Button>
+      {regimenType && (
+        <SelectProductForSkinRegimen
+          regimenType={regimenType}
+          onClose={() => setRegimenType(null)}
+        />
+      )}
       <GradientImage firstImage={{ className: "lg:left-96", width: 600 }} />
     </div>
   );

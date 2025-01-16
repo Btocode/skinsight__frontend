@@ -1,4 +1,6 @@
-const products = [
+import { RegimenProduct } from "@/types/regimen";
+
+const products: RegimenProduct[] = [
   {
     productImage: "/regimen/img1.png",
     productTitle: "Glucoside Foaming Cleanser",

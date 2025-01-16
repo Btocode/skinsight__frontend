@@ -5,43 +5,43 @@ import HeadingPrimary from "@/components/common/HeadingPrimary";
 import Image from "next/image";
 import Link from "next/link";
 import BuildRegimenImg from "../../../../public/build-regimen.png";
+import SectionOpacity from "@/components/animations/SectionOpacity";
 
 const BuildRegimenPage = () => {
   return (
-    <section className="container min-h-[80svh] lg:flex items-center justify-between py-10">
-      <article className="flex-1 space-y-2 lg:space-y-6">
-        <BackButton />
-        <HeadingPrimary className="leading-[44px]">
-          Build your regimen
-        </HeadingPrimary>
+    <SectionOpacity>
+      <section className="container min-h-[80svh] lg:flex items-center justify-between py-10">
+        <article className="flex-1 space-y-2 lg:space-y-3">
+          <BackButton />
+          <HeadingPrimary className="lg:text-[48px] font-semibold lg:leading-[57.12px] tracking-[-0.02em]">
+            Build your regimen
+          </HeadingPrimary>
+          <Image
+            src={BuildRegimenImg}
+            alt="Find Products"
+            className="lg:hidden"
+          />
+          <p className="max-w-xl text-base lg:text-2xl font-normal leading-[24px] lg:leading-[36px] tracking-[-0.03em] text-accent">
+            Answer a few questions and let us build you your perfect skincare
+            regimen
+          </p>
+          <Link href={"/build-regimen/comfortable-products-count"}>
+            <Button className="mt-5 p-0 w-[184px] h-[60px] rounded-xl text-xl font-medium leading-[26px]">
+              Let&apos;s go
+            </Button>
+          </Link>
+        </article>
         <Image
           src={BuildRegimenImg}
-          alt="Find Products"
-          className="lg:hidden"
-        />
-        <p className="max-w-xl text-lg lg:text-2xl font-normal leading-[36px] tracking-[-0.03em]">
-          Answer a few questions and let us build you your perfect skincare
-          regimen
-        </p>
-        <Link
-          href={"/build-regimen/comfortable-products-count"}
-          className="w-full inline-block"
-        >
-          <Button className="px-12">Let&apos;s go</Button>
-        </Link>
-      </article>
-      <div className="hidden lg:block flex-1 relative h-[550px] mt-16 lg:mt-0">
-        <Image
-          src={"/build-regimen.png"}
-          alt="Find Products"
-          fill
+          alt="Build Regimen"
+          width={614.83}
+          height={394.58}
+          className="hidden lg:block"
           priority
-          sizes="(100vw, 100vh)"
-          className="object-cover"
         />
-      </div>
-      <GradientImage />
-    </section>
+        <GradientImage />
+      </section>
+    </SectionOpacity>
   );
 };
 

@@ -1,7 +1,10 @@
+import SectionTransform from "@/components/animations/SectionTransform";
 import BackButton from "@/components/common/BackButton";
 import Spinner from "@/components/common/Spinner";
+import { cn } from "@/lib/utils";
 import dynamic from "next/dynamic";
 import { notFound } from "next/navigation";
+import { use } from "react";
 
 const ComfortableProductCount = dynamic(
   () => import("../_components/ComfortableProductCount"),
@@ -19,12 +22,8 @@ export const generateStaticParams = () => {
   return folderNames.map((name) => ({ name }));
 };
 
-const BuilderRegimen = async ({
-  params,
-}: {
-  params: Promise<{ name: string }>;
-}) => {
-  const name = (await params).name;
+const BuilderRegimen = ({ params }: { params: Promise<{ name: string }> }) => {
+  const name = use(params).name;
 
   if (!folderNames.includes(name)) {
     notFound();
@@ -36,12 +35,23 @@ const BuilderRegimen = async ({
   };
 
   return (
-    <section className="container flex justify-center lg:items-center min-h-[85svh] py-4 lg:py-10 relative">
-      <div className="flex flex-col  items-start gap-2">
-        {name === "comfortable-products-count" && <BackButton />}
-        {components[name]}
-      </div>
-    </section>
+    <SectionTransform
+      type={name === "using-products-selection" ? "left" : "up"}
+    >
+      <section
+        className={cn(
+          "container flex  lg:items-center min-h-[85svh] py-8 lg:py-10 relative",
+          {
+            "justify-center": name === "comfortable-products-count",
+          }
+        )}
+      >
+        <div>
+          {name === "comfortable-products-count" && <BackButton />}
+          {components[name]}
+        </div>
+      </section>
+    </SectionTransform>
   );
 };
 

@@ -19,7 +19,7 @@ export default function SkinRegimenTabs() {
   const selectedTab = searchParams.get("tab") || tabs[0].id;
 
   return (
-    <div className="max-w-md mx-auto w-full border-b my-16 overflow-auto">
+    <div className="max-w-md mx-auto w-full border-b mt-6 mb-[64px] overflow-auto">
       <ul
         className="flex justify-evenly space-x-4 lg:space-x-8"
         aria-label="Tabs"
