@@ -7,6 +7,7 @@ interface InputBoxProps extends InputHTMLAttributes<HTMLInputElement> {
   label?: string;
   labelClassName?: string;
   containerClassName?: string;
+  boxClassName?: string;
   error?: string;
   helperText?: string;
 }
@@ -20,6 +21,7 @@ export const InputBox = forwardRef<HTMLInputElement, InputBoxProps>(
       error,
       helperText,
       disabled,
+      boxClassName,
       ...props
     },
     ref
@@ -46,11 +48,15 @@ export const InputBox = forwardRef<HTMLInputElement, InputBoxProps>(
         )}
 
         <div
-          className={cn("w-full rounded-xl relative", {
-            "bg-[#8599FE26]": !error && !disabled,
-            "bg-[#FF2D5521]": error,
-            "opacity-50": disabled,
-          })}
+          className={cn(
+            "w-full rounded-xl relative",
+            {
+              "bg-[#8599FE26]": !error && !disabled,
+              "bg-[#FF2D5521]": error,
+              "opacity-50": disabled,
+            },
+            boxClassName
+          )}
         >
           <input
             {...props}
