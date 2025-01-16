@@ -1,4 +1,6 @@
-const products = [
+import { FindAlternativesProduct } from "@/types/alternatives";
+
+const products: FindAlternativesProduct[] = [
   {
     productImage: "/find-alternatives/img1.png",
     productTitle: "Bio-lifting cream",

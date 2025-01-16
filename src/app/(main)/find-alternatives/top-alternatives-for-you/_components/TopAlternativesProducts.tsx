@@ -1,15 +1,24 @@
 import Image from "next/image";
 import { AlternativesProductCard } from "./AlternativesProductCard";
 import AdImg from "../../../../../../public/ad.png";
+import { FindAlternativesProduct } from "@/types/alternatives";
 
-const TopAlternativesProducts = ({ products }) => {
+const TopAlternativesProducts = ({
+  products,
+}: {
+  products: FindAlternativesProduct[];
+}) => {
   return (
-    <div className="max-w-[1400px] mx-auto py-4 space-y-4">
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 lg:gap-10">
+    <div className="lg:px-[43px] mt-[46px]">
+      <div className="grid grid-cols-2 md:grid-cols-2 lg:grid-cols-3 gap-x-[15px] lg:gap-x-[40px] gap-y-[16px] lg:gap-y-[70px]">
         {products?.map((item, index) => (
           <AlternativesProductCard key={index} item={item} />
         ))}
-        <Image src={AdImg} alt="ad" className="w-full h-full object-cover" />
+        <Image
+          src={AdImg}
+          alt="ad"
+          className="w-[331px] h-full lg:h-[397px] rounded-[13px] border-[1.08px] border-[#EFEFEF]"
+        />
       </div>
     </div>
   );

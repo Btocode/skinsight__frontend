@@ -8,12 +8,12 @@ import SectionOpacity from "@/components/animations/SectionOpacity";
 const FindAlternativesPage = () => {
   return (
     <SectionOpacity>
-      <section className="container min-h-[80svh] lg:flex items-center justify-between py-10 relative">
-        <article className="flex-1 space-y-2 lg:space-y-6">
-          <p className="text-lg lg:text-2xl font-semibold leading-[26px]">
+      <section className="container min-h-[80svh] lg:flex lg:gap-4 items-center justify-center py-8 lg:py-10 relative">
+        <article className="lg:basis-[420px] space-y-2">
+          <p className="text-lg lg:text-2xl font-semibold leading-[26px] text-accent">
             Find alternatives
           </p>
-          <HeadingPrimary className="leading-[44px]">
+          <HeadingPrimary className="text-[38px] lg:text-[48px] font-semibold leading-[45.22px] lg:leading-[57.12px] tracking-[-0.02em] pb-4">
             Select your target product
           </HeadingPrimary>
           <Image
@@ -23,21 +23,15 @@ const FindAlternativesPage = () => {
           />
           <SelectYourTargetProduct />
         </article>
-        <div className="hidden lg:block flex-1 relative h-[550px] mt-16 lg:mt-0">
-          <Image
-            src={"/find-alternatives.png"}
-            alt="Find Products"
-            fill
-            priority
-            sizes="(100vw, 100vh)"
-            className="object-cover"
-          />
-        </div>
-
-        <GradientImage
-          firstImage={{ url: "/gradient2.png", className: "lg:-left-[100px]" }}
-          secondImage={{ url: "/gradient3.png", width: 400, height: 375 }}
+        <Image
+          width={614.83}
+          height={394.58}
+          src={FindAlternativeImg}
+          alt="Find Products"
+          priority
+          className="hidden lg:block"
         />
+        <GradientImage />
       </section>
     </SectionOpacity>
   );
