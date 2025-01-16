@@ -32,3 +32,13 @@ export type FindAlternativesState = {
   brand: string;
   product: string;
 };
+
+export type Product = {
+  productImage: string;
+  productTitle: string;
+  brand: string;
+  price: string;
+  matched: boolean;
+  most_viewed: boolean;
+  best_rated: boolean;
+};

@@ -1,15 +1,14 @@
 "use client";
 import Image from "next/image";
-import AddFavorite from "./AddFavorite";
 import Tag from "@/components/common/Tag";
 import { useRouter } from "next/navigation";
 import { useRef } from "react";
+import { Product } from "@/types/products";
 type ProductDetailsHandler = (
   e: React.MouseEvent<HTMLDivElement, MouseEvent>
 ) => void;
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-export function MatchesProductCard({ item }: { item: any }) {
+export function MatchesProductCard({ item }: { item: Product }) {
   const router = useRouter();
   const cardRef = useRef<HTMLDivElement>(null);
   const onProductDetails: ProductDetailsHandler = () => {
@@ -43,13 +42,13 @@ export function MatchesProductCard({ item }: { item: any }) {
         {/* Product Info */}
         <div className="flex-1 w-full space-y-[2px]">
           <span className="text-[11.47px] lg:text-[11.54px] font-normal leading-[17.21px] lg:leading-[17.31px] tracking-[-0.03em] text-[#575656]">
-            {item.brandName}
+            {item?.brand}
           </span>
           <h3 className="text-[14.34px] lg:text-[15.39px] font-semibold leading-[21.51px] lg:leading-[23.08px] tracking-[-0.03em] text-[#575656] truncate">
-            {item.productTitle}
+            {item?.productTitle}
           </h3>
           <p className="text-[11.47px] lg:text-[11.54px] leading-[17.21px] lg:leading-[17.31px] font-normal tracking-[-0.03em] text-[#80E8DE]">
-            ${item.price}
+            ${item?.price}
           </p>
         </div>
         {/* Buttons */}

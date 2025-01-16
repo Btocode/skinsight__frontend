@@ -1,6 +1,7 @@
+import { Product } from "@/types/products";
 import { MatchesProductCard } from "./MatchesProductCard";
 
-const MoisturisersProducts = ({ products }) => {
+const MoisturisersProducts = ({ products }: { products: Product[] }) => {
   return (
     <section id="moisturisers" className="lg:container mt-[27px] lg:mt-[46px]">
       <div className="flex items-center justify-between lg:px-[40px] mb-[17px] lg:mb-[48px]">
