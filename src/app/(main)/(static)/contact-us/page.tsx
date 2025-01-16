@@ -92,6 +92,7 @@ const ContactForm = () => {
           placeholder="Enter email address"
           id="email"
           containerClassName="w-full"
+          boxClassName="bg-transparent"
           className="w-full bg-white border rounded-full"
         />
         <Button>Send</Button>
