@@ -1,5 +1,5 @@
 import GradientImage from "@/components/common/GradientImage";
-import { cn } from "@/lib/utils";
+import Skeleton from "@/components/common/Skeleton";
 
 export default function SkeletonLoader() {
   return (
@@ -27,16 +27,5 @@ export default function SkeletonLoader() {
 
       <GradientImage />
     </div>
-  );
-}
-
-function Skeleton({ className }: { className?: string }) {
-  return (
-    <div
-      className={cn(
-        "bg-gray-500 bg-clip-padding backdrop-filter backdrop-blur-sm bg-opacity-10 rounded-lg animate-pulse",
-        className
-      )}
-    />
   );
 }
