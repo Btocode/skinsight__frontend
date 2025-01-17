@@ -8,6 +8,7 @@ import { Accordion } from "@/components/common/Accordion";
 import Image from "next/image";
 import ProductTabs from "./_components/ProductTabs";
 import Advertisement from "@/components/common/Advertisement";
+import GradientImage from "@/components/common/GradientImage";
 
 const ProductDetails = () => {
   return (
@@ -31,7 +32,7 @@ const ProductDetails = () => {
         <div className="flex items-center gap-4 mt-4 lg:mt-0">
           <button
             type="button"
-            className="w-[141px] h-[48px] rounded-xl bg-[#8F80E833] flex items-center justify-center gap-2"
+            className="w-[141px] h-[48px] rounded-xl bg-[#8F80E833] flex items-center justify-center"
           >
             <svg width="25" height="24" viewBox="0 0 25 24" fill="none">
               <path
@@ -63,7 +64,7 @@ const ProductDetails = () => {
                 />
               </svg>
             }
-            className="p-0 w-[141px] h-[48px] rounded-xl flex items-center justify-center gap-2"
+            className="p-0 w-[141px] h-[48px] rounded-xl flex items-center justify-center"
           >
             <span className="text-sm font-medium leading-[21px] tracking-[-3%] text-white">
               Buy now
@@ -89,6 +90,7 @@ const ProductDetails = () => {
       </div>
       <ProductTabs />
       <Advertisement />
+      <GradientImage secondImage={{ className: "lg:-right-52" }} />
     </section>
   );
 };

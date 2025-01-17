@@ -66,21 +66,13 @@ export function Accordion({
         </div>
       </div>
       <div
-        className={`overflow-hidden transition-all duration-500 ease-in-out ${
-          isOpen ? "max-h-40 py-4" : "max-h-0 py-0"
+        className={`overflow-hidden transition-all duration-300 ${
+          isActive ? "max-h-[1000px]" : "max-h-0"
         }`}
       >
-        <p
-          className={cn(
-            "text-xs lg:text-base font-normal leading-[18px] lg:leading-[24px] tracking-[-0.03em] text-accent opacity-0 transition-opacity duration-500 ease-in-out",
-            contentClassName,
-            {
-              "opacity-100": isOpen,
-            }
-          )}
-        >
+        <div className="font-['DM_Sans'] text-[14px] font-normal leading-[18px] tracking-[-0.03em] text-[#575656] text-left py-4">
           {content}
-        </p>
+        </div>
       </div>
     </div>
   );
