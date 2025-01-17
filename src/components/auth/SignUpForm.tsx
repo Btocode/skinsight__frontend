@@ -20,22 +20,23 @@ const SignUpForm = () => {
   const { 
     control, 
     handleSubmit,
-    formState: { errors: formErrors } 
+    formState: { errors } 
   } = useForm<RegisterSchema>({
     resolver: zodResolver(registerSchema),
     defaultValues: {
       display_name: "",
       email: "",
       password: "",
+      confirm_password: "",
     },
   });
 
   const renderError = () => {
     // Show form validation errors first
-    if (formErrors.display_name?.message || formErrors.email?.message || formErrors.password?.message) {
+    if (errors.display_name?.message || errors.email?.message || errors.password?.message) {
       return (
         <span className="text-red-600">
-          {formErrors.display_name?.message || formErrors.email?.message || formErrors.password?.message}
+          {errors.display_name?.message || errors.email?.message || errors.password?.message}
         </span>
       );
     }
@@ -66,16 +67,12 @@ const SignUpForm = () => {
 
   const onSubmit = async (data: RegisterSchema) => {
     try {
-      await register(data).unwrap();
-
-      setTimeout(() => { 
-        router.push(`/${pathname}?auth=sign-in`);
-      }
-      , 1000
-      );
+      // Remove confirm_password before sending to API
+      const { confirm_password, ...registerData } = data;
+      await register(registerData).unwrap();
+      router.push(`/${pathname}?auth=sign-in`);
     } catch (err) {
-      console.error("Registration failed:", err);
-      // Error handled by RTK Query
+      console.log(err);
     }
   };
 
@@ -84,17 +81,20 @@ const SignUpForm = () => {
   }
 
   return (
-    <div className="bg-white rounded-3xl w-full relative lg:px-[100px] py-4 lg:py-[52px]">
+    <div className="bg-white rounded-[32px] w-full relative lg:px-[80px] py-4 lg:py-[40px]">
       <div className="text-center mb-8 mt-4">
         <HeadingPrimary className="text-[28px] leading-8 lg:text-4xl lg:leading-10 lg:tracking-[-3%]">
           Sign up to get personalized recommendations
         </HeadingPrimary>
-        <p className="text-gray-600 text-base leading-6 tracking-[-2%]">
-          Join us to start your skincare journey
+        <p className="text-[#2C2C2C]/80 text-base leading-6 tracking-[-0.5px]">
+          Discover products that work for you - no more guessing!
         </p>
       </div>
 
-      <form onSubmit={handleSubmit(onSubmit)} className="lg:px-[32px] space-y-5 lg:space-y-7">
+      <form
+        onSubmit={handleSubmit(onSubmit)}
+        className="lg:px-[32px] space-y-5 lg:space-y-7"
+      >
         <Controller
           name="display_name"
           control={control}
@@ -146,6 +146,23 @@ const SignUpForm = () => {
           )}
         />
 
+        <Controller
+          name="confirm_password"
+          control={control}
+          render={({ field, fieldState: { error } }) => (
+            <InputBox
+              type="password"
+              placeholder="Confirm password"
+              id="confirm_password"
+              value={field.value}
+              onChange={field.onChange}
+              required
+              disabled={isLoading}
+              error={error?.message}
+            />
+          )}
+        />
+
         {isError && renderError()}
 
         <div className="flex items-center gap-4">
@@ -159,13 +176,15 @@ const SignUpForm = () => {
         </div>
 
         <p className="text-center text-lg">
-          <span className="text-blue-400">Already have an account? </span>
-          <Link
-            href={`/${pathname}?auth=sign-in`}
-            className="text-blue-500 hover:text-blue-600 font-medium"
-          >
-            Sign In
-          </Link>
+          <span className=" text-[18px] leading-[26px] font-medium text-[#8599FE]">
+            Already have an account?{" "}
+            <Link
+              href={`/${pathname}?auth=sign-in`}
+              className="text-[#8599FE] hover:text-blue-600 decoration-skip-ink-none font-bold"
+            >
+              Sign In
+            </Link>
+          </span>
         </p>
       </form>
     </div>

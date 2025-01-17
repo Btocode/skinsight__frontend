@@ -50,7 +50,7 @@ const SelectRegion = () => {
   };
 
   return (
-    <div className="flex flex-col mt-[32px] lg:mt-0 gap-5">
+    <div className="flex flex-col mt-[32px] lg:mt-0 gap-5 text-[#2C2C2C]">
       <Combobox
         options={formatCountries() as Option[]}
         placeholder="Select"

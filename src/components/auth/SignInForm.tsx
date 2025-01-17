@@ -94,19 +94,19 @@ const SignInForm = () => {
   }
 
   return (
-    <div className="bg-white rounded-3xl w-full relative lg:px-[136px] py-4 lg:py-[52px]">
+    <div className="bg-white w-[680px] h-[510px] mx-auto rounded-[12px] flex flex-col gap-[10px] lg:px-[80px] py-4 lg:py-[40px]">
       <div className="text-center mb-8">
         <HeadingPrimary className="text-[28px] leading-8 lg:text-4xl lg:leading-10 lg:tracking-[-2%]">
           Log into your account
         </HeadingPrimary>
-        <p className="text-gray-600 text-base leading-6 tracking-[-2%]">
+        <p className="text-[#2C2C2C]/80 text-base leading-6 tracking-[-0.5px]">
           View your saved searches, skincare routine and more
         </p>
       </div>
 
       <form
         onSubmit={handleSubmit(onSubmit)}
-        className="space-y-5 lg:space-y-7"
+        className="lg:px-[32px] space-y-5 lg:space-y-7"
       >
         <Controller
           name="email"
@@ -157,13 +157,15 @@ const SignInForm = () => {
         </div>
 
         <p className="text-center text-lg">
-          <span className="text-blue-400">Don&apos;t have an account? </span>
-          <Link
+          <span className="text-[18px] leading-[26px] font-medium text-[#8599FE]">
+            Don&apos;t have an account?{" "}
+            <Link
             href={`/${pathname}?auth=sign-up`}
-            className="text-blue-500 hover:text-blue-600 font-medium"
+            className="text-[#8599FE] hover:text-blue-600 decoration-skip-ink-none font-bold"
           >
-            Sign Up
-          </Link>
+              Sign Up
+            </Link>
+          </span>
         </p>
       </form>
     </div>

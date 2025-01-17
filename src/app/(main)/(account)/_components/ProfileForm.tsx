@@ -11,28 +11,28 @@ export default function ProfileForm() {
         <div className="flex justify-between items-center mb-6">
           <h2 className="text-2xl font-semibold">Profile info</h2>
         </div>
-        <div>
+        <div className="w-full lg:w-[70%]">
           <input
             type="text"
             defaultValue="Miranda Kelly"
             className="w-full px-3 py-4 rounded-md bg-white"
           />
         </div>
-        <div>
+        <div className="w-full lg:w-[70%]">
           <input
             type="email"
             defaultValue="miranda.kelly@gmail.com"
             className="w-full px-3 py-4 rounded-md bg-white"
           />
         </div>
-        <div>
+        <div className="w-full lg:w-[70%]">
           <input
             type="password"
             defaultValue="••••••••••"
             className="w-full px-3 py-4 rounded-md bg-white"
           />
         </div>
-        <div>
+        <div className="w-full lg:w-[70%]">
           <input
             type="text"
             defaultValue="United States"

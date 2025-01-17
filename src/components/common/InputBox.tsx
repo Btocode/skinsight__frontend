@@ -68,13 +68,15 @@ export const InputBox = forwardRef<HTMLInputElement, InputBoxProps>(
             className={cn(
               "w-full h-full px-4 py-4 bg-transparent text-xl rounded-xl",
               "focus:outline-none focus:ring-0 focus:border-0",
-              "disabled:cursor-not-allowed",
+              "disabled:cursor-not-allowed placeholder-[#2C2C2C]/60",
+
               error
                 ? "text-[#FF2D55] placeholder-[#FF2D55]"
-                : "text-[#2C2C2C] placeholder-[#2C2C2C]",
+                : "text-[#2C2C2C] placeholder-[#2C2C2C]/60",
               { "pr-12": props.type === "password" },
               props.className
             )}
+            
             style={{ outline: "none" }}
           />
 
