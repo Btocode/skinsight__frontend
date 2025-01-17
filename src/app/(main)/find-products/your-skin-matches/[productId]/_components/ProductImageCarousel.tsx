@@ -23,7 +23,7 @@ const ProductImageCarousel = () => {
   }, []);
 
   return (
-    <div className="w-full lg:mx-0 lg:w-[591px] h-[358px] lg:h-[509px] bg-white border rounded-xl p-4 space-y-4">
+    <div className="w-full lg:mx-0 lg:w-[591px] h-[358px] lg:h-[529px] bg-white border rounded-xl p-4 space-y-4 lg:mt-8">
       <div className="flex items-center gap-2">
         <Tag variant="matched">99% matched</Tag>
         <Tag variant="best_rated">Most loved by your skintwins</Tag>

@@ -1,4 +1,6 @@
-import React from "react";
+"use client";
+
+import React, { useState } from "react";
 import ProductImageCarousel from "./_components/ProductImageCarousel";
 import ProductAccordion from "./_components/ProductAccordion";
 import BackButton from "@/components/common/BackButton";
@@ -11,9 +13,16 @@ import Advertisement from "@/components/common/Advertisement";
 import GradientImage from "@/components/common/GradientImage";
 
 const ProductDetails = () => {
+  const [activeId, setActiveId] = useState("1");
+
+  const handleToggle = (id: string) => {
+    setActiveId(id === activeId ? "" : id);
+  };
+
+
   return (
     <section className="container mt-4 lg:mt-[74px]">
-      <div className="lg:flex items-center justify-between gap-4">
+      <div className="lg:flex items-center justify-between gap-4 mb-8">
         <div className="space-y-2">
           <BackButton />
           <p className="text-[15px] lg:text-xl font-medium leading-[17.85px] lg:leading-[23.8px] tracking-[-0.02em]">
@@ -83,7 +92,9 @@ const ProductDetails = () => {
       <br />
       <Accordion
         title="Tonners"
+        onToggle={() => handleToggle("1")}
         content="Toners balance your skin's pH levels & help prep skin for optimal absorption of the rest of your skincare routine. Our toners are formulated to multi-task by treating skin with clinically effective actives, while also hydrating & balancing skin with gentle ingredients so you can treat your specific skin concerns without irritating skin or stripping it of moisture."
+        isActive={activeId === "1"}
       />
       <div className="h-[160px] lg:w-[1000px] mx-auto my-10 relative">
         <Image src={"/brand.png"} alt="brand" fill />
