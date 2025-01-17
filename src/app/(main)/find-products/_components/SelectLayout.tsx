@@ -53,7 +53,7 @@ const SelectLayout = ({ name }: { name: string }) => {
               </p>
             )}
             {name === "find-perfect-match" && (
-              <p className="text-[15px] font-medium lg:font-normal leading-[17.85px] tracking-[-0.02em] lg:tracking-normal text-xl lg:leading-[26px] text-accent">
+              <p className="text-[15px] font-medium lg:font-normal leading-[17.85px] tracking-[-0.02em] lg:tracking-normal lg:text-xl text-base lg:leading-[26px] text-accent">
                 This will only take a few seconds
               </p>
             )}

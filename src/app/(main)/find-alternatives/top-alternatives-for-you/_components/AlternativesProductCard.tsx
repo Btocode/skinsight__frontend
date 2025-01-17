@@ -8,7 +8,7 @@ export function AlternativesProductCard({
   item: FindAlternativesProduct;
 }) {
   return (
-    <div className="lg:w-[340px] rounded-xl bg-white p-[6.69px] lg:p-5 shadow-[0px_5.13px_33.34px_0px_#2C2C2C17] border border-[#EFEFEF]">
+    <div className="lg:w-[340px] lg:h-[397px] rounded-xl bg-white p-[6.69px] lg:p-5 shadow-[0px_5.13px_33.34px_0px_#2C2C2C17] border border-[#EFEFEF]">
       <div className="flex flex-col">
         <div className="flex items-center gap-2">
           {item?.matched && <Tag variant="matched">99% matched</Tag>}
@@ -19,7 +19,7 @@ export function AlternativesProductCard({
           )}
         </div>
         {/* Product Image */}
-        <div className="w-[100px] lg:w-[300px] h-[100px] lg:[h-[204px] relative mx-auto">
+        <div className="w-[100px] lg:w-[300px] h-[100px] lg:h-[204px] relative mx-auto">
           <Image
             src={item.productImage}
             alt={item.productTitle}

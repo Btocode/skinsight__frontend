@@ -6,6 +6,7 @@ import CleansersProducts from "./_components/CleansersProducts";
 import MoisturisersProducts from "./_components/MoisturisersProducts";
 import Advertisement from "@/components/common/Advertisement";
 import GradientImage from "@/components/common/GradientImage";
+import AddFavorite from "./_components/AddFavorite";
 
 const getProducts = async () => {
   const response = await fetch("http://localhost:3000/api/your-skin-matches");
@@ -34,6 +35,7 @@ const YourSkinMatchesPage = async () => {
       <MoisturisersProducts products={products[2]} />
       <Advertisement />
       <GradientImage secondImage={{ className: "lg:-right-52" }} />
+      <AddFavorite />
     </div>
   );
 };
