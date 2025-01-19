@@ -10,7 +10,7 @@ import AddFavorite from "./_components/AddFavorite";
 
 const getProducts = async () => {
   const response = await fetch("http://localhost:3000/api/your-skin-matches");
-  return response.json();
+  return await response.json();
 };
 
 const YourSkinMatchesPage = async () => {

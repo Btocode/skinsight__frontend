@@ -15,12 +15,13 @@ const SignUpForm = () => {
   const router = useRouter();
   const pathname = usePathname();
   const [mounted, setMounted] = useState(false);
-  const [register, { isLoading, isError, error: apiError }] = useRegisterMutation();
+  const [register, { isLoading, isError, error: apiError }] =
+    useRegisterMutation();
 
-  const { 
-    control, 
+  const {
+    control,
     handleSubmit,
-    formState: { errors } 
+    formState: { errors },
   } = useForm<RegisterSchema>({
     resolver: zodResolver(registerSchema),
     defaultValues: {
@@ -33,10 +34,16 @@ const SignUpForm = () => {
 
   const renderError = () => {
     // Show form validation errors first
-    if (errors.display_name?.message || errors.email?.message || errors.password?.message) {
+    if (
+      errors.display_name?.message ||
+      errors.email?.message ||
+      errors.password?.message
+    ) {
       return (
         <span className="text-red-600">
-          {errors.display_name?.message || errors.email?.message || errors.password?.message}
+          {errors.display_name?.message ||
+            errors.email?.message ||
+            errors.password?.message}
         </span>
       );
     }
@@ -44,7 +51,7 @@ const SignUpForm = () => {
     // Then show API errors
     if (!isError) return null;
 
-    const is422 = (apiError as any)?.status === 422;
+    const is422 = (apiError as { status: number })?.status === 422;
 
     if (is422) {
       return (
@@ -56,7 +63,8 @@ const SignUpForm = () => {
 
     return (
       <span className="text-red-600">
-        {(apiError as { data: { detail: string } })?.data?.detail || "Registration failed"}
+        {(apiError as { data: { detail: string } })?.data?.detail ||
+          "Registration failed"}
       </span>
     );
   };
@@ -68,6 +76,7 @@ const SignUpForm = () => {
   const onSubmit = async (data: RegisterSchema) => {
     try {
       // Remove confirm_password before sending to API
+      // eslint-disable-next-line @typescript-eslint/no-unused-vars
       const { confirm_password, ...registerData } = data;
       await register(registerData).unwrap();
       router.push(`/${pathname}?auth=sign-in`);

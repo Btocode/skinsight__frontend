@@ -1,8 +1,10 @@
 // src/redux/slices/authSlice.ts
 import {
+  Gender,
   ProductState,
   ProductStateKeyType,
   ProductStateValueType,
+  Region,
 } from "@/types/products";
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 
@@ -41,12 +43,29 @@ const productSlice = createSlice({
         state.skinConcern.push(value as string);
         return;
       }
-      state[key] = value;
+      if (key === "findAlternatives") {
+        return;
+      }
+      if (key === "region") {
+        state.region = value as Region;
+      }
+      if (key === "gender") {
+        state.gender = value as Gender;
+      }
+      if (key === "skinType") {
+        state.skinType = value as string;
+      }
+      if (key === "complexion") {
+        state.complexion = value as string;
+      }
+      if (key === "age") {
+        state.age = value as string;
+      }
     },
     setFindAlternatives: (
       state,
       action: PayloadAction<{
-        key: string;
+        key: keyof typeof initialState.findAlternatives;
         value: string;
       }>
     ) => {

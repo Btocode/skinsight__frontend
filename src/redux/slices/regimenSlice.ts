@@ -10,7 +10,10 @@ const regimenSlice = createSlice({
   name: "regimen",
   initialState,
   reducers: {
-    setRegimenState(state, action: PayloadAction<RegimenState>) {
+    setRegimenState(
+      state,
+      action: PayloadAction<Pick<RegimenState, "productCount">>
+    ) {
       state.productCount = action.payload.productCount;
     },
     updatePersonalRegimen(

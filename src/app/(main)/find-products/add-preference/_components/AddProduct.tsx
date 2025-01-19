@@ -4,8 +4,6 @@ import Button from "@/components/common/Button";
 import { Combobox } from "@/components/common/Combobox";
 import HeadingPrimary from "@/components/common/HeadingPrimary";
 import Modal from "@/components/common/Modal";
-import { useAppDispatch, useAppSelector } from "@/lib/redux/hook";
-import { setAddPreference } from "@/redux/slices/productSlice";
 import Image from "next/image";
 import { useState } from "react";
 
@@ -15,10 +13,7 @@ type AddProductProps = {
 };
 
 const AddProduct = ({ open, onClose }: AddProductProps) => {
-  const [attachments, setAttachments] = useState<File[]>([]);
-  const [file, setFile] = useState<File | null>(null);
-  const preference = useAppSelector((state) => state.product.addPreference);
-  const dispatch = useAppDispatch();
+  const [file] = useState<File | null>(null);
 
   return (
     <Modal

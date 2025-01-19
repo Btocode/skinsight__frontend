@@ -1,5 +1,6 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import axios from "axios";
-import { getStorageItem, setStorageItem } from '@/utils/storage';
+import { getStorageItem, setStorageItem } from "@/utils/storage";
 
 const api = axios.create({
   baseURL: process.env.NEXT_PUBLIC_API_URL,
@@ -27,7 +28,7 @@ export const authApi = {
       }
       return response.data;
     } catch (error: any) {
-      throw error.response?.data || { message: 'Login failed' };
+      throw error?.response?.data || { message: "Login failed" };
     }
   },
   logout: async () => {

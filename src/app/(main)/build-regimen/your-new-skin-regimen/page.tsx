@@ -10,7 +10,7 @@ import { RegimenProduct } from "@/types/regimen";
 
 const getYourSkinRegimen = async (): Promise<RegimenProduct[]> => {
   const response = await fetch("http://localhost:3000/api/build-regimen");
-  return response.json();
+  return await response.json();
 };
 
 const YourNewSkinRegimenPage = async () => {

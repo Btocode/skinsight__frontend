@@ -3,15 +3,16 @@
 import { cn } from "@/lib/utils";
 import { useCallback, useState } from "react";
 import { MatchesProductCard } from "../../_components/MatchesProductCard";
+import { Product } from "@/types/products";
 
-const products = [
+const products: Product[] = [
   {
     productImage: "/find-alternatives/img1.png",
     productTitle: "Bio-lifting cream",
     brand: "CHANTECAILLE",
     price: "29",
     matched: true,
-    popular: true,
+    most_viewed: true,
     best_rated: false,
   },
   {
@@ -19,7 +20,7 @@ const products = [
     productTitle: "Intensive Age Defying Hydrating Cream",
     brand: "June Jacobs",
     price: "19",
-    popular: false,
+    most_viewed: false,
     best_rated: true,
     matched: false,
   },
@@ -28,7 +29,7 @@ const products = [
     productTitle: "Collagenesis 24 hr Youth Preservation",
     brand: "SKINN",
     price: "29",
-    popular: false,
+    most_viewed: false,
     best_rated: false,
     matched: false,
   },
