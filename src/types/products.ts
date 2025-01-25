@@ -9,6 +9,14 @@ export type AddPreferenceType = {
   product: string;
 };
 
+export type ProductPreference = {
+  id?: string;
+  brandId: string;
+  productId: string;
+  productImage: string;
+  reaction: string;
+};
+
 export type ProductState = {
   gender: Gender | null;
   skinType: string | null;
@@ -17,6 +25,7 @@ export type ProductState = {
   age: string | null;
   region: Region | null;
   findAlternatives: FindAlternativesState;
+  preferences: ProductPreference[];
 };
 
 export type ProductStateKeyType = keyof ProductState;

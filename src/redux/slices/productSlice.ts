@@ -19,6 +19,7 @@ const initialState: ProductState = {
     brand: "",
     product: "",
   },
+  preferences: [],
 };
 
 const productSlice = createSlice({
@@ -72,8 +73,16 @@ const productSlice = createSlice({
       const { key, value } = action.payload;
       state.findAlternatives[key] = value;
     },
+    setPreference: (state, action) => {
+      const preference = action.payload;
+      state.preferences.push({
+        id: state.preferences.length + 1,
+        ...preference,
+      });
+    },
   },
 });
 
-export const { setProductState, setFindAlternatives } = productSlice.actions;
+export const { setProductState, setFindAlternatives, setPreference } =
+  productSlice.actions;
 export const productReducer = productSlice.reducer;

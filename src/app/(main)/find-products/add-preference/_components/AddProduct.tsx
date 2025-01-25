@@ -1,11 +1,217 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 "use client";
 import BackButton from "@/components/common/BackButton";
 import Button from "@/components/common/Button";
-import { Combobox } from "@/components/common/Combobox";
+import { Combobox, Option } from "@/components/common/Combobox";
 import HeadingPrimary from "@/components/common/HeadingPrimary";
 import Modal from "@/components/common/Modal";
+import { useAppDispatch, useAppSelector } from "@/lib/redux/hook";
+import { cn } from "@/lib/utils";
+import { setPreference } from "@/redux/slices/productSlice";
 import Image from "next/image";
+import { useRouter } from "next/navigation";
 import { useState } from "react";
+
+const brands = [
+  { value: "1", label: "Sensibio" },
+  { value: "2", label: "La Roche-Posay" },
+  { value: "3", label: "Good Genes" },
+  { value: "4", label: "C-Firma" },
+  { value: "5", label: "Neutrogena" },
+  { value: "6", label: "The Ordinary" },
+  { value: "7", label: "CeraVe" },
+  { value: "8", label: "Eucerin" },
+  { value: "9", label: "Aveeno" },
+  { value: "10", label: "Vichy" },
+];
+
+const products = [
+  {
+    id: "1",
+    productTitle: "Sensibio H2O Micellar Water",
+    productImage: "/products/product1.png",
+    brandId: "1",
+  },
+  {
+    id: "2",
+    productTitle: "Ultra Repair Cream",
+    productImage: "/products/product2.png",
+    brandId: "2",
+  },
+  {
+    id: "3",
+    productTitle: "Good Genes All-In-One Lactic Acid Treatment",
+    productImage: "/products/product3.png",
+    brandId: "3",
+  },
+  {
+    id: "4",
+    productTitle: "C-Firma Fresh Day Serum",
+    productImage: "/products/product1.png",
+    brandId: "4",
+  },
+  {
+    id: "5",
+    productTitle: "Neutrogena Hydro Boost Water Gel",
+    productImage: "/products/product2.png",
+    brandId: "5",
+  },
+  {
+    id: "6",
+    productTitle: "The Ordinary Niacinamide 10% + Zinc 1%",
+    productImage: "/products/product3.png",
+    brandId: "6",
+  },
+  {
+    id: "7",
+    productTitle: "CeraVe Moisturizing Cream",
+    productImage: "/products/product2.png",
+    brandId: "7",
+  },
+  {
+    id: "8",
+    productTitle: "Eucerin Advanced Repair Lotion",
+    productImage: "/products/product3.png",
+    brandId: "8",
+  },
+  {
+    id: "9",
+    productTitle: "Aveeno Daily Moisturizing Lotion",
+    productImage: "/products/product1.png",
+    brandId: "9",
+  },
+  {
+    id: "10",
+    productTitle: "Vichy Mineral 89 Hyaluronic Acid Face Serum",
+    productImage: "/products/product2.png",
+    brandId: "10",
+  },
+  {
+    id: "11",
+    productTitle: "Sensibio Eye Contour Gel",
+    productImage: "/products/product3.png",
+    brandId: "1",
+  },
+  {
+    id: "12",
+    productTitle: "La Roche-Posay Toleriane Double Repair Moisturizer",
+    productImage: "/products/product1.png",
+    brandId: "2",
+  },
+  {
+    id: "13",
+    productTitle: "Good Genes Glycolic Acid Treatment",
+    productImage: "/products/product2.png",
+    brandId: "3",
+  },
+  {
+    id: "14",
+    productTitle: "C-Firma Day Serum",
+    productImage: "/products/product3.png",
+    brandId: "4",
+  },
+  {
+    id: "15",
+    productTitle: "Neutrogena Rapid Wrinkle Repair Retinol Oil",
+    productImage: "/products/product2.png",
+    brandId: "5",
+  },
+  {
+    id: "16",
+    productTitle: "The Ordinary Hyaluronic Acid 2% + B5",
+    productImage: "/products/product1.png",
+    brandId: "6",
+  },
+  {
+    id: "17",
+    productTitle: "CeraVe Hydrating Cleanser",
+    productImage: "/products/product3.png",
+    brandId: "7",
+  },
+  {
+    id: "18",
+    productTitle: "Eucerin Roughness Relief Lotion",
+    productImage: "/products/product1.png",
+    brandId: "8",
+  },
+  {
+    id: "19",
+    productTitle: "Aveeno Positively Radiant Daily Moisturizer",
+    productImage: "/products/product2.png",
+    brandId: "9",
+  },
+  {
+    id: "20",
+    productTitle: "Vichy LiftActiv Vitamin C Brightening Skin Corrector",
+    productImage: "/products/product3.png",
+    brandId: "10",
+  },
+  {
+    id: "21",
+    productTitle: "Sensibio AR Anti-Redness Cream",
+    productImage: "/products/product2.png",
+    brandId: "1",
+  },
+  {
+    id: "22",
+    productTitle: "La Roche-Posay Anthelios Melt-in Milk Sunscreen",
+    productImage: "/products/product3.png",
+    brandId: "2",
+  },
+  {
+    id: "23",
+    productTitle: "Good Genes Clarifying Cleanser",
+    productImage: "/products/product2.png",
+    brandId: "3",
+  },
+  {
+    id: "24",
+    productTitle: "C-Firma Vitamin C Day Cream",
+    productImage: "/products/product3.png",
+    brandId: "4",
+  },
+  {
+    id: "25",
+    productTitle: "Neutrogena Ultra Sheer Dry-Touch Sunscreen",
+    productImage: "/products/product25.png",
+    brandId: "5",
+  },
+  {
+    id: "26",
+    productTitle: "The Ordinary Salicylic Acid 2% Solution",
+    productImage: "/products/product1.png",
+    brandId: "6",
+  },
+  {
+    id: "27",
+    productTitle: "CeraVe Renewing SA Cleanser",
+    productImage: "/products/product2.png",
+    brandId: "7",
+  },
+  {
+    id: "28",
+    productTitle: "Eucerin Daily Protection Face Lotion",
+    productImage: "/products/product3.png",
+    brandId: "8",
+  },
+  {
+    id: "29",
+    productTitle: "Aveeno Clear Complexion Foaming Cleanser",
+    productImage: "/products/product1.png",
+    brandId: "9",
+  },
+  {
+    id: "30",
+    productTitle: "Vichy Normaderm Anti-Acne Treatment",
+    productImage: "/products/product3.png",
+    brandId: "10",
+  },
+];
+
+const formattedProducts = products.map((p) => ({
+  value: p.id,
+  label: p.productTitle,
+}));
 
 type AddProductProps = {
   open: boolean;
@@ -13,7 +219,15 @@ type AddProductProps = {
 };
 
 const AddProduct = ({ open, onClose }: AddProductProps) => {
-  const [file] = useState<File | null>(null);
+  const [selectedProduct, setSelectedProduct] = useState<{
+    brandId: string;
+    productId: string;
+    productImage: string;
+    reaction: string;
+  } | null>(null);
+  const router = useRouter();
+  const dispatch = useAppDispatch();
+  const preferences = useAppSelector((state) => state.product.preferences);
 
   return (
     <Modal
@@ -23,49 +237,129 @@ const AddProduct = ({ open, onClose }: AddProductProps) => {
       contentClassName="p-0 lg:p-0"
     >
       <div className="max-w-[690px] flex items-center justify-center gap-[25px] lg:px-[25px] lg:py-[36px]">
-        <div className="flex-1 flex flex-col gap-[28px]">
+        <div className="w-[416px] flex flex-col gap-[28px]">
           <BackButton buttonProps={{ className: "self-start -mb-[18px]" }} />
+
+          <div className="flex items-center gap-4">
+            {preferences.length > 0 &&
+              preferences.map((preference) => {
+                const selectedPreference = products.find(
+                  (product) => product.id === preference.productId
+                );
+                return (
+                  <div
+                    key={preference.id}
+                    className="w-[51.19px] h-[63.41px] border-[0.58px] bg-[#E1E1E1] rounded-[6.98px] relative"
+                  >
+                    <Image
+                      src={preference.productImage}
+                      alt={selectedPreference?.productTitle || "Product"}
+                      fill
+                      priority
+                    />
+                    <div
+                      className={cn(
+                        "w-[27.96px] h-[26.96px] rounded-[6.98px] flex items-center justify-center absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2",
+                        {
+                          "bg-[#E77CCF75]": preference?.reaction === "like",
+                          "bg-[#e1e1e194]": preference?.reaction === "dislike",
+                        }
+                      )}
+                    >
+                      {preference?.reaction === "like" ? "🥰" : "😔"}
+                    </div>
+                  </div>
+                );
+              })}
+          </div>
           <HeadingPrimary className="lg:text-[38px] font-semibold lg:leading-[45.22px] tracking-[-0.02em] -mb-2">
             Select a product you currently use
           </HeadingPrimary>
-          <label
-            htmlFor="add-product-image"
-            className="w-[150px] lg:w-[200px] mx-auto h-[200px] lg:h-[260px] border border-dashed border-primary lg:hidden flex items-center justify-center rounded-xl cursor-pointer"
-          >
-            <span className="itext-4xl text-primary w-10 h-10 rounded-full border border-primary flex items-center justify-center">
-              +
-            </span>
-            <input type="file" id="add-product-image" hidden />
-          </label>
+          <div className="flex lg:hidden w-[136.5px] mx-auto h-[168px] border border-dashed border-primary items-center justify-center rounded-xl">
+            {selectedProduct &&
+            selectedProduct?.productImage !== null &&
+            selectedProduct?.productImage !== "" ? (
+              <Image
+                src={selectedProduct.productImage}
+                width={136}
+                height={168}
+                alt="product"
+                className="p-2"
+              />
+            ) : (
+              <svg
+                width="41"
+                height="40"
+                viewBox="0 0 41 40"
+                fill="none"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <path
+                  d="M12.1667 20H20.5M20.5 20H28.8333M20.5 20V28.3333M20.5 20V11.6667M20.5 38.75C10.1447 38.75 1.75 30.3553 1.75 20C1.75 9.64466 10.1447 1.25 20.5 1.25C30.8553 1.25 39.25 9.64466 39.25 20C39.25 30.3553 30.8553 38.75 20.5 38.75Z"
+                  stroke="#8599FE"
+                  strokeWidth="2"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                />
+              </svg>
+            )}
+          </div>
           <Combobox
-            options={[
-              { label: "Brand 1", value: "brand1" },
-              { label: "Brand 2", value: "brand2" },
-              { label: "Brand 3", value: "brand3" },
-              { label: "Brand 4", value: "brand4" },
-              { label: "Brand 5", value: "brand5" },
-            ]}
+            options={brands as Option[]}
+            value={brands.find((b) => b.value === selectedProduct?.brandId)}
+            onChange={(value) => {
+              setSelectedProduct((prev: any) => ({
+                ...prev,
+                brandId: value.value,
+                productId: "",
+                productImage: "",
+              }));
+            }}
             placeholder="Select brand"
             className="max-w-full"
             buttonClassName="border-0"
             valueClassName="text-xl font-normal leading-[26px] text-accent"
           />
           <Combobox
-            options={[
-              { label: "Product 1", value: "product1" },
-              { label: "Product 2", value: "product2" },
-              { label: "Product 3", value: "product3" },
-              { label: "Product 4", value: "product4" },
-            ]}
+            options={formattedProducts}
+            value={formattedProducts.find(
+              (p) => p.value === selectedProduct?.productId
+            )}
+            onChange={(value) => {
+              setSelectedProduct((prev: any) => ({
+                ...prev,
+                productId: value.value,
+                productImage:
+                  products.find((p) => p.id === value.value)!.productImage ??
+                  "",
+              }));
+            }}
             placeholder="Select product"
             className="max-w-full"
             buttonClassName="border-0"
             valueClassName="text-xl font-normal leading-[26px] text-accent"
           />
           <div className="flex items-center gap-4">
-            <Button className="w-[126px] h-[60px] rounded-xl text-xl font-medium leading-[26px]">
-              Next
-            </Button>
+            {preferences.length === 3 ? (
+              <Button
+                onClick={() => {
+                  router.push("/find-products/your-skin-matches");
+                }}
+                className="w-[126px] h-[60px] rounded-xl text-xl font-medium leading-[26px]"
+              >
+                Save
+              </Button>
+            ) : (
+              <Button
+                onClick={() => {
+                  dispatch(setPreference(selectedProduct));
+                  setSelectedProduct(null);
+                }}
+                className="w-[126px] h-[60px] rounded-xl text-xl font-medium leading-[26px]"
+              >
+                Next
+              </Button>
+            )}
             <Button
               onClick={onClose}
               className="w-[126px] h-[60px] border rounded-xl text-xl font-medium leading-[26px]"
@@ -75,32 +369,76 @@ const AddProduct = ({ open, onClose }: AddProductProps) => {
             </Button>
           </div>
         </div>
-        <div className="hidden px-4 w-[182px] h-[224px] border border-dashed border-primary lg:flex items-center justify-center rounded-xl">
-          {file ? (
-            <Image
-              src={URL.createObjectURL(file)}
-              alt="product"
-              width={200}
-              height={260}
-              className="p-2"
-            />
-          ) : (
-            <svg
-              width="41"
-              height="40"
-              viewBox="0 0 41 40"
-              fill="none"
-              xmlns="http://www.w3.org/2000/svg"
-            >
-              <path
-                d="M12.1667 20H20.5M20.5 20H28.8333M20.5 20V28.3333M20.5 20V11.6667M20.5 38.75C10.1447 38.75 1.75 30.3553 1.75 20C1.75 9.64466 10.1447 1.25 20.5 1.25C30.8553 1.25 39.25 9.64466 39.25 20C39.25 30.3553 30.8553 38.75 20.5 38.75Z"
-                stroke="#8599FE"
-                strokeWidth="2"
-                strokeLinecap="round"
-                strokeLinejoin="round"
+        <div>
+          <div className="hidden px-4 w-[182px] h-[224px] border border-dashed border-primary lg:flex items-center justify-center rounded-xl">
+            {selectedProduct &&
+            selectedProduct?.productImage !== null &&
+            selectedProduct?.productImage !== "" ? (
+              <Image
+                src={selectedProduct.productImage}
+                alt="product"
+                width={200}
+                height={260}
+                className="p-2"
               />
-            </svg>
-          )}
+            ) : (
+              <svg
+                width="41"
+                height="40"
+                viewBox="0 0 41 40"
+                fill="none"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <path
+                  d="M12.1667 20H20.5M20.5 20H28.8333M20.5 20V28.3333M20.5 20V11.6667M20.5 38.75C10.1447 38.75 1.75 30.3553 1.75 20C1.75 9.64466 10.1447 1.25 20.5 1.25C30.8553 1.25 39.25 9.64466 39.25 20C39.25 30.3553 30.8553 38.75 20.5 38.75Z"
+                  stroke="#8599FE"
+                  strokeWidth="2"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                />
+              </svg>
+            )}
+          </div>
+          {selectedProduct?.brandId &&
+            selectedProduct?.productId &&
+            selectedProduct?.productImage && (
+              <div className="flex items-center justify-center gap-4 mt-[25px]">
+                <button
+                  type="button"
+                  onClick={() => {
+                    setSelectedProduct((prev: any) => ({
+                      ...prev,
+                      reaction: "like",
+                    }));
+                  }}
+                  className={cn(
+                    "w-[48px] h-[46px] rounded-[12px] bg-[#EDAFDF4D]",
+                    {
+                      " bg-[#E77CCF80]": selectedProduct?.reaction === "like",
+                    }
+                  )}
+                >
+                  🥰
+                </button>
+                <button
+                  type="button"
+                  onClick={() => {
+                    setSelectedProduct((prev: any) => ({
+                      ...prev,
+                      reaction: "dislike",
+                    }));
+                  }}
+                  className={cn(
+                    "w-[48px] h-[46px] rounded-[12px] bg-[#e1e1e194] ",
+                    {
+                      "bg-[#E1E1E1]": selectedProduct?.reaction === "dislike",
+                    }
+                  )}
+                >
+                  😔
+                </button>
+              </div>
+            )}
         </div>
       </div>
     </Modal>

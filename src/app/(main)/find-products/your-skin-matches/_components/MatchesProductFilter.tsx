@@ -3,7 +3,7 @@ import Button from "@/components/common/Button";
 import Checkbox from "@/components/common/CheckBox";
 import Modal from "@/components/common/Modal";
 import { cn } from "@/lib/utils";
-import { useState } from "react";
+import { Fragment, useState } from "react";
 
 const MatchesProductFilter = () => {
   const [isOpen, setIsOpen] = useState(false);
@@ -52,6 +52,7 @@ interface FilterOption {
   id: string;
   label: string;
   checked: boolean;
+  children?: FilterOption[];
 }
 
 function FilterModal() {
@@ -59,36 +60,83 @@ function FilterModal() {
   const [filterExpanded, setFilterExpanded] = useState(true);
 
   const [sortOptions, setSortOptions] = useState<FilterOption[]>([
-    { id: "perfect-match", label: "Perfect match", checked: true },
+    {
+      id: "perfect-match",
+      label: "Perfect match",
+      checked: true,
+      children: [
+        { id: "exact-match", label: "Exact match", checked: false },
+        { id: "close-match", label: "Close match", checked: false },
+      ],
+    },
     { id: "best-rated", label: "Best rated", checked: false },
-    { id: "most-popular", label: "Most popular", checked: false },
+    {
+      id: "most-popular",
+      label: "Most popular",
+      checked: false,
+      children: [
+        { id: "trending", label: "Trending", checked: false },
+        { id: "all-time", label: "All-time favorites", checked: false },
+      ],
+    },
     { id: "price-low-high", label: "Price (Low to High)", checked: false },
   ]);
 
   const [filterOptions, setFilterOptions] = useState<FilterOption[]>([
-    { id: "all", label: "All", checked: false },
-    { id: "toners", label: "Toners", checked: true },
-    { id: "treatments", label: "Treatments", checked: false },
-    { id: "moisturisers", label: "Moisturisers", checked: false },
-    { id: "other", label: "Other", checked: false },
+    {
+      id: "all",
+      label: "All",
+      checked: false,
+    },
+    {
+      id: "toners",
+      label: "Toners",
+      checked: false,
+      children: [
+        {
+          id: "hydrating-toners",
+          label: "Hydrating Toners",
+          checked: false,
+        },
+        {
+          id: "exfoliating-toners",
+          label: "Exfoliating Toners",
+          checked: false,
+        },
+      ],
+    },
+    {
+      id: "treatments",
+      label: "Treatments",
+      checked: false,
+    },
+    {
+      id: "moisturisers",
+      label: "Moisturisers",
+      checked: false,
+      children: [
+        {
+          id: "day-creams",
+          label: "Day Creams",
+          checked: false,
+        },
+      ],
+    },
+    {
+      id: "other",
+      label: "Other",
+      checked: false,
+    },
   ]);
 
-  const handleSortChange = (id: string) => {
-    setSortOptions(
-      sortOptions.map((option) => ({
-        ...option,
-        checked: option.id === id,
-      }))
-    );
+  const handleSortChange = (id: string, isChecked: boolean) => {
+    const updatedOptions = updateCheckedState(sortOptions, id, isChecked);
+    setSortOptions(updateParentState(updatedOptions)); // Ensure parent state consistency
   };
 
-  const handleFilterChange = (id: string) => {
-    setFilterOptions(
-      filterOptions.map((option) => ({
-        ...option,
-        checked: option.id === id ? !option.checked : option.checked,
-      }))
-    );
+  const handleFilterChange = (id: string, isChecked: boolean) => {
+    const updatedOptions = updateCheckedState(filterOptions, id, isChecked);
+    setFilterOptions(updateParentState(updatedOptions)); // Ensure parent state consistency
   };
 
   const handleClear = () => {
@@ -100,8 +148,66 @@ function FilterModal() {
     );
   };
 
+  // Function to update the checked state for a specific node
+  function updateCheckedState(
+    options: FilterOption[],
+    id: string,
+    isChecked: boolean
+  ): FilterOption[] {
+    return options.map((option) => {
+      // If this is the target node
+      if (option.id === id) {
+        return {
+          ...option,
+          checked: isChecked,
+          children: option.children
+            ? option.children.map((child) => ({
+                ...child,
+                checked: isChecked, // Check/uncheck all children when parent is changed
+              }))
+            : undefined,
+        };
+      }
+
+      // If the node has children, recursively update them
+      if (option.children) {
+        const updatedChildren = updateCheckedState(
+          option.children,
+          id,
+          isChecked
+        );
+        const isParentChecked = updatedChildren.some((child) => child.checked);
+
+        return {
+          ...option,
+          checked: isParentChecked, // Parent stays checked if any child is checked
+          children: updatedChildren,
+        };
+      }
+
+      return option;
+    });
+  }
+
+  // Function to propagate child state changes to the parent
+  function updateParentState(options: FilterOption[]): FilterOption[] {
+    return options.map((option) => {
+      if (option.children) {
+        const updatedChildren = updateParentState(option.children);
+        const isParentChecked = updatedChildren.some((child) => child.checked);
+
+        return {
+          ...option,
+          checked: isParentChecked, // Update parent based on children
+          children: updatedChildren,
+        };
+      }
+      return option;
+    });
+  }
+
   return (
-    <div className="bg-white w-[380px] lg:w-[402px] overflow-hidden rounded-xl py-[18px]">
+    <div className="bg-white w-[380px]  overflow-hidden rounded-xl py-[18px]">
       {/* Sort Section */}
       <div className="w-full">
         <div className="pl-3 flex items-center justify-between">
@@ -139,27 +245,40 @@ function FilterModal() {
 
         <div
           className={cn(
-            "space-y-4 pt-3 px-[29.5px] transition-all duration-200 ease-in-out h-[0px] -z-10 opacity-0",
+            "space-y-4 pt-3 px-[29.5px] transition-all duration-200 ease-in-out h-[0px] overflow-auto -z-10 opacity-0",
             {
-              "h-[150px] opacity-100": sortExpanded,
+              "h-[160px] opacity-100": sortExpanded,
             }
           )}
         >
           {sortOptions.map((option) => (
-            <Checkbox
-              key={option.id}
-              label={option.label}
-              checked={option.checked}
-              onChange={() => handleSortChange(option.id)}
-              iconClassName="w-[18px] h-[18px] rounded flex items-center justify-center"
-              labelClassName="text-base font-normal leading-[24px] tracking-[-0.03em] text-accent ml-[15px]"
-            />
+            <Fragment key={option.id}>
+              <Checkbox
+                label={option.label}
+                checked={option.checked}
+                onChange={() => handleSortChange(option.id, !option.checked)}
+                iconClassName="w-[18px] h-[18px] rounded flex items-center justify-center"
+                labelClassName="text-base font-normal leading-[24px] tracking-[-0.03em] text-accent ml-[15px]"
+              />
+              {option.children &&
+                option.children.map((child) => (
+                  <Checkbox
+                    key={child.id}
+                    label={child.label}
+                    checked={child.checked}
+                    onChange={() => handleSortChange(child.id, !child.checked)}
+                    className="ml-2 mt-2"
+                    iconClassName="w-[18px] h-[18px] rounded flex items-center justify-center"
+                    labelClassName="text-base font-normal leading-[24px] tracking-[-0.03em] text-accent ml-[15px]"
+                  />
+                ))}
+            </Fragment>
           ))}
         </div>
       </div>
 
       {/* Filter Section */}
-      <div className="w-full mt-[25px]">
+      <div className="w-full">
         <div className="pl-3 flex items-center justify-between">
           <h2 className="text-base font-semibold leading-[24px] tracking-[-0.03em] text-accent">
             Filter
@@ -195,21 +314,36 @@ function FilterModal() {
 
         <div
           className={cn(
-            "space-y-4 pt-3 px-[29.5px] transition-all duration-200 ease-in-out h-[0px] -z-10 opacity-0",
+            "space-y-4 pt-3 px-[29.5px] transition-all duration-200 ease-in-out h-[0px] overflow-auto -z-10 opacity-0",
             {
               "h-[200px] opacity-100": filterExpanded,
             }
           )}
         >
           {filterOptions.map((option) => (
-            <Checkbox
-              key={option.id}
-              label={option.label}
-              checked={option.checked}
-              onChange={() => handleFilterChange(option.id)}
-              iconClassName="w-[18px] h-[18px] rounded flex items-center justify-center"
-              labelClassName="text-base font-normal leading-[24px] tracking-[-0.03em] text-accent ml-[15px]"
-            />
+            <Fragment key={option.id}>
+              <Checkbox
+                label={option.label}
+                checked={option.checked}
+                onChange={() => handleFilterChange(option.id, !option.checked)}
+                iconClassName="w-[18px] h-[18px] rounded flex items-center justify-center"
+                labelClassName="text-base font-normal leading-[24px] tracking-[-0.03em] text-accent ml-[15px]"
+              />
+              {option.children &&
+                option.children.map((child) => (
+                  <Checkbox
+                    key={child.id}
+                    label={child.label}
+                    checked={child.checked}
+                    onChange={() =>
+                      handleFilterChange(child.id, !child.checked)
+                    }
+                    className="ml-2 mt-2"
+                    iconClassName="w-[18px] h-[18px] rounded flex items-center justify-center"
+                    labelClassName="text-base font-normal leading-[24px] tracking-[-0.03em] text-accent ml-[15px]"
+                  />
+                ))}
+            </Fragment>
           ))}
         </div>
       </div>

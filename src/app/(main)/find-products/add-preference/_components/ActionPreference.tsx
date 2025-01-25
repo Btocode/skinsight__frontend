@@ -7,6 +7,7 @@ import AddProduct from "./AddProduct";
 const ActionPreference = () => {
   const [open, setOpen] = useState(false);
   const router = useRouter();
+
   return (
     <>
       <div className="flex items-center gap-5 pt-2">
