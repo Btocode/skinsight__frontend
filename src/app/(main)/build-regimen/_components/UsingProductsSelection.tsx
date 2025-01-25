@@ -130,6 +130,8 @@ const UsingProductsSelection = () => {
     router.push("/build-regimen/your-new-skin-regimen");
   };
 
+  console.log(Object.keys(selectedRegimens).length >= 3);
+
   return (
     <div className="lg:container space-y-8">
       <article className="lg:space-y-2">
@@ -150,7 +152,7 @@ const UsingProductsSelection = () => {
         </p>
       </article>
 
-      <div className="max-w-max grid grid-cols-2 md:grid-cols-3 gap-6 lg:gap-9">
+      <div className="max-w-max grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6 lg:gap-9">
         {items.map((item) => {
           const attachment = selectedRegimens[item.id];
 
@@ -211,12 +213,76 @@ const UsingProductsSelection = () => {
                   />
                 </svg>
                 <p className="text-base font-semibold leading-[23px] tracking-[-0.03em] text-primary">
-                  {attachment ? "Missing something?" : item.label}
+                  {item.label && item.label}
                 </p>
               </div>
             </button>
           );
         })}
+
+        {Object.keys(selectedRegimens).length < 3 ? null : selectedRegimens[
+            "missing-something"
+          ] ? (
+          <div className="relative w-[182px] h-[224px] rounded-xl border border-[#E1E1E1] flex items-center justify-center">
+            <Image
+              src={selectedRegimens["missing-something"]?.productImage}
+              alt={selectedRegimens["missing-something"]?.productId}
+              fill
+              className="object-cover p-2"
+            />
+            <button
+              onClick={(e) => {
+                e.preventDefault();
+                dispatch(onClearPersonalRegimen("missing-something"));
+              }}
+              className="absolute -top-2 -right-2 w-[23px] h-[23px] cursor-pointer rounded-[6px] bg-[#E1E1E1] flex items-center justify-center"
+            >
+              <svg
+                width="20"
+                height="20"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="2"
+                className="w-4 h-4 opacity-50"
+              >
+                <path d="M18 6L6 18M6 6l12 12" />
+              </svg>
+            </button>
+          </div>
+        ) : (
+          <button
+            className={cn(
+              "relative inset-0 w-[182px] h-[224px] rounded-lg flex items-center justify-center overflow-hidden px-[18px]",
+              "bg-[#8599FE26] bg-clip-padding backdrop-filter backdrop-blur-sm bg-opacity-10"
+            )}
+            onClick={() => setRegimenType("missing-something")}
+          >
+            <div className="flex flex-col items-center gap-4">
+              <svg
+                width="41"
+                height="40"
+                viewBox="0 0 41 40"
+                fill="none"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <path
+                  d="M12.1667 20H20.5M20.5 20H28.8333M20.5 20V28.3333M20.5 20V11.6667M20.5 38.75C10.1447 38.75 1.75 30.3553 1.75 20C1.75 9.64466 10.1447 1.25 20.5 1.25C30.8553 1.25 39.25 9.64466 39.25 20C39.25 30.3553 30.8553 38.75 20.5 38.75Z"
+                  stroke="#8599FE"
+                  strokeWidth="2"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                />
+              </svg>
+              <h4 className="text-[15.39px] font-semibold leading-[23.08px] tracking-[-0.03em] text-primary">
+                Missing something?
+              </h4>
+              <p className="text-sm font-normal leading-[21px] tracking-[-0.03em] text-primary">
+                Add another category in your routine
+              </p>
+            </div>
+          </button>
+        )}
       </div>
       <Button
         onClick={onGenerateRegimen}

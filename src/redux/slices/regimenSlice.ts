@@ -26,6 +26,12 @@ const regimenSlice = createSlice({
       const { type, regimen } = action.payload;
       state.personalRegimen[type] = regimen;
     },
+    // updatePersonalRegimenMissingSomething(
+    //   state,
+    //   action) {
+    //   const { type, regimen } = action.payload;
+    //   state.personalRegimen[type] = regimen;
+    // },
     onClearPersonalRegimen(state, action: PayloadAction<string>) {
       const type = action.payload;
       // check if type exists

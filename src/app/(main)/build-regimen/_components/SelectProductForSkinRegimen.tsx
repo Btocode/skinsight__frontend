@@ -9,6 +9,17 @@ import { updatePersonalRegimen } from "@/redux/slices/regimenSlice";
 import Image from "next/image";
 import { useState } from "react";
 
+const categories = [
+  { value: "1", label: "treat" },
+  { value: "2", label: "moisturize" },
+  { value: "3", label: "protect" },
+  { value: "4", label: "cleanse" },
+  { value: "5", label: "exfoliate" },
+  { value: "6", label: "serum" },
+  { value: "7", label: "mask" },
+  { value: "8", label: "toner" },
+];
+
 const brands = [
   { value: "1", label: "Sensibio" },
   { value: "2", label: "La Roche-Posay" },
@@ -214,6 +225,7 @@ const titles = {
   cleanser: "Add a cleanser",
   spf: "Add a SPF",
   moisturiser: "Add a moisturiser",
+  "missing-something": "Missing something?",
 };
 
 type SelectProductForSkinRegimenProps = {
@@ -229,6 +241,7 @@ const SelectProductForSkinRegimen = ({
     brandId: string;
     productId: string;
     productImage: string;
+    categoryId?: string;
   } | null>(null);
   const dispatch = useAppDispatch();
   const open = Boolean(regimenType);
@@ -249,8 +262,10 @@ const SelectProductForSkinRegimen = ({
                 "Select a product you currently use"}
             </HeadingPrimary>
             <p className="hidden lg:block text-base font-medium leading-[24px] tracking-[-0.03em] text-accent">
-              Select a {regimenType} you already use in your regimen or one you
-              wish to choose
+              {regimenType === "missing-something"
+                ? "Add a category and then add the product you are looking for"
+                : `Select a ${regimenType} you already use in your regimen or one you
+              wish to choose`}
             </p>
             <div className="flex lg:hidden w-[136.5px] mx-auto h-[168px] border border-dashed border-primary items-center justify-center rounded-xl">
               {selectedProduct &&
@@ -282,15 +297,36 @@ const SelectProductForSkinRegimen = ({
               )}
             </div>
           </div>
+          {regimenType === "missing-something" && (
+            <Combobox
+              options={categories as Option[]}
+              value={categories.find(
+                (b) => b.value === selectedProduct?.categoryId
+              )}
+              onChange={(value) => {
+                setSelectedProduct({
+                  categoryId: value.value,
+                  brandId: "",
+                  productId: "",
+                  productImage: "",
+                });
+              }}
+              placeholder="Select category"
+              className="max-w-full "
+              buttonClassName="border-0"
+              valueClassName="text-xl font-normal leading-[26px] text-accent"
+            />
+          )}
           <Combobox
             options={brands as Option[]}
             value={brands.find((b) => b.value === selectedProduct?.brandId)}
             onChange={(value) => {
-              setSelectedProduct({
+              setSelectedProduct((prev) => ({
+                ...prev,
                 brandId: value.value,
                 productId: "",
                 productImage: "",
-              });
+              }));
             }}
             placeholder="Select brand"
             className="max-w-full "
