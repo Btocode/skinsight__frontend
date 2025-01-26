@@ -57,7 +57,7 @@ export function MatchesProductCard({ item }: { item: Product }) {
           <button
             id="add-favorite"
             type="button"
-            className="w-[47.8px] lg:w-[141px] h-[45.89px] lg:h-[48px] flex items-center justify-center gap-[10px] rounded-[11.47px] lg:rounded-[12px] bg-[#8F80E833] transition-colors"
+            className="w-[47.8px] lg:w-[141px] h-[45.89px] lg:h-[48px] flex items-center justify-center gap-[7px] rounded-[11.47px] lg:rounded-[12px] bg-[#8F80E833] transition-colors"
           >
             <svg
               width="25"
@@ -73,7 +73,7 @@ export function MatchesProductCard({ item }: { item: Product }) {
               />
             </svg>
             <span className="hidden lg:inline-block text-sm font-medium leading-[21px] tracking-[-0.03em] text-[#8F80E8]">
-              Add to routine
+              Save for later
             </span>
           </button>
           <button

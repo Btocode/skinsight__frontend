@@ -2,6 +2,7 @@
 
 import React, { useState, useRef, useEffect } from "react";
 import Link from "next/link";
+import Image from "next/image";
 import { cn } from "@/lib/utils";
 import { useAppSelector, useAppDispatch } from "@/lib/redux/hook";
 import { useRouter } from "next/navigation";
@@ -197,32 +198,8 @@ const UserMenu = () => {
         aria-controls="user-menu"
         className="flex justify-between items-center gap-2 border-2 px-2 border-[#EBEAED] rounded-[100px] min-w-[128px] h-[40px] cursor-pointer"
       >
-        {isLoading ? (
-           <svg className="animate-spin h-5 w-5 text-[#8599FE]" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
-           <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
-           <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
-         </svg>
-        )
-        :
-        (
-        <svg
-          width="20"
-          height="20"
-          viewBox="0 0 20 20"
-          fill="none"
-          xmlns="http://www.w3.org/2000/svg"
-        >
-          <path
-            d="M15.2166 17.3323C13.9349 15.9008 12.0727 15 10 15C7.92734 15 6.06492 15.9008 4.7832 17.3323M10 19C5.02944 19 1 14.9706 1 10C1 5.02944 5.02944 1 10 1C14.9706 1 19 5.02944 19 10C19 14.9706 14.9706 19 10 19ZM10 12C8.34315 12 7 10.6569 7 9C7 7.34315 8.34315 6 10 6C11.6569 6 13 7.34315 13 9C13 10.6569 11.6569 12 10 12Z"
-            stroke="#2C2C2C"
-            strokeWidth="2"
-            strokeLinecap="round"
-            strokeLinejoin="round"
-          />
-        </svg>
-        )
-        }
-        <span className="text-base font-medium leading-[22px]">
+        <Image src="/avatar.png" alt="user-avatar" width={20} height={20} />
+        <span className="text-base font-medium leading-[22px] text-[#1E0E62]">
           Hi, {displayName?.split(" ")[0] || "User"}!
         </span>
         <svg
