@@ -21,7 +21,7 @@ const AccountLayout = ({ children }: { children: React.ReactNode }) => {
 
   return (
     <div className="min-h-svh bg-white">
-      <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-8 lg:w-[90%]">
+      <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-20 lg:w-[90%]">
         <h1 className="text-4xl leading-[54px] tracking-tight text-center mb-8">
           Welcome, <span className="font-bold">{userName?.split(" ")[0]}!</span>
         </h1>

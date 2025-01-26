@@ -3,8 +3,8 @@ import { Product } from "../saved-items/page";
 
 export function ProductCard({ item }: { item: Product }) {
   return (
-    <div className="w-full rounded-xl bg-white p-4 lg:p-6 shadow-[0px_5.13px_33.34px_0px_#2C2C2C17] border border-[#EFEFEF]">
-      <div className="flex flex-col gap-6 h-96 items-center">
+    <div className="w-full rounded-xl bg-white px-4 py-3 shadow-[0px_5.13px_33.34px_0px_#2C2C2C17] border border-[#EFEFEF]">
+      <div className="flex flex-col gap-3 items-center">
         {/* Product Image */}
         <div className="h-36 w-36 lg:h-48 lg:w-48 relative">
           <Image
@@ -16,9 +16,9 @@ export function ProductCard({ item }: { item: Product }) {
         </div>
 
         {/* Product Info */}
-        <div className="flex-1 w-full space-y-2">
-          <h2 className="text-sm text-accent">{item.brandName}</h2>
-          <h3 className="text-xl font-semibold text-accent">
+        <div className="flex-1 w-full">
+          <h2 className="text-sm text-[#575656]">{item.brandName}</h2>
+          <h3 className="text-[16px] font-semibold text-[#575656]">
             {item.productTitle}
           </h3>
           <p className="text-base text-cyan-500 font-medium">${item.price}</p>

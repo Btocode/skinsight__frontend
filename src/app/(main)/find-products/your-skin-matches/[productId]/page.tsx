@@ -10,7 +10,6 @@ import { Accordion } from "@/components/common/Accordion";
 import Image from "next/image";
 import ProductTabs from "./_components/ProductTabs";
 import Advertisement from "@/components/common/Advertisement";
-import GradientImage from "@/components/common/GradientImage";
 
 const ProductDetails = () => {
   const [activeId, setActiveId] = useState("1");
@@ -96,12 +95,12 @@ const ProductDetails = () => {
         content="Toners balance your skin's pH levels & help prep skin for optimal absorption of the rest of your skincare routine. Our toners are formulated to multi-task by treating skin with clinically effective actives, while also hydrating & balancing skin with gentle ingredients so you can treat your specific skin concerns without irritating skin or stripping it of moisture."
         isActive={activeId === "1"}
       />
-      <div className="h-[160px] lg:w-[1000px] mx-auto my-10 relative">
+      <div className="h-[160px]  mx-auto my-10 relative">
         <Image src={"/brand.png"} alt="brand" fill />
       </div>
       <ProductTabs />
       <Advertisement />
-      <GradientImage secondImage={{ className: "lg:-right-52" }} />
+      {/* <GradientImage secondImage={{ className: "lg:-right-52" }} /> */}
     </section>
   );
 };
