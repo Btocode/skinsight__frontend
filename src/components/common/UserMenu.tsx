@@ -6,7 +6,7 @@ import { cn } from "@/lib/utils";
 import { useAppSelector, useAppDispatch } from "@/lib/redux/hook";
 import { useRouter } from "next/navigation";
 import { useLogoutMutation } from "@/lib/services/authApi";
-import { logout } from "@/redux/slices/authSlice";
+import { logout, selectUserDisplayName } from "@/redux/slices/authSlice";
 
 export const MENU_ITEMS = [
   {
@@ -96,23 +96,22 @@ export const MENU_ITEMS = [
 ];
 
 const UserMenu = () => {
-  const { user } = useAppSelector((state) => state.auth);
   const [isOpen, setIsOpen] = useState(false);
   const [activeIndex, setActiveIndex] = useState(-1);
   const menuRef = useRef<HTMLDivElement>(null);
   const buttonRef = useRef<HTMLButtonElement>(null);
   const menuItemsRef = useRef<(HTMLAnchorElement | null | undefined)[]>([]);
-  const router = useRouter();
   const dispatch = useAppDispatch();
   const [logoutUser, { isLoading }] = useLogoutMutation();
+  const displayName = useAppSelector(selectUserDisplayName);
+
 
   const handleLogout = async () => {
     try {
       await logoutUser().unwrap();
       dispatch(logout());
-      router.push("/");
     } catch (error) {
-      console.error("Logout failed:", error);
+      console.log("Logout failed:", error);
     }
   };
 
@@ -196,26 +195,35 @@ const UserMenu = () => {
         aria-expanded={isOpen}
         aria-haspopup="true"
         aria-controls="user-menu"
-        className="flex justify-between items-center gap-2 border-2 px-2 border-[#EBEAED] rounded-[100px] w-[168px] h-[40px]"
+        className="flex justify-between items-center gap-2 border-2 px-2 border-[#EBEAED] rounded-[100px] min-w-[128px] h-[40px] cursor-pointer"
       >
+        {isLoading ? (
+           <svg className="animate-spin h-5 w-5 text-[#8599FE]" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+           <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
+           <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+         </svg>
+        )
+        :
+        (
         <svg
-          width="18"
+          width="20"
           height="20"
-          viewBox="0 0 18 20"
+          viewBox="0 0 20 20"
           fill="none"
           xmlns="http://www.w3.org/2000/svg"
         >
           <path
-            d="M17 19C17 16.2386 13.4183 14 9 14C4.58172 14 1 16.2386 1 19M9 11C6.23858 11 4 8.76142 4 6C4 3.23858 6.23858 1 9 1C11.7614 1 14 3.23858 14 6C14 8.76142 11.7614 11 9 11Z"
-            stroke="#8599FE"
+            d="M15.2166 17.3323C13.9349 15.9008 12.0727 15 10 15C7.92734 15 6.06492 15.9008 4.7832 17.3323M10 19C5.02944 19 1 14.9706 1 10C1 5.02944 5.02944 1 10 1C14.9706 1 19 5.02944 19 10C19 14.9706 14.9706 19 10 19ZM10 12C8.34315 12 7 10.6569 7 9C7 7.34315 8.34315 6 10 6C11.6569 6 13 7.34315 13 9C13 10.6569 11.6569 12 10 12Z"
+            stroke="#2C2C2C"
             strokeWidth="2"
             strokeLinecap="round"
             strokeLinejoin="round"
           />
         </svg>
-
+        )
+        }
         <span className="text-base font-medium leading-[22px]">
-          Hi, {user?.display_name || "User"}
+          Hi, {displayName?.split(" ")[0] || "User"}!
         </span>
         <svg
           width="24"
@@ -242,13 +250,13 @@ const UserMenu = () => {
         role="menu"
         aria-orientation="vertical"
         aria-labelledby="user-menu-button"
-        className={`absolute right-0 mt-2 w-[248px] h-[330px] origin-top-right transform rounded-lg bg-white shadow-lg ring-1 ring-black ring-opacity-5 transition-all duration-200 ease-in-out ${
+        className={`absolute right-0 mt-2 w-[248px] h-[320px] origin-top-right transform rounded-lg bg-white shadow-lg ring-1 ring-black ring-opacity-5 transition-all duration-200 ease-in-out ${
           isOpen
             ? "visible scale-100 opacity-100"
             : "invisible scale-95 opacity-0"
         }`}
       >
-        <div className="py-[40px] space-y-4">
+        <div className="py-[25px] space-y-4">
           {MENU_ITEMS.map((item, index) => (
             <MenuItem
               key={index}
@@ -271,22 +279,22 @@ const UserMenu = () => {
             onClick={handleLogout}
             className={`border-0 outline-none inset-0 w-full flex items-center flex-shrink-0 gap-4 pl-[40px] py-2 text-sm text-gray-700 hover:bg-gray-100 focus:bg-gray-100 focus:outline-none`}
           >
-            <svg
-              width="18"
-              height="18"
-              viewBox="0 0 18 18"
-              fill="none"
-              xmlns="http://www.w3.org/2000/svg"
-            >
-              <path
-                d="M9 12L12 9M12 9L9 6M12 9H1M6 4.24859V4.2002C6 3.08009 6 2.51962 6.21799 2.0918C6.40973 1.71547 6.71547 1.40973 7.0918 1.21799C7.51962 1 8.08009 1 9.2002 1H13.8002C14.9203 1 15.4796 1 15.9074 1.21799C16.2837 1.40973 16.5905 1.71547 16.7822 2.0918C17 2.5192 17 3.07899 17 4.19691V13.8036C17 14.9215 17 15.4805 16.7822 15.9079C16.5905 16.2842 16.2837 16.5905 15.9074 16.7822C15.48 17 14.921 17 13.8031 17H9.19691C8.07899 17 7.5192 17 7.0918 16.7822C6.71547 16.5905 6.40973 16.2839 6.21799 15.9076C6 15.4798 6 14.9201 6 13.8V13.75"
-                stroke="#8599FE"
-                strokeWidth="2"
-                strokeLinecap="round"
-                strokeLinejoin="round"
-              />
-            </svg>
-            <span className="text-lg font-medium leading-[26px]">Log out</span>
+                <svg
+                  width="18"
+                  height="18"
+                  viewBox="0 0 18 18"
+                  fill="none"
+                  xmlns="http://www.w3.org/2000/svg"
+                >
+                  <path
+                    d="M9 12L12 9M12 9L9 6M12 9H1M6 4.24859V4.2002C6 3.08009 6 2.51962 6.21799 2.0918C6.40973 1.71547 6.71547 1.40973 7.0918 1.21799C7.51962 1 8.08009 1 9.2002 1H13.8002C14.9203 1 15.4796 1 15.9074 1.21799C16.2837 1.40973 16.5905 1.71547 16.7822 2.0918C17 2.5192 17 3.07899 17 4.19691V13.8036C17 14.9215 17 15.4805 16.7822 15.9079C16.5905 16.2842 16.2837 16.5905 15.9074 16.7822C15.48 17 14.921 17 13.8031 17H9.19691C8.07899 17 7.5192 17 7.0918 16.7822C6.71547 16.5905 6.40973 16.2839 6.21799 15.9076C6 15.4798 6 14.9201 6 13.8V13.75"
+                    stroke="#8599FE"
+                    strokeWidth="2"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                  />
+                </svg>
+                <span className="text-lg font-medium leading-[26px]">Log out</span>
           </button>
         </div>
       </div>

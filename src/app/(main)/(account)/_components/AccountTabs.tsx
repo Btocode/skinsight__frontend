@@ -20,7 +20,7 @@ export default function AccountTabs() {
   const pathname = usePathname();
 
   return (
-    <div className="w-full border-b mb-16 overflow-auto">
+    <div className="w-full border-b mb-12 overflow-auto">
       <nav
         className="flex justify-evenly space-x-4 lg:space-x-8"
         aria-label="Tabs"

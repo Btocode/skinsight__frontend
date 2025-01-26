@@ -33,7 +33,7 @@ export function Accordion({
 
   return (
     <div className="w-full cursor-pointer" onClick={toggle}>
-      <div className="text-left items-center py-2 lg:py-4 select-none flex justify-between flex-row border-b-2 border-[#EFEFEF]">
+      <div className="text-left items-center py-3 select-none flex justify-between flex-row border-b-2 border-[#EFEFEF]">
         <h3
           className={cn(
             "flex-1 text-base lg:text-xl font-semibold leading-[24px] lg:leading-[30px] tracking-[-0.03em] text-accent",
@@ -66,21 +66,13 @@ export function Accordion({
         </div>
       </div>
       <div
-        className={`overflow-hidden transition-all duration-500 ease-in-out ${
-          isOpen ? "max-h-40 py-4" : "max-h-0 py-0"
+        className={`overflow-hidden transition-all duration-300 ${
+          isActive ? "max-h-[1000px]" : "max-h-0"
         }`}
       >
-        <p
-          className={cn(
-            "text-xs lg:text-base font-normal leading-[18px] lg:leading-[24px] tracking-[-0.03em] text-accent opacity-0 transition-opacity duration-500 ease-in-out",
-            contentClassName,
-            {
-              "opacity-100": isOpen,
-            }
-          )}
-        >
+        <div className="font-['DM_Sans'] text-[14px] font-normal leading-[18px] tracking-[-0.03em] text-[#575656] text-left py-4">
           {content}
-        </p>
+        </div>
       </div>
     </div>
   );

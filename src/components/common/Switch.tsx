@@ -12,8 +12,8 @@ export function Switch({ enabled, onToggle }: SwitchProps) {
     <button
       onClick={() => onToggle(!enabled)}
       className={cn(
-        "relative inline-flex h-6 w-10 items-center rounded-full transition-colors duration-300",
-        enabled ? "bg-primary" : "bg-gray-300"
+        "relative inline-flex h-7 w-10 items-center rounded-full transition-colors duration-300",
+        enabled ? "bg-[#8F80E8]" : "bg-gray-300"
       )}
     >
       <span

@@ -1,6 +1,5 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
 import axios from "axios";
-import { getStorageItem, setStorageItem } from "@/utils/storage";
+import { getStorageItem } from '@/utils/storage';
 
 const api = axios.create({
   baseURL: process.env.NEXT_PUBLIC_API_URL,
@@ -17,27 +16,5 @@ api.interceptors.request.use((config) => {
   }
   return config;
 });
-
-// Authentication APIs
-export const authApi = {
-  login: async (email: string, password: string) => {
-    try {
-      const response = await api.post("/auth/sign_in", { email, password });
-      if (response.data.token) {
-        setStorageItem("token", response.data.token);
-      }
-      return response.data;
-    } catch (error: any) {
-      throw error?.response?.data || { message: "Login failed" };
-    }
-  },
-  logout: async () => {
-    await api.post("/auth/sign_out");
-  },
-  getUser: async () => {
-    const response = await api.get("/auth/me");
-    return response.data; // { user }
-  },
-};
 
 export default api;

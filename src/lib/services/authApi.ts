@@ -1,6 +1,6 @@
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 import { AuthResponse, LoginRequest, MessageResponse, RegisterRequest } from "@/types/auth";
-import { setCredentials } from "@/redux/slices/authSlice";
+import { logout, setCredentials } from "@/redux/slices/authSlice";
 
 export const authApi = createApi({
   reducerPath: "authApi",
@@ -20,14 +20,6 @@ export const authApi = createApi({
         method: "POST",
         body: credentials,
       }),
-      async onQueryStarted(_, { dispatch, queryFulfilled }) {
-        try {
-          const { data } = await queryFulfilled;
-          dispatch(setCredentials({ user: data.user }));
-        } catch (err) {
-          console.error('Login failed:', err);
-        }
-      },
       invalidatesTags: ['Auth'],
     }),
     register: builder.mutation<MessageResponse, RegisterRequest>({
@@ -42,11 +34,22 @@ export const authApi = createApi({
         url: "/auth/sign_out",
         method: "POST",
       }),
-      invalidatesTags: ['Auth'],
+      async onQueryStarted(_, { dispatch }) {
+        try {
+          // Clear auth state
+          dispatch(logout());
+          // Clear ALL cached data including the checkAuth query
+          dispatch(authApi.util.resetApiState());
+          // Force a refetch of checkAuth
+          dispatch(authApi.util.invalidateTags(['Auth']));
+        } catch (err) {
+          console.error('Logout failed:', err);
+        }
+      },
     }),
     checkAuth: builder.query<AuthResponse, void>({
       query: () => ({
-        url: "/auth/me",
+        url: "/users/me",
         method: "GET",
       }),
       providesTags: ['Auth'],

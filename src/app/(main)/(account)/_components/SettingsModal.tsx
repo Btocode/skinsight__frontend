@@ -41,12 +41,12 @@ const SettingsModal = () => {
         ) : state === "delete-success" ? (
           <AccountDeleteSuccess onClose={onStateClose} />
         ) : (
-          <div className="w-[380px] lg:w-[550px]">
+          <div className="w-[380px] lg:w-[550px] lg:py-5 lg:px-2  ">
             <h2 className="text-2xl font-semibold leading-[36px] tracking-[-0.02em] text-[#111111] mt-2 lg:mt-0">
               Account Settings
             </h2>
             <hr className="w-full h-px my-6 bg-[#EFEFEF]" />
-            <ul className="list-none m-0 space-y-6 mb-8">
+            <ul className="list-none m-0 space-y-10 mb-8">
               <Step
                 onClick={() => setState("marketing")}
                 label="Change my marketing preferences"
@@ -64,7 +64,7 @@ const SettingsModal = () => {
                 label="Delete my account"
               />
             </ul>
-            <Button onClick={onClose}>Close</Button>
+            <Button onClick={onClose} className="py-3 px-6 text-[20px] w-[150px]">Close</Button>
           </div>
         )}
       </Modal>

@@ -1,7 +1,7 @@
 "use client";
 import HeadingPrimary from "@/components/common/HeadingPrimary";
 import { InputBox } from "@/components/common/InputBox";
-import { useLoginMutation } from "@/redux/apis/authApi";
+import { useLoginMutation } from "@/lib/services/authApi";
 import { loginSchema } from "@/schema/auth";
 import { LoginSchema } from "@/types/auth";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -9,14 +9,12 @@ import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
 import { Controller, useForm } from "react-hook-form";
 import { useEffect, useState } from "react";
-import { setCredentials } from "@/redux/slices/authSlice";
-import { useDispatch } from "react-redux";
+import Image from "next/image";
 
 const SignInForm = () => {
   const pathname = usePathname();
   const router = useRouter();
   const [mounted, setMounted] = useState(false);
-  const dispatch = useDispatch();
   const [isSuccess, setIsSuccess] = useState(false);
   const {
     control,
@@ -34,17 +32,16 @@ const SignInForm = () => {
 
   const onSubmit = async (data: LoginSchema) => {
     try {
-      const response = await loginUser(data).unwrap();
+      await loginUser(data).unwrap();
       setIsSuccess(true);
-      dispatch(setCredentials({ user: response.user }));
-
-      // Wait for 500ms before redirecting
+      // Only redirect if login was successful
       setTimeout(() => {
         router.push(pathname);
       }, 500);
     } catch (err) {
-      console.error(err);
+      console.log(err);
       setIsSuccess(false);
+      // Don't redirect or change URL on error
     }
   };
 
@@ -93,20 +90,26 @@ const SignInForm = () => {
     return null;
   }
 
+  const handleSocialLogin = (provider: string) => {
+    // redirect to authentication url
+    const url = `${process.env.NEXT_PUBLIC_API_URL}/auth/sign_in_with_provider/${provider}`;
+    window.location.href = url;
+  };
+
   return (
-    <div className="bg-white w-[680px] h-[510px] mx-auto rounded-[12px] flex flex-col gap-[10px] lg:px-[80px] py-4 lg:py-[40px]">
-      <div className="text-center mb-8">
-        <HeadingPrimary className="text-[28px] leading-8 lg:text-4xl lg:leading-10 lg:tracking-[-2%]">
+    <div className="bg-white w-[620px] h-[460px] mx-auto rounded-[12px] flex flex-col gap-[10px] lg:px-[60px] py-4 lg:py-[40px]">
+      <div className="text-center mb-4">
+        <HeadingPrimary  className="text-[28px] leading-8 lg:text-4xl lg:leading-10 lg:tracking-[-2%]">
           Log into your account
         </HeadingPrimary>
-        <p className="text-[#2C2C2C]/80 text-base leading-6 tracking-[-0.5px]">
+        <p className="text-[#2C2C2C] text-base leading-6 tracking-[-0.5px]">
           View your saved searches, skincare routine and more
         </p>
       </div>
 
       <form
         onSubmit={handleSubmit(onSubmit)}
-        className="lg:px-[32px] space-y-5 lg:space-y-7"
+        className="lg:px-[50px] space-y-5 lg:space-y-7"
       >
         <Controller
           name="email"
@@ -146,14 +149,41 @@ const SignInForm = () => {
 
         {isError && renderError()}
 
-        <div className="flex items-center gap-4">
-          <button
+        <div className="flex gap-4 w-full">
+        <button
             type="submit"
             disabled={isLoading}
-            className="w-full bg-[#8599FE] hover:bg-blue-500 text-white rounded-xl py-3 text-lg font-medium transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+            className="bg-[#8599FE] hover:bg-blue-500 text-white rounded-xl text-lg font-medium transition-colors disabled:opacity-50 w-[50%]"
           >
-            {isLoading ? "Signing in..." : "Sign In"}
+            {isLoading ? "Signing in..." : "Sign in"}
           </button>
+
+          <div className="flex w-[50%] gap-3 justify-end">
+            <Image
+              src="/icons/google.png"
+              width={56}
+              height={56}
+              alt="Google"
+              className="cursor-pointer transition-colors hover:opacity-80"
+              onClick={() => handleSocialLogin("google")}
+            />
+            <Image
+              src="/icons/facebook.png"
+              width={56}
+              height={56}
+              alt="Facebook"
+              className="cursor-pointer transition-colors hover:opacity-80"
+              onClick={() => handleSocialLogin("facebook")}
+            />
+            <Image
+              src="/icons/apple.png"
+              width={56}
+              height={56}
+              alt="Apple"
+              className="cursor-pointer transition-colors hover:opacity-80"
+              onClick={() => handleSocialLogin("apple")}
+            />
+          </div>
         </div>
 
         <p className="text-center text-lg">
