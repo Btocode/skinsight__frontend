@@ -24,9 +24,9 @@ export const AuthCheck = () => {
       dispatch(setCredentials({ user: data }));
     } else if (error) {
       // Clear auth state
-      dispatch(logout());
+      // dispatch(logout());
       // Close any open modals/navbars by removing auth param
-      router.replace(window.location.pathname);
+      // router.replace(window.location.pathname);
     }
   }, [data, error, dispatch, router]);
 
