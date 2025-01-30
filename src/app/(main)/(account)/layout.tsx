@@ -12,7 +12,6 @@ const AccountLayout = ({ children }: { children: React.ReactNode }) => {
   const userName = user?.display_name;
   const router = useRouter();
 
-
   useEffect(() => {
     if (!isAuthenticated) {
       router.push("/");
