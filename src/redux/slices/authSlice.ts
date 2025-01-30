@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 
 // Define the shape of user data we want to store
@@ -43,9 +44,10 @@ const authSlice = createSlice({
           userData.user_metadata?.full_name ||
           userData.user_metadata?.name ||
           userData.user_metadata?.display_name ||
-          userData.email?.split('@')[0], // Fallback to email username
-        avatar_url: userData.user_metadata?.avatar_url || userData.user_metadata?.picture,
-        provider: userData.app_metadata?.provider || 'email'
+          userData.email?.split("@")[0], // Fallback to email username
+        avatar_url:
+          userData.user_metadata?.avatar_url || userData.user_metadata?.picture,
+        provider: userData.app_metadata?.provider || "email",
       };
       state.isAuthenticated = true;
     },
