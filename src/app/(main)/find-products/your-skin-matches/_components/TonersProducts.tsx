@@ -16,7 +16,7 @@ const TonersProducts = ({ products }: { products: Product[] }) => {
   const handleScroll = () => {
     if (sliderRef.current) {
       const container = sliderRef.current;
-      const cardWidth = container.firstElementChild?.clientWidth || 0;
+      // const cardWidth = container.firstElementChild?.clientWidth || 0;
 
       if (container.scrollLeft === 0) {
         container.scrollLeft = container.scrollWidth / 3;
