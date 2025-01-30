@@ -14,7 +14,7 @@ const CodeValidationForm = () => {
       </div>
 
       {/* Form */}
-      <form className=" space-y-5 lg:space-y-7 lg:px-[20px]">
+      <form className=" space-y-5 lg:space-y-7">
         <InputBox type="text" placeholder="Enter code" id="code" />
 
         <div className="lg:max-w-[240px] mx-auto">
