@@ -64,6 +64,12 @@ const SignUpForm = () => {
     return null; // or loading spinner
   }
 
+  const handleSocialLogin = (provider: string) => {
+    // redirect to authentication url
+    const url = `${process.env.NEXT_PUBLIC_API_URL}/auth/oauth/${provider}`;
+    window.location.href = url;
+  };
+
   return (
     <div className="bg-white w-[620px] mx-auto rounded-[12px] flex flex-col gap-[10px] lg:px-[70px] py-4 lg:py-[50px]">
       <div className="text-center mb-4">
@@ -155,6 +161,7 @@ const SignUpForm = () => {
           </button>
           <div className="flex w-[50%] gap-4 justify-end">
             <Image
+              onClick={() => handleSocialLogin("google")}
               src="/icons/google.png"
               width={56}
               height={56}
