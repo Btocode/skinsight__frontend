@@ -29,16 +29,18 @@ export default function ProfileForm() {
           <input
             type="email"
             defaultValue={user?.email || ""}
-            className="w-full px-3 py-4 rounded-xl bg-white text-[20px] font-normal text-[#2C2C2C]"
+            className="w-full px-3 py-4 rounded-xl bg-[#E1E1E1] text-[20px] font-normal text-[#2C2C2C] cursor-not-allowed opacity-70"
             placeholder="Email"
+            disabled
           />
         </div>
-        <div className="w-full lg:w-[70%]">
+        <div className="w-full lg:w-[70%] relative">
           <input
             type="password"
             defaultValue="••••••••••"
-            className="w-full px-3 py-4 rounded-xl bg-white text-[20px] font-normal text-[#2C2C2C]"
+            className="w-full px-3 py-4 rounded-xl bg-[#E1E1E1] text-[20px] font-normal text-[#2C2C2C] cursor-not-allowed opacity-70"
             placeholder="Password"
+            disabled
           />
         </div>
         <div className="w-full lg:w-[70%]">

@@ -92,7 +92,7 @@ const SignInForm = () => {
 
   const handleSocialLogin = (provider: string) => {
     // redirect to authentication url
-    const url = `${process.env.NEXT_PUBLIC_API_URL}/auth/sign_in_with_provider/${provider}`;
+    const url = `${process.env.NEXT_PUBLIC_API_URL}/auth/oauth/${provider}`;
     window.location.href = url;
   };
 
