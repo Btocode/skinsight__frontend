@@ -2,12 +2,13 @@
 
 import Image from "next/image";
 import { ReviewProduct } from "../my-reviews/page";
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import ReviewModal from "@/components/common/ReviewModal";
 
 const ReviewProductCard = ({ item }: { item: ReviewProduct }) => {
   const [reviewPopup, setReviewPopup] = useState(false);
   const handleReaction = (reaction: string) => {
+    console.log(reaction);
     setReviewPopup(true);
   };
 
@@ -16,10 +17,14 @@ const ReviewProductCard = ({ item }: { item: ReviewProduct }) => {
       className="w-[232px] h-[302px] p-5 flex flex-col gap-2.5 rounded-[13px] bg-white"
       style={{
         boxShadow: "0px 5.13px 33.34px 0px #2C2C2C17",
-        border: "1px solid #EFEFEF"
+        border: "1px solid #EFEFEF",
       }}
     >
-      <ReviewModal isOpen={reviewPopup} onClose={() => setReviewPopup(false)} item={item} />
+      <ReviewModal
+        isOpen={reviewPopup}
+        onClose={() => setReviewPopup(false)}
+        item={item}
+      />
       {/* Product Image Container - Fixed height */}
       <div className="h-[140px] w-full flex items-center justify-center">
         <div className="relative h-[120px] w-[120px]">

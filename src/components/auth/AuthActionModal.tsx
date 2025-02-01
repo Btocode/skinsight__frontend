@@ -35,7 +35,7 @@ const AuthActionModal = () => {
         isOpen={open}
         onClose={onClose}
       >
-        <div className="w-full lg:max-w-[680px] ">
+        <div className="w-full lg:max-w-[680px]">
           {components[authAction as string]}
         </div>
       </Modal>

@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 "use client";
 
 import { useAppSelector } from "@/lib/redux/hook";
@@ -12,7 +13,9 @@ export default function ProfileForm() {
 
       <form className="max-w-xl space-y-8">
         <div className="flex justify-between items-center mb-12">
-          <h2 className="text-2xl font-semibold text-[#2C2C2C]">Profile info</h2>
+          <h2 className="text-2xl font-semibold text-[#2C2C2C]">
+            Profile info
+          </h2>
         </div>
         <div className="w-full lg:w-[70%]">
           <input
@@ -43,12 +46,15 @@ export default function ProfileForm() {
         <div className="w-full lg:w-[70%]">
           <input
             type="text"
-            defaultValue={user?.country || "United States"}
+            defaultValue={(user && (user as any)?.country) || "United States"}
             className="w-full px-3 py-4 rounded-xl bg-white text-[20px] font-normal text-[#2C2C2C]"
             placeholder="Country"
           />
         </div>
-        <button type="submit" className="btn-primary text-[20px] font-normal w-[160px] lg:h-[58px]">
+        <button
+          type="submit"
+          className="btn-primary text-[20px] font-normal w-[160px] lg:h-[58px]"
+        >
           Save
         </button>
       </form>

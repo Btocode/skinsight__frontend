@@ -15,12 +15,13 @@ const SignUpForm = () => {
   const router = useRouter();
   const pathname = usePathname();
   const [mounted, setMounted] = useState(false);
-  const [registerUser, { isLoading, isError, error: apiError }] = useRegisterMutation();
+  const [registerUser, { isLoading, isError, error: apiError }] =
+    useRegisterMutation();
 
   const {
     control,
     handleSubmit,
-    formState: { errors }
+    formState: { errors },
   } = useForm<RegisterSchema>({
     resolver: zodResolver(registerSchema),
     defaultValues: {
@@ -33,6 +34,7 @@ const SignUpForm = () => {
 
   const onSubmit = async (data: RegisterSchema) => {
     try {
+      // eslint-disable-next-line @typescript-eslint/no-unused-vars
       const { confirm_password, ...registerData } = data;
       await registerUser(registerData).unwrap();
       router.replace(pathname);
@@ -49,7 +51,8 @@ const SignUpForm = () => {
     if (isError) {
       return (
         <span className="text-red-600">
-          {(apiError as { data: { detail: string } })?.data?.detail || "Registration failed"}
+          {(apiError as { data: { detail: string } })?.data?.detail ||
+            "Registration failed"}
         </span>
       );
     }
@@ -71,7 +74,7 @@ const SignUpForm = () => {
   };
 
   return (
-    <div className="bg-white w-[620px] mx-auto rounded-[12px] flex flex-col gap-[10px] lg:px-[70px] py-4 lg:py-[50px]">
+    <div className="bg-white  rounded-[12px] flex flex-col gap-[10px] lg:px-[70px] py-4 lg:py-[50px]">
       <div className="text-center mb-4">
         <HeadingPrimary className="text-[28px] leading-8 lg:text-4xl lg:leading-10 lg:tracking-[-3%]">
           Sign up to get personalized recommendations
@@ -155,11 +158,11 @@ const SignUpForm = () => {
           <button
             type="submit"
             disabled={isLoading}
-            className="bg-[#8599FE] hover:bg-blue-500 text-white rounded-xl text-lg font-medium transition-colors disabled:opacity-50 w-[50%]"
+            className="flex-1 bg-[#8599FE] hover:bg-blue-500 text-white rounded-xl text-lg font-medium transition-colors disabled:opacity-50 "
           >
             {isLoading ? "Signing up..." : "Sign up"}
           </button>
-          <div className="flex w-[50%] gap-4 justify-end">
+          <div className="flex-1 flex  gap-4 justify-end">
             <Image
               onClick={() => handleSocialLogin("google")}
               src="/icons/google.png"

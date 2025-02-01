@@ -8,6 +8,7 @@ export function Accordion({
   isActive,
   onToggle,
   titleClassName,
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   contentClassName,
 }: {
   title: string;

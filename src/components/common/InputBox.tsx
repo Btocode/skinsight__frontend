@@ -1,20 +1,18 @@
 "use client";
 
 import { cn } from "@/lib/utils";
-import React, { useState, forwardRef } from "react";
+import React, { useState, forwardRef, ComponentProps } from "react";
 
-interface InputBoxProps extends React.InputHTMLAttributes<HTMLInputElement | HTMLTextAreaElement> {
+type InputBoxProps = ComponentProps<"input"> & {
   label?: string;
   labelClassName?: string;
   containerClassName?: string;
   boxClassName?: string;
   error?: string;
   helperText?: string;
-  type?: "text" | "textarea" | "password";
-  rows?: number;
-}
+};
 
-export const InputBox = forwardRef<HTMLInputElement | HTMLTextAreaElement, InputBoxProps>(
+export const InputBox = forwardRef<HTMLInputElement, InputBoxProps>(
   (
     {
       label,
@@ -60,46 +58,25 @@ export const InputBox = forwardRef<HTMLInputElement | HTMLTextAreaElement, Input
             boxClassName
           )}
         >
-          {type === "textarea" ? (
-            <textarea
-              {...props}
-              ref={ref}
-              disabled={disabled}
-              aria-invalid={error ? "true" : "false"}
-              aria-describedby={props.id ? `${props.id}-error` : undefined}
-              className={cn(
-                "w-full h-full px-4 py-4 bg-transparent text-xl rounded-xl",
-                "focus:outline-none focus:ring-0 focus:border-0",
-                "disabled:cursor-not-allowed placeholder-[#2C2C2C]/60",
-                error
-                  ? "text-[#FF2D55] placeholder-[#FF2D55]"
-                  : "text-[#2C2C2C] placeholder-[#2C2C2C]/60",
-                props.className
-              )}
-              style={{ outline: "none" }}
-              rows={props.rows || 4}
-            />
-          ) : (
-            <input
-              {...props}
-              ref={ref}
-              type={type}
-              disabled={disabled}
-              aria-invalid={error ? "true" : "false"}
-              aria-describedby={props.id ? `${props.id}-error` : undefined}
-              className={cn(
-                "w-full h-full px-4 py-4 bg-transparent text-xl rounded-xl",
-                "focus:outline-none focus:ring-0 focus:border-0",
-                "disabled:cursor-not-allowed placeholder-[#2C2C2C]/60",
-                error
-                  ? "text-[#FF2D55] placeholder-[#FF2D55]"
-                  : "text-[#2C2C2C] placeholder-[#2C2C2C]/60",
-                { "pr-12": props.type === "password" },
-                props.className
-              )}
-              style={{ outline: "none" }}
-            />
-          )}
+          <input
+            {...props}
+            ref={ref}
+            type={type}
+            disabled={disabled}
+            aria-invalid={error ? "true" : "false"}
+            aria-describedby={props.id ? `${props.id}-error` : undefined}
+            className={cn(
+              "w-full h-full px-4 py-4 bg-transparent text-xl rounded-xl",
+              "focus:outline-none focus:ring-0 focus:border-0",
+              "disabled:cursor-not-allowed placeholder-[#2C2C2C]/60",
+              error
+                ? "text-[#FF2D55] placeholder-[#FF2D55]"
+                : "text-[#2C2C2C] placeholder-[#2C2C2C]/60",
+              { "pr-12": props.type === "password" },
+              props.className
+            )}
+            style={{ outline: "none" }}
+          />
 
           {props.type === "password" && (
             <button

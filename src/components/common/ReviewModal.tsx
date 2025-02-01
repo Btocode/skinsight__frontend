@@ -5,9 +5,11 @@ import Modal from "./Modal";
 import { InputBox } from "./InputBox";
 import Image from "next/image";
 import Button from "./Button";
+import TextAreaBox from "./TextAreaBox";
 interface ReviewModalProps {
   isOpen: boolean;
   onClose: () => void;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   item: any;
 }
 
@@ -30,10 +32,8 @@ const ReviewModal: React.FC<ReviewModalProps> = ({ isOpen, onClose, item }) => {
         <div className="flex gap-6">
           <div className="flex flex-col gap-6 w-[400px]">
             <InputBox placeholder="Write a headline (optional)" />
-
-            <InputBox
+            <TextAreaBox
               placeholder="Write your review"
-              type="textarea"
               rows={5}
               className="mb-4"
             />
