@@ -33,7 +33,7 @@ const ProductDetails = () => {
           <p className="text-[15px] lg:text-xl font-medium leading-[17.85px] lg:leading-[26px] tracking-[-0.02em] lg:tracking-normal">
             Price{" "}
             <span className="text-xl lg:text-2xl font-semibold leading-[26px]">
-              $565
+              $$$
             </span>
           </p>
         </div>
