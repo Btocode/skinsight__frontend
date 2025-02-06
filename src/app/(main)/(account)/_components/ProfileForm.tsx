@@ -34,15 +34,6 @@ export default function ProfileForm() {
             disabled
           />
         </div>
-        <div className="w-full lg:w-[70%] relative">
-          <input
-            type="password"
-            defaultValue="••••••••••"
-            className="w-full px-3 py-4 rounded-xl bg-[#E1E1E1] text-[20px] font-normal text-[#2C2C2C] cursor-not-allowed opacity-70"
-            placeholder="Password"
-            disabled
-          />
-        </div>
         <div className="w-full lg:w-[70%]">
           <input
             type="text"
