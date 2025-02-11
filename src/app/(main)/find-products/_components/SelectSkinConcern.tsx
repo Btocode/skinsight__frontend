@@ -1,26 +1,22 @@
 "use client";
 import { cn } from "@/lib/utils";
-import { setProductState } from "@/redux/slices/productSlice";
-import { useAppDispatch, useAppSelector } from "@/lib/redux/hook";
 import { useRouter } from "next/navigation";
 import { skinConcerns } from "@/utils/products";
 import Button from "@/components/common/Button";
 import { useCallback } from "react";
+import { RecommendationComponentProps } from "@/types/products";
 
-const SelectSkinConcern = () => {
-  const dispatch = useAppDispatch();
-  const skinConcern = useAppSelector((state) => state.product.skinConcern);
+const SelectSkinConcern = ({
+  value,
+  onChange,
+}: RecommendationComponentProps) => {
   const router = useRouter();
-
-  const onSkinConcernChange = (item: string) => {
-    dispatch(setProductState({ key: "skinConcern", value: item }));
-  };
 
   const isChecked = useCallback(
     (item: string) => {
-      return skinConcern?.includes(item);
+      return Array.isArray(value) && value?.includes(item);
     },
-    [skinConcern]
+    [value]
   );
 
   return (
@@ -35,13 +31,13 @@ const SelectSkinConcern = () => {
                 "bg-primary": isChecked(item.join(" & ")),
               }
             )}
-            onClick={onSkinConcernChange.bind(null, item.join(" & "))}
+            onClick={() => onChange("skinConcern", item.join(" & "))}
           >
             <div
               className={cn(
                 "w-6 h-6 flex items-center justify-center rounded-[3px] bg-[#FDFDFF]",
                 {
-                  "bg-white": skinConcern?.includes(item.join(" & ")),
+                  "bg-white": isChecked(item.join(" & ")),
                 }
               )}
             >
@@ -54,7 +50,7 @@ const SelectSkinConcern = () => {
                   fill="none"
                   xmlns="http://www.w3.org/2000/svg"
                   className={`${
-                    skinConcern?.includes(item.join(" & "))
+                    isChecked(item.join(" & "))
                       ? "stroke-primary"
                       : "stroke-current"
                   }`}

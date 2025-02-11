@@ -4,13 +4,18 @@ import Button from "@/components/common/Button";
 import { Combobox, Option } from "@/components/common/Combobox";
 import { useCallback } from "react";
 import { allCountries } from "country-region-data";
-import { useAppDispatch, useAppSelector } from "@/lib/redux/hook";
-import { setProductState } from "@/redux/slices/productSlice";
 import { useRouter } from "next/navigation";
+import { RecommendationComponentProps, Region } from "@/types/products";
+import { setCookie } from "cookies-next/client";
+import { useAppSelector } from "@/lib/redux/hook";
 
-const SelectRegion = () => {
-  const dispatch = useAppDispatch();
-  const region = useAppSelector((state) => state.product.region);
+const SelectRegion = ({
+  value,
+  onChange,
+}: Omit<RecommendationComponentProps, "value"> & { value: Region | null }) => {
+  const userSkinProfile = useAppSelector(
+    (state) => state.product.userSkinProfile
+  );
   const router = useRouter();
 
   const formatCountries = useCallback(() => {
@@ -39,44 +44,36 @@ const SelectRegion = () => {
     return regions.find((r) => r.value === region);
   };
 
-  const onSkip = () => {
-    dispatch(
-      setProductState({
-        key: "region",
-        value: { country: "", city: "" },
-      })
-    );
+  const onNext = () => {
+    setCookie("recommendation", JSON.stringify(userSkinProfile));
     router.push("/find-products/find-perfect-match");
   };
+
+  const onSkip = () => {
+    onChange("region", { country: "", city: "" });
+    router.push("/find-products/find-perfect-match");
+  };
+
+  console.log(value);
 
   return (
     <div className="flex flex-col mt-[32px] lg:mt-0 gap-5 text-[#2C2C2C]">
       <Combobox
         options={formatCountries() as Option[]}
         placeholder="Select"
-        value={getCountry(region?.country || "")}
-        onChange={(value) =>
-          dispatch(
-            setProductState({
-              key: "region",
-              value: { country: value.value, city: "" },
-            })
-          )
+        value={getCountry(value?.country || "")}
+        onChange={(_country) =>
+          onChange("region", { country: _country?.value, city: "" })
         }
       />
 
-      {region?.country && getCountry(region?.country || "") && (
+      {value?.country && getCountry(value?.country || "") && (
         <Combobox
-          options={formatRegions(region.country) as Option[]}
+          options={formatRegions(value?.country) as Option[]}
           placeholder="Select"
-          value={getRegion(region?.country || "", region?.city || "")}
-          onChange={(value) =>
-            dispatch(
-              setProductState({
-                key: "region",
-                value: { city: value.value, country: region.country },
-              })
-            )
+          value={getRegion(value?.country || "", value?.city || "")}
+          onChange={(_city) =>
+            onChange("region", { country: value?.country, city: _city?.value })
           }
         />
       )}
@@ -84,10 +81,8 @@ const SelectRegion = () => {
       <div className="flex items-center gap-5">
         <Button
           className="w-[126px] h-[60px] p-0 text-xl font-medium leading-[26px]"
-          disabled={!region?.country || !region?.city}
-          onClick={() => {
-            router.push("/find-products/find-perfect-match");
-          }}
+          disabled={!value?.country || !value?.city}
+          onClick={onNext}
         >
           Next
         </Button>
