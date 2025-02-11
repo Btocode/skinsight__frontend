@@ -278,23 +278,7 @@ const SelectProductForSkinRegimen = ({
                   alt="product"
                   className="p-2"
                 />
-              ) : (
-                <svg
-                  width="41"
-                  height="40"
-                  viewBox="0 0 41 40"
-                  fill="none"
-                  xmlns="http://www.w3.org/2000/svg"
-                >
-                  <path
-                    d="M12.1667 20H20.5M20.5 20H28.8333M20.5 20V28.3333M20.5 20V11.6667M20.5 38.75C10.1447 38.75 1.75 30.3553 1.75 20C1.75 9.64466 10.1447 1.25 20.5 1.25C30.8553 1.25 39.25 9.64466 39.25 20C39.25 30.3553 30.8553 38.75 20.5 38.75Z"
-                    stroke="#8599FE"
-                    strokeWidth="2"
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                  />
-                </svg>
-              )}
+              ) : null}
             </div>
           </div>
           {regimenType === "missing-something" && (
@@ -386,7 +370,7 @@ const SelectProductForSkinRegimen = ({
             </Button>
           </div>
         </div>
-        <div className="hidden px-4 w-[182px] h-[224px] border border-dashed border-primary lg:flex items-center justify-center rounded-xl">
+        <div className="hidden px-4 w-[280px] h-[250px] border border-dashed border-primary lg:flex items-center justify-center rounded-xl">
           {selectedProduct &&
           selectedProduct?.productImage !== null &&
           selectedProduct?.productImage !== "" ? (
@@ -397,23 +381,7 @@ const SelectProductForSkinRegimen = ({
               height={260}
               className="p-2"
             />
-          ) : (
-            <svg
-              width="41"
-              height="40"
-              viewBox="0 0 41 40"
-              fill="none"
-              xmlns="http://www.w3.org/2000/svg"
-            >
-              <path
-                d="M12.1667 20H20.5M20.5 20H28.8333M20.5 20V28.3333M20.5 20V11.6667M20.5 38.75C10.1447 38.75 1.75 30.3553 1.75 20C1.75 9.64466 10.1447 1.25 20.5 1.25C30.8553 1.25 39.25 9.64466 39.25 20C39.25 30.3553 30.8553 38.75 20.5 38.75Z"
-                stroke="#8599FE"
-                strokeWidth="2"
-                strokeLinecap="round"
-                strokeLinejoin="round"
-              />
-            </svg>
-          )}
+          ) : null}
         </div>
       </div>
     </Modal>
