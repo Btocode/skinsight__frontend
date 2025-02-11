@@ -28,7 +28,7 @@ export function AlternativesProductCard({
           />
         </div>
         {/* Product Info */}
-        <div className="w-full space-y-[2px]">
+        <div className="w-full space-y-[2px] mt-[7px]">
           <h2 className="text-xs lg:text-[11.54px] font-normal leading-[18px] lg:leading-[17.31px] tracking-[-0.03em] text-[#575656]">
             {item.brand}
           </h2>
@@ -40,11 +40,11 @@ export function AlternativesProductCard({
           </p>
         </div>
         {/* Buttons */}
-        <div className="flex w-full gap-4 mt-1">
+        <div className="flex w-full gap-4 mt-[11px]">
           <button
             id="add-favorite"
             type="button"
-            className="w-[47.8px] lg:w-[141px] h-[45.89px] lg:h-[48px] flex items-center justify-center gap-[10px] rounded-[11.47px] lg:rounded-[12px] bg-[#8F80E833] transition-colors"
+            className="w-[50px] lg:w-[141px] h-[48px] lg:h-[48px] flex items-center justify-center gap-[10px] rounded-[11.47px] lg:rounded-[12px] bg-[#8F80E833] transition-colors"
           >
             <svg
               width="25"
@@ -66,7 +66,7 @@ export function AlternativesProductCard({
           <button
             type="button"
             id="buy-now"
-            className="w-[107.08px] lg:w-[141px] h-[45.89px] lg:h-[48px] flex items-center justify-center gap-[10px] rounded-[9.56px] lg:rounded-[12px] bg-[#EDAFDF4D] transition-colors"
+            className="flex-1 lg:w-[141px] h-[45.89px] lg:h-[48px] flex items-center justify-center gap-[10px] rounded-[9.56px] lg:rounded-[12px] bg-[#EDAFDF4D] transition-colors"
           >
             <svg width="25" height="24" viewBox="0 0 25 24" fill="none">
               <path
