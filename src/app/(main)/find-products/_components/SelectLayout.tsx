@@ -11,45 +11,13 @@ import HeadingPrimary from "@/components/common/HeadingPrimary";
 
 import SectionTransform from "@/components/animations/SectionTransform";
 import Progressbar from "./Progressbar";
-import { useAppDispatch, useAppSelector } from "@/lib/redux/hook";
-import { updateUserSkinProfile } from "@/redux/slices/productSlice";
-import { useRouter } from "next/navigation";
-import { UserSkinProfileKey, UserSkinProfileValue } from "@/types/products";
 
 const SelectLayout = ({ name }: { name: string }) => {
-  const router = useRouter();
-  const dispatch = useAppDispatch();
-  const userSkinProfile = useAppSelector(
-    (state) => state.product.userSkinProfile
-  );
-
-  const onChange = (key: UserSkinProfileKey, value: UserSkinProfileValue) => {
-    dispatch(updateUserSkinProfile({ key, value }));
-    setTimeout(() => {
-      let path = "/find-products/";
-      if (key === "gender") {
-        path += "skin-type";
-      }
-      if (key === "skinType") {
-        path += "complexion";
-      }
-      if (key === "complexion") {
-        path += "skin-concern";
-      }
-      if (key === "age") {
-        path += "region";
-      }
-      if (key !== "skinConcern" && key !== "region") {
-        router.push(path);
-      }
-    }, 1000);
-  };
-
   const getText: { [key: string]: JSX.Element | string } = {
     gender: "What’s your gender?",
     "skin-type": "What’s your skin type?",
     complexion: "What’s your complexion?",
-    "skin-concern": "What's are skin concerns?",
+    "skin-concern": "What's your skin concerns?",
     age: "What’s your age?",
     region: "Select your region",
     "find-perfect-match": (
@@ -60,24 +28,12 @@ const SelectLayout = ({ name }: { name: string }) => {
   };
 
   const components: { [key: string]: JSX.Element } = {
-    gender: <SelectGender value={userSkinProfile.gender} onChange={onChange} />,
-    "skin-type": (
-      <SelectSkinType value={userSkinProfile.skinType} onChange={onChange} />
-    ),
-    complexion: (
-      <SelectComplexion
-        value={userSkinProfile.complexion}
-        onChange={onChange}
-      />
-    ),
-    "skin-concern": (
-      <SelectSkinConcern
-        value={userSkinProfile.skinConcern}
-        onChange={onChange}
-      />
-    ),
-    age: <SelectAge value={userSkinProfile.age} onChange={onChange} />,
-    region: <SelectRegion value={userSkinProfile.region} onChange={onChange} />,
+    gender: <SelectGender />,
+    "skin-type": <SelectSkinType />,
+    complexion: <SelectComplexion />,
+    "skin-concern": <SelectSkinConcern />,
+    age: <SelectAge />,
+    region: <SelectRegion />,
   };
 
   return (

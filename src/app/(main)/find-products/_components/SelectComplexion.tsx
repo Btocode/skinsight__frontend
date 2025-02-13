@@ -1,19 +1,31 @@
 "use client";
 import { complexionOptions } from "@/utils/products";
+import { useAppDispatch, useAppSelector } from "@/lib/redux/hook";
+import { useRouter } from "next/navigation";
+import { setProductState } from "@/redux/slices/productSlice";
 import { cn } from "@/lib/utils";
 import { useCallback } from "react";
 import Image from "next/image";
-import { RecommendationComponentProps } from "@/types/products";
 
-const SelectComplexion = ({
-  value,
-  onChange,
-}: RecommendationComponentProps) => {
+const SelectComplexion = () => {
+  const dispatch = useAppDispatch();
+  const complexion = useAppSelector((state) => state.product.complexion);
+  const router = useRouter();
+
+  const onComplexionChange = async (item: string) => {
+    dispatch(setProductState({ key: "complexion", value: item }));
+    // push it after 1 second
+    // router.push("/find-products/skin-concern");
+    setTimeout(() => {
+      router.push("/find-products/skin-concern");
+    }, 1000);
+  };
+
   const isChecked = useCallback(
     (item: string) => {
-      return value === item;
+      return complexion === item;
     },
-    [value]
+    [complexion]
   );
 
   return (
@@ -27,7 +39,7 @@ const SelectComplexion = ({
               "bg-primary": isChecked(item.title),
             }
           )}
-          onClick={() => onChange("complexion", item.title)}
+          onClick={onComplexionChange.bind(null, item.title)}
         >
           <div
             className={cn(

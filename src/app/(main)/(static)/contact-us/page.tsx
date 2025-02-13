@@ -15,34 +15,34 @@ const ContactUsPage = () => {
         <p className="uppercase text-[14px] leading-[26px] tracking-[2px] text-accent lg:text-[#15143966]">
           Get Started
         </p>
-        <HeadingPrimary className="text-[36px] leading-[45.22px] lg:text-4xl lg:leading-[44px] tracking-[-2%]">
+        <HeadingPrimary className="lg:text-4xl leading-[44px]">
           Get in Touch with Us
         </HeadingPrimary>
         <div className="hidden lg:block">
           <ContactForm />
         </div>
       </div>
-      <div className="lg:hidden space-y-2 w-[260px] mx-auto my-10 text-center">
-        <p className="uppercase text-[14px] leading-[26px] tracking-[2px]">
-          Write to us
-        </p>
+      <div className="max-w-4xl mx-auto flex flex-col lg:flex-row gap-20 items-center justify-between flex-wrap py-10">
+        <div className="space-y-2 w-[260px] text-center">
+          <p className="uppercase text-[14px] leading-[26px] tracking-[2px]">
+            Write to us
+          </p>
 
-        <p className="text-[16px] leading-[26px] text-[#15143966]">
-          Send us your queries or feedback to us
-        </p>
-        <Button onClick={() => setOpen(true)} className="px-10 rounded-full">
-          Send
-        </Button>
-        <Modal isOpen={open} onClose={onClose}>
-          <div className="w-[340px] py-10 px-4">
-            <h2 className="text-left mb-4 uppercase text-lg font-semibold leading-[26px] tracking-[2px]">
-              Email Us
-            </h2>
-            <ContactForm />
-          </div>
-        </Modal>
-      </div>
-      <div className="max-w-4xl mx-auto flex gap-20 lg:gap-2 items-center justify-center lg:justify-between flex-wrap py-10">
+          <p className="text-[16px] leading-[26px] text-[#15143966]">
+            Send us your queries or feedback to us
+          </p>
+          <Button onClick={() => setOpen(true)} className="px-10 rounded-full">
+            Send
+          </Button>
+          <Modal isOpen={open} onClose={onClose}>
+            <div className="w-[380px] py-10 px-4">
+              <h2 className="text-left mb-4 uppercase text-lg font-semibold leading-[26px] tracking-[2px]">
+                Email Us
+              </h2>
+              <ContactForm />
+            </div>
+          </Modal>
+        </div>
         <div className="space-y-2 w-[260px] text-center">
           <p className="uppercase text-[14px] leading-[26px] tracking-[2px]">
             New York, NY

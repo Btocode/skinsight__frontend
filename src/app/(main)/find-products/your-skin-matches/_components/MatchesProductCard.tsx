@@ -7,6 +7,7 @@ import { Product } from "@/types/products";
 type ProductDetailsHandler = (
   e: React.MouseEvent<HTMLDivElement, MouseEvent>
 ) => void;
+
 export function MatchesProductCard({ item }: { item: Product }) {
   const router = useRouter();
   const cardRef = useRef<HTMLDivElement>(null);

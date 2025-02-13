@@ -17,7 +17,7 @@ const TopAlternativesProducts = ({
         <Image
           src={AdImg}
           alt="ad"
-          className="w-[331px] h-[265px] lg:h-[397px] rounded-[13px] border-[1.08px] border-[#EFEFEF]"
+          className="w-[331px] h-full lg:h-[397px] rounded-[13px] border-[1.08px] border-[#EFEFEF]"
         />
       </div>
     </div>

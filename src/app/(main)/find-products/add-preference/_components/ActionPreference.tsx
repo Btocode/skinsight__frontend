@@ -10,15 +10,15 @@ const ActionPreference = () => {
 
   return (
     <>
-      <div className="flex items-center gap-3 lg:gap-[20px]">
+      <div className="flex items-center gap-5 pt-2">
         <Button
           onClick={() => setOpen(true)}
-          className="w-[119px] lg:w-[126px] h-[44px] lg:h-[60px] text-base lg:text-xl font-medium leading-[26px]"
+          className="w-[126px] h-[60px] text-xl font-medium leading-[26px]"
         >
           Add
         </Button>
         <Button
-          className="w-[109px] lg:w-[126px] h-[44px] lg:h-[60px] border text-base lg:text-xl font-medium leading-[26px]"
+          className="w-[126px] h-[60px] border text-xl font-medium leading-[26px]"
           variant={"outline"}
           onClick={() => router.back()}
         >
