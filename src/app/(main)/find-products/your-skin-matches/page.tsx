@@ -7,6 +7,8 @@ import MoisturisersProducts from "./_components/MoisturisersProducts";
 import Advertisement from "@/components/common/Advertisement";
 import GradientImage from "@/components/common/GradientImage";
 import AddFavorite from "./_components/AddFavorite";
+import Button from "@/components/common/Button";
+import Link from "next/link";
 
 const getProducts = async () => {
   const response = await fetch("http://localhost:3000/api/your-skin-matches");
@@ -27,7 +29,12 @@ const YourSkinMatchesPage = async () => {
         <h4 className="text-base lg:text-2xl font-semibold leading-[19.04px] lg:leading-[26px] tracking-[-0.02em] lg:tracking-normal text-accent">
           Top products for you
         </h4>
-        <MatchesProductFilter />
+        <div className="flex items-center gap-4">
+          <Link href={"/find-products/gender"} className="h-[40px]">
+            <Button className="h-[40px]">Modify</Button>
+          </Link>
+          <MatchesProductFilter />
+        </div>
       </div>
       <TonersProducts products={products[1]} />
       <CleansersProducts products={products[0]} />

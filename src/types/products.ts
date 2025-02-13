@@ -18,15 +18,22 @@ export type ProductPreference = {
 };
 
 export type ProductState = {
-  gender: Gender | null;
-  skinType: string | null;
-  complexion: string | null;
-  skinConcern: string[];
-  age: string | null;
-  region: Region | null;
+  userSkinProfile: {
+    gender: Gender | null;
+    skinType: string | null;
+    complexion: string | null;
+    skinConcern: string[];
+    age: string | null;
+    region: Region | null;
+  };
   findAlternatives: FindAlternativesState;
   preferences: ProductPreference[];
 };
+
+export type UserSkinProfileKey = keyof ProductState["userSkinProfile"];
+
+export type UserSkinProfileValue =
+  ProductState["userSkinProfile"][UserSkinProfileKey];
 
 export type ProductStateKeyType = keyof ProductState;
 export type ProductStateValueType = ProductState[ProductStateKeyType];
@@ -50,4 +57,9 @@ export type Product = {
   matched: boolean;
   most_viewed: boolean;
   best_rated: boolean;
+};
+
+export type RecommendationComponentProps = {
+  value: UserSkinProfileValue;
+  onChange: (key: UserSkinProfileKey, value: UserSkinProfileValue) => void;
 };

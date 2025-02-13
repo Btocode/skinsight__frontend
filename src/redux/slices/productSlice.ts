@@ -1,20 +1,46 @@
+"use client";
+/* eslint-disable @typescript-eslint/no-explicit-any */
 // src/redux/slices/authSlice.ts
-import {
-  Gender,
-  ProductState,
-  ProductStateKeyType,
-  ProductStateValueType,
-  Region,
-} from "@/types/products";
+import { ProductState, UserSkinProfileKey } from "@/types/products";
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
+import { getCookie, hasCookie } from "cookies-next/client";
+
+const isClient = typeof window !== "undefined";
+
+const initialRecommendationState = () => {
+  if (!isClient)
+    return {
+      userSkinProfile: {
+        gender: null,
+        skinType: null,
+        complexion: null,
+        skinConcern: [],
+        age: null,
+        region: null,
+      },
+    };
+
+  const recommendation = getCookie("recommendation");
+  const hasRecommendation = hasCookie("recommendation");
+
+  return hasRecommendation
+    ? {
+        userSkinProfile: JSON.parse(recommendation || ""),
+      }
+    : {
+        userSkinProfile: {
+          gender: null,
+          skinType: null,
+          complexion: null,
+          skinConcern: [],
+          age: null,
+          region: null,
+        },
+      };
+};
 
 const initialState: ProductState = {
-  gender: null,
-  skinType: null,
-  complexion: null,
-  skinConcern: [],
-  age: null,
-  region: null,
+  ...initialRecommendationState(),
   findAlternatives: {
     brand: "",
     product: "",
@@ -26,42 +52,27 @@ const productSlice = createSlice({
   name: "product",
   initialState,
   reducers: {
-    setProductState: (
+    updateUserSkinProfile: (
       state,
       action: PayloadAction<{
-        key: ProductStateKeyType;
-        value: ProductStateValueType;
+        key: UserSkinProfileKey;
+        value: any;
       }>
     ) => {
       const { key, value } = action.payload;
+
       if (key === "skinConcern") {
-        if (state.skinConcern.includes(value as string)) {
-          state.skinConcern = state.skinConcern.filter(
-            (item) => item !== value
-          );
+        if (state.userSkinProfile.skinConcern.includes(value as string)) {
+          state.userSkinProfile.skinConcern =
+            state.userSkinProfile.skinConcern.filter(
+              (item: string) => item !== value
+            );
           return;
         }
-        state.skinConcern.push(value as string);
+        state.userSkinProfile.skinConcern.push(value as string);
         return;
       }
-      if (key === "findAlternatives") {
-        return;
-      }
-      if (key === "region") {
-        state.region = value as Region;
-      }
-      if (key === "gender") {
-        state.gender = value as Gender;
-      }
-      if (key === "skinType") {
-        state.skinType = value as string;
-      }
-      if (key === "complexion") {
-        state.complexion = value as string;
-      }
-      if (key === "age") {
-        state.age = value as string;
-      }
+      state.userSkinProfile[key] = value;
     },
     setFindAlternatives: (
       state,
@@ -83,6 +94,6 @@ const productSlice = createSlice({
   },
 });
 
-export const { setProductState, setFindAlternatives, setPreference } =
+export const { setFindAlternatives, setPreference, updateUserSkinProfile } =
   productSlice.actions;
 export const productReducer = productSlice.reducer;

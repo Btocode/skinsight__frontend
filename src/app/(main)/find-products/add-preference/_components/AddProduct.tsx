@@ -236,10 +236,12 @@ const AddProduct = ({ open, onClose }: AddProductProps) => {
       isCloseIconVisible={false}
       contentClassName="p-0 lg:p-0"
     >
-      <div className="max-w-[690px] flex items-center justify-center gap-[25px] lg:px-[25px] lg:py-[36px]">
-        <div className="w-[416px] flex flex-col gap-[28px]">
-          <BackButton buttonProps={{ className: "self-start -mb-[18px]" }} />
-
+      <div className=" max-w-[690px] flex items-center justify-center gap-[25px] lg:px-[25px] lg:py-[36px]">
+        <div className="w-[368px] lg:w-[416px] flex flex-col gap-[28px] p-5 lg:p-0">
+          <BackButton
+            onClick={onClose}
+            buttonProps={{ className: "self-start lg:-mb-[18px]" }}
+          />
           <div className="flex items-center gap-4">
             {preferences.length > 0 &&
               preferences.map((preference) => {
@@ -272,21 +274,63 @@ const AddProduct = ({ open, onClose }: AddProductProps) => {
                 );
               })}
           </div>
-          <HeadingPrimary className="lg:text-[38px] font-semibold lg:leading-[45.22px] tracking-[-0.02em] -mb-2">
+          <HeadingPrimary className="text-[20px] leading-[23.8px] lg:text-[38px] font-semibold lg:leading-[45.22px] tracking-[-0.02em] -mb-2">
             Select a product you currently use
           </HeadingPrimary>
-          <div className="flex lg:hidden w-[136.5px] mx-auto h-[168px] border border-dashed border-primary items-center justify-center rounded-xl">
-            {selectedProduct &&
-            selectedProduct?.productImage !== null &&
-            selectedProduct?.productImage !== "" ? (
-              <Image
-                src={selectedProduct.productImage}
-                width={136}
-                height={168}
-                alt="product"
-                className="p-2"
-              />
-            ) : null}
+          <div className="lg:hidden">
+            <div className="flex  w-[136.5px] mx-auto h-[168px] border border-dashed border-primary items-center justify-center rounded-xl">
+              {selectedProduct &&
+              selectedProduct?.productImage !== null &&
+              selectedProduct?.productImage !== "" ? (
+                <Image
+                  src={selectedProduct.productImage}
+                  width={136}
+                  height={168}
+                  alt="product"
+                  className="p-2"
+                />
+              ) : null}
+            </div>
+            {selectedProduct?.brandId &&
+              selectedProduct?.productId &&
+              selectedProduct?.productImage && (
+                <div className="flex items-center justify-center gap-4 mt-[25px]">
+                  <button
+                    type="button"
+                    onClick={() => {
+                      setSelectedProduct((prev: any) => ({
+                        ...prev,
+                        reaction: "like",
+                      }));
+                    }}
+                    className={cn(
+                      "w-[48px] h-[46px] rounded-[12px] bg-[#EDAFDF4D]",
+                      {
+                        " bg-[#E77CCF80]": selectedProduct?.reaction === "like",
+                      }
+                    )}
+                  >
+                    🥰
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => {
+                      setSelectedProduct((prev: any) => ({
+                        ...prev,
+                        reaction: "dislike",
+                      }));
+                    }}
+                    className={cn(
+                      "w-[48px] h-[46px] rounded-[12px] bg-[#e1e1e194] ",
+                      {
+                        "bg-[#E1E1E1]": selectedProduct?.reaction === "dislike",
+                      }
+                    )}
+                  >
+                    😔
+                  </button>
+                </div>
+              )}
           </div>
           <Combobox
             options={brands as Option[]}
@@ -324,37 +368,29 @@ const AddProduct = ({ open, onClose }: AddProductProps) => {
             valueClassName="text-xl font-normal leading-[26px] text-accent"
           />
           <div className="flex items-center gap-4">
-            {preferences.length === 3 ? (
-              <Button
-                onClick={() => {
-                  router.push("/find-products/your-skin-matches");
-                }}
-                className="w-[126px] h-[60px] rounded-xl text-xl font-medium leading-[26px]"
-              >
-                Save
-              </Button>
-            ) : (
-              <Button
-                onClick={() => {
-                  dispatch(setPreference(selectedProduct));
-                  setSelectedProduct(null);
-                }}
-                className="w-[126px] h-[60px] rounded-xl text-xl font-medium leading-[26px]"
-              >
-                Next
-              </Button>
-            )}
             <Button
-              onClick={onClose}
-              className="w-[126px] h-[60px] border rounded-xl text-xl font-medium leading-[26px]"
+              onClick={() => {
+                dispatch(setPreference(selectedProduct));
+                setSelectedProduct(null);
+              }}
+              disabled={preferences.length === 3 || !selectedProduct}
+              className="w-auto h-[44px] lg:h-[60px] rounded-xl text-xl font-medium leading-[26px]"
+            >
+              Add another
+            </Button>
+            <Button
+              onClick={() => {
+                router.push("/find-products/your-skin-matches");
+              }}
+              className="w-[119px] lg:w-[126px] h-[44px] lg:h-[60px] border rounded-xl text-xl font-medium leading-[26px]"
               variant="outline"
             >
-              Cancel
+              Done
             </Button>
           </div>
         </div>
-        <div>
-          <div className="hidden px-4 w-[182px] h-[224px] border border-dashed border-primary lg:flex items-center justify-center rounded-xl">
+        <section className="hidden lg:block">
+          <div className=" px-4 w-[182px] h-[224px] border border-dashed border-primary flex items-center justify-center rounded-xl">
             {selectedProduct &&
             selectedProduct?.productImage !== null &&
             selectedProduct?.productImage !== "" ? (
@@ -407,7 +443,7 @@ const AddProduct = ({ open, onClose }: AddProductProps) => {
                 </button>
               </div>
             )}
-        </div>
+        </section>
       </div>
     </Modal>
   );
