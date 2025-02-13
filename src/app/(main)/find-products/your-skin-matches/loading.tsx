@@ -20,7 +20,7 @@ export default function SkeletonLoader() {
         {[...Array(6)].map((_, i) => (
           <Skeleton
             key={i}
-            className="w-full lg:w-[340px] h-[260px] lg:h-[420px]"
+            className="w-full lg:w-[340px] h-[260px] lg:h-[410px]"
           />
         ))}
       </div>
