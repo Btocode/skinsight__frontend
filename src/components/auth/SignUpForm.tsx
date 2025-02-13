@@ -15,12 +15,13 @@ const SignUpForm = () => {
   const router = useRouter();
   const pathname = usePathname();
   const [mounted, setMounted] = useState(false);
-  const [registerUser, { isLoading, isError, error: apiError }] = useRegisterMutation();
+  const [registerUser, { isLoading, isError, error: apiError }] =
+    useRegisterMutation();
 
   const {
     control,
     handleSubmit,
-    formState: { errors }
+    formState: { errors },
   } = useForm<RegisterSchema>({
     resolver: zodResolver(registerSchema),
     defaultValues: {
@@ -49,7 +50,8 @@ const SignUpForm = () => {
     if (isError) {
       return (
         <span className="text-red-600">
-          {(apiError as { data: { detail: string } })?.data?.detail || "Registration failed"}
+          {(apiError as { data: { detail: string } })?.data?.detail ||
+            "Registration failed"}
         </span>
       );
     }
@@ -71,7 +73,7 @@ const SignUpForm = () => {
   };
 
   return (
-    <div className="bg-white w-[620px] mx-auto rounded-[12px] flex flex-col gap-[10px] lg:px-[70px] py-4 lg:py-[50px]">
+    <div className="bg-white lg:w-[620px] mx-auto rounded-[12px] flex flex-col gap-[10px] lg:px-[70px] py-4 lg:py-[50px]">
       <div className="text-center mb-4">
         <HeadingPrimary className="text-[28px] leading-8 lg:text-4xl lg:leading-10 lg:tracking-[-3%]">
           Sign up to get personalized recommendations
