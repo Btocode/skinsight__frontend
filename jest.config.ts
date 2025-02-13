@@ -1,11 +1,23 @@
-import type { Config } from "@jest/types";
+import type { Config } from 'jest';
+import nextJest from 'next/jest';
 
-const config: Config.InitialOptions = {
-  testEnvironment: "jsdom",
-  setupFilesAfterEnv: ["<rootDir>/jest.setup.ts"],
+const createJestConfig = nextJest({
+  dir: './',
+});
+
+const config: Config = {
+  setupFilesAfterEnv: ['<rootDir>/jest.setup.ts'],
+  testEnvironment: 'jest-environment-jsdom',
   moduleNameMapper: {
-    "^@/(.*)$": "<rootDir>/src/$1",
+    '^@/(.*)$': '<rootDir>/src/$1',
   },
+  collectCoverage: true,
+  collectCoverageFrom: [
+    'src/**/*.{js,jsx,ts,tsx}',
+    '!src/**/*.d.ts',
+    '!src/**/types.ts',
+  ],
+  modulePathIgnorePatterns: ['<rootDir>/node_modules/punycode/'],
 };
 
-export default config;
+export default createJestConfig(config);

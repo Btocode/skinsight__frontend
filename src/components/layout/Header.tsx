@@ -7,7 +7,6 @@ import { usePathname, useRouter } from "next/navigation";
 import AuthActionModal from "../auth/AuthActionModal";
 import UserMenu, { MENU_ITEMS } from "../common/UserMenu";
 import { useAppSelector } from "@/lib/redux/hook";
-import Logo from "../../../public/logo.png";
 
 const menuItems = [
   {
@@ -35,7 +34,6 @@ const menuItems = [
 export const Header: React.FC = () => {
   const router = useRouter();
   const pathname = usePathname();
-  // Move auth state to parent component
   const { isAuthenticated } = useAppSelector((state) => state.auth);
   const [mounted, setMounted] = useState(false);
 
@@ -51,12 +49,11 @@ export const Header: React.FC = () => {
     <header className="bg-white border-b border-[#E1E1E1] sticky top-0 z-50">
       <DesktopNavbar
         onOpenAuthModal={onOpenAuthModal}
-        isAuthenticated={isAuthenticated}
-        mounted={mounted}
+        isAuthenticated={mounted && isAuthenticated}
       />
       <MobileNavbar
         onOpenAuthModal={onOpenAuthModal}
-        isAuthenticated={isAuthenticated}
+        isAuthenticated={mounted && isAuthenticated}
       />
       <AuthActionModal />
     </header>
@@ -66,42 +63,46 @@ export const Header: React.FC = () => {
 const DesktopNavbar = ({
   onOpenAuthModal,
   isAuthenticated,
-  mounted,
 }: {
   onOpenAuthModal: () => void;
   isAuthenticated: boolean;
-  mounted: boolean;
 }) => {
-  // Return null or loading state on initial render
-  if (!mounted) {
-    return (
-      <nav className="hidden container h-[100px] lg:flex items-center justify-between">
-        <Link href="/">
+  return (
+    <nav className="hidden container py-6 lg:flex items-center justify-between">
+      <Link href="/">
+        <div className="relative w-[180px] h-[47px]">
           <Image
-            src={Logo}
+            src="/logo.png"
             alt="Skinsight Logo"
-            width={162.13}
-            height={48}
+            fill
+            sizes="180px"
             priority
+            className="object-contain"
           />
-        </Link>
-        <div className="flex items-center gap-[40px]">
-          {menuItems.slice(0, 3).map((item) => (
-            <Link
-              href={item.href}
-              key={item.href}
-              className="text-base leading-[26px] font-normal text-foreground"
-            >
-              {item.label}
-            </Link>
-          ))}
         </div>
-        <div className="flex items-center gap-[40px]">
-          {menuItems.slice(3).map((item) => (
-            <Link href={item.href} key={item.href} className="menu-link">
-              {item.label}
-            </Link>
-          ))}
+      </Link>
+      <div className="flex items-center gap-8">
+        {menuItems.slice(0, 3).map((item) => (
+          <Link
+            href={item.href}
+            key={item.href}
+            className="text-base leading-[26px] font-normal text-foreground hover:opacity-70 transition-opacity"
+          >
+            {item.label}
+          </Link>
+        ))}
+      </div>
+      <div className="flex items-center gap-8">
+        {menuItems.slice(3).map((item) => (
+          <Link
+            href={item.href}
+            key={item.href}
+            className="text-base leading-[26px] font-normal text-foreground hover:opacity-70 transition-opacity"
+          >
+            {item.label}
+          </Link>
+        ))}
+        <div className="min-w-[100px]">
           {isAuthenticated ? (
             <UserMenu />
           ) : (
@@ -114,40 +115,6 @@ const DesktopNavbar = ({
             </button>
           )}
         </div>
-      </nav>
-    );
-  }
-
-  return (
-    <nav className="hidden container py-6 lg:flex items-center justify-between">
-      <Link href="/">
-        <Image src="/logo.png" alt="Skinsight Logo" width={180} height={40} />
-      </Link>
-      <div className="flex items-center gap-8">
-        {menuItems.slice(0, 3).map((item) => (
-          <Link href={item.href} key={item.href} className="menu-link">
-            {item.label}
-          </Link>
-        ))}
-      </div>
-      <div className="flex items-center gap-8">
-        {menuItems.slice(3).map((item) => (
-          <Link href={item.href} key={item.href} className="menu-link">
-            {item.label}
-          </Link>
-        ))}
-
-        {mounted && isAuthenticated ? (
-          <UserMenu />
-        ) : (
-          <button
-            onClick={onOpenAuthModal}
-            type="button"
-            className="text-base font-medium border-2 rounded-full px-6 py-2 text-foreground"
-          >
-            Log in
-          </button>
-        )}
       </div>
     </nav>
   );
@@ -168,13 +135,16 @@ const MobileNavbar = ({
     <nav id="menu" className="container block lg:hidden">
       <div className="py-6 flex items-center justify-between">
         <Link href="/">
-          <Image
-            src={Logo}
-            alt="Skinsight Logo"
-            width={162.13}
-            height={48}
-            priority
-          />
+          <div className="relative w-[162px] h-[48px]">
+            <Image
+              src="/logo.png"
+              alt="Skinsight Logo"
+              fill
+              sizes="162px"
+              priority
+              className="object-contain"
+            />
+          </div>
         </Link>
         <button
           onClick={() => setIsOpen(!isOpen)}
@@ -197,41 +167,42 @@ const MobileNavbar = ({
           </svg>
         </button>
       </div>
+      {/* Mobile Menu */}
       <div
         className={cn(
           "fixed inset-0 bg-black transition-opacity duration-300 ease-in-out",
           {
-            "translate-y-0": isOpen,
-            "translate-y-full": !isOpen,
+            "opacity-50 pointer-events-auto": isOpen,
+            "opacity-0 pointer-events-none": !isOpen,
           }
         )}
         onClick={onClose}
-        style={{ opacity: isOpen ? 0.5 : 0 }}
-      ></div>
+      />
       <div
         className={cn(
-          `fixed inset-0 mt-4 rounded-t-lg overflow-hidden bg-white z-50 transition-transform duration-300 ease-in-out`,
+          "fixed inset-0 mt-4 rounded-t-lg overflow-hidden bg-white z-50 transition-transform duration-300 ease-in-out",
           {
             "translate-y-0": isOpen,
             "translate-y-full": !isOpen,
           }
         )}
       >
+        {/* Mobile menu content remains the same */}
         <div className="h-full flex flex-col p-6">
-          {/* Header */}
           <div className="flex justify-between items-center">
             <Link href="/">
-              <Image
-                src="/logo.png"
-                alt="Skinsight Logo"
-                width={180}
-                height={80}
-                style={{ width: "auto", height: "auto" }}
-                sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
-              />
+              <div className="relative w-[180px] h-[40px]">
+                <Image
+                  src="/logo.png"
+                  alt="Skinsight Logo"
+                  fill
+                  sizes="180px"
+                  className="object-contain"
+                />
+              </div>
             </Link>
             <button
-              className="absolute top-0 right-0 p-2 m-2 text-gray-600 hover:text-gray-900 transition-colors duration-200 focus:outline-none cursor-pointer z-20"
+              className="p-2 text-gray-600 hover:text-gray-900 transition-colors duration-200 focus:outline-none"
               onClick={onClose}
             >
               <svg
@@ -250,12 +221,11 @@ const MobileNavbar = ({
             </button>
           </div>
 
-          {/* Navigation Links */}
           <nav className="mt-10 flex-1">
             <ul className="space-y-5">
               <li>
                 <Link
-                  href={"/"}
+                  href="/"
                   onClick={onClose}
                   className="text-accent text-xl hover:opacity-70 transition-opacity"
                 >
@@ -266,16 +236,18 @@ const MobileNavbar = ({
                 <li className="text-accent text-xl hover:opacity-70 transition-opacity relative">
                   <div
                     onClick={() => setIsAccountOpen(!isAccountOpen)}
-                    className="flex items-center gap-2 "
+                    className="flex items-center gap-2 cursor-pointer"
                   >
-                    Account{" "}
+                    Account
                     <svg
                       width="24"
                       height="25"
                       viewBox="0 0 24 25"
                       fill="none"
                       xmlns="http://www.w3.org/2000/svg"
-                      className="w-5 h-5"
+                      className={cn("w-5 h-5 transition-transform", {
+                        "rotate-180": isAccountOpen,
+                      })}
                     >
                       <path
                         d="M19 9.5L12 16.5L5 9.5"
@@ -288,9 +260,10 @@ const MobileNavbar = ({
                   </div>
                   <ul
                     className={cn(
-                      "pl-2 space-y-5 h-[0px] overflow-hidden transition-all duration-300 ease-in-out ",
+                      "pl-2 space-y-5 overflow-hidden transition-all duration-300 ease-in-out",
                       {
-                        "mt-4 h-[200px]": isAccountOpen,
+                        "mt-4 max-h-[200px]": isAccountOpen,
+                        "max-h-0": !isAccountOpen,
                       }
                     )}
                   >
@@ -310,7 +283,7 @@ const MobileNavbar = ({
                 </li>
               )}
 
-              {[...menuItems].map((item) => (
+              {menuItems.map((item) => (
                 <li key={item.href}>
                   <Link
                     href={item.href}
@@ -338,7 +311,6 @@ const MobileNavbar = ({
             </ul>
           </nav>
 
-          {/* Sign Up Button */}
           <p className="text-accent text-sm">
             Skinsight 2024 • All rights reserved.
           </p>
