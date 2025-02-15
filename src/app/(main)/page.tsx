@@ -6,8 +6,11 @@ import Link from "next/link";
 import Button from "@/components/common/Button";
 import homePageImg from "../../../public/hero.png";
 import HeartImg from "../../../public/heart.png";
-
-const HomePage = () => {
+import { cookies } from "next/headers";
+const HomePage = async () => {
+  // check cookie if user has performed questionnaire
+  const cookieStore = await cookies();
+  const hasPerformedQuestionnaire = cookieStore.get("recommendation") !== undefined;
   return (
     <SectionOpacity>
       <section className="container min-h-[85svh] lg:flex gap-[34px] items-center justify-between py-10 relative">
@@ -26,9 +29,11 @@ const HomePage = () => {
             care routine and more with the help of AI
           </p>
           <div className="flex flex-row items-center gap-[12px]">
-            <Link href="/find-products">
+            <Link href={hasPerformedQuestionnaire ? "/find-products/your-skin-matches" : "/find-products"}>
               <Button className="w-[177px] lg:w-[200px] h-[60px] px-0 text-[18px] lg:text-xl font-medium rounded-xl leading-[26px]">
-                Find my products
+                {
+                  hasPerformedQuestionnaire ? "Your products" : "Find my products"
+                }
               </Button>
             </Link>
             <Link href="/find-alternatives">
