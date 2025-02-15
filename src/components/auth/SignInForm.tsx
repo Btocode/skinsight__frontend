@@ -97,14 +97,13 @@ const SignInForm = () => {
   };
 
   return (
-    <div className="bg-white h-[460px] mx-auto rounded-[12px] flex flex-col gap-[10px] lg:px-[60px] py-4 lg:py-[40px]">
+    <div className="bg-white w-[620px] h-[460px] mx-auto rounded-[12px] flex flex-col gap-[10px] lg:px-[60px] py-4 lg:py-[40px]">
       <div className="text-center mb-4">
-        <HeadingPrimary className="text-[28px] leading-8 lg:text-4xl lg:leading-10 lg:tracking-[-2%]">
+        <HeadingPrimary  className="text-[28px] leading-8 lg:text-4xl lg:leading-10 lg:tracking-[-2%]">
           Log into your account
         </HeadingPrimary>
-        <p className="text-[#2C2C2C] text-base leading-6 tracking-[-3%]">
-          View your saved searches, skincare <br className="lg:hidden" />{" "}
-          routine and more
+        <p className="text-[#2C2C2C] text-base leading-6 tracking-[-0.5px]">
+          View your saved searches, skincare routine and more
         </p>
       </div>
 
@@ -151,16 +150,17 @@ const SignInForm = () => {
         {isError && renderError()}
 
         <div className="flex gap-4 w-full">
-          <button
+        <button
             type="submit"
             disabled={isLoading}
-            className="w-[155px] lg:w-[243px] bg-[#8599FE] hover:bg-blue-500 text-white rounded-xl text-lg font-medium transition-colors disabled:opacity-50 "
+            className="bg-[#8599FE] hover:bg-blue-500 text-white rounded-xl text-lg font-medium transition-colors disabled:opacity-50 w-[50%]"
           >
             {isLoading ? "Signing in..." : "Sign in"}
           </button>
 
-          <div className="flex  gap-3 justify-end">
+          <div className="flex w-[50%] gap-3 justify-end">
             <Image
+
               src="/icons/google.png"
               width={56}
               height={56}
@@ -191,9 +191,9 @@ const SignInForm = () => {
           <span className="text-[18px] leading-[26px] font-medium text-[#8599FE]">
             Don&apos;t have an account?{" "}
             <Link
-              href={`/${pathname}?auth=sign-up`}
-              className="text-[#8599FE] hover:text-blue-600 decoration-skip-ink-none font-bold"
-            >
+            href={`/${pathname}?auth=sign-up`}
+            className="text-[#8599FE] hover:text-blue-600 decoration-skip-ink-none font-bold"
+          >
               Sign Up
             </Link>
           </span>

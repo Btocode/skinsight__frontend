@@ -31,7 +31,7 @@ const YourSkinMatchesPage = async () => {
         </h4>
         <div className="flex items-center gap-4">
           <Link href={"/find-products/gender"} className="h-[40px]">
-            <Button className="h-[40px]">Modify</Button>
+            <Button className="h-[40px]">Retake Quiz</Button>
           </Link>
           <MatchesProductFilter />
         </div>
