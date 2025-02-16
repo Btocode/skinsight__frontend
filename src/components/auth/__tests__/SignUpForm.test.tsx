@@ -1,4 +1,4 @@
-import { render, screen, fireEvent, waitFor, act } from '@testing-library/react';
+import { render, screen, fireEvent, waitFor } from '@testing-library/react';
 import { useRegisterMutation } from '@/lib/services/authApi';
 import SignUpForm from '../SignUpForm';
 import { useRouter, usePathname } from 'next/navigation';

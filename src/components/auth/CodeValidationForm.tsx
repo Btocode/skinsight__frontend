@@ -25,7 +25,7 @@ const CodeValidationForm: React.FC<CodeValidationFormProps> = ({ onSubmit }) => 
           Enter the code
         </HeadingPrimary>
         <p className="text-gray-600 text-base leading-6 tracking-[-2%]">
-          We've sent you a code on mi****@gmail.com
+        We&apos;ve sent you a code on mi****@gmail.com
         </p>
       </div>
 
@@ -42,7 +42,7 @@ const CodeValidationForm: React.FC<CodeValidationFormProps> = ({ onSubmit }) => 
           </button>
         </div>
         <p className="text-center text-lg">
-          <span className="text-blue-400">Didn't receive the code? </span>
+          <span className="text-blue-400">Didn&apos;t receive the code? </span>
           <button className="outline-none border-none bg-transparent text-blue-500 hover:text-blue-600 font-medium">
             Resend
           </button>

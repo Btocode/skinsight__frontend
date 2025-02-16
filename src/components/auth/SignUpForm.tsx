@@ -33,7 +33,7 @@ const SignUpForm = () => {
 
   const onSubmit = async (data: RegisterSchema) => {
     try {
-      const { confirm_password, ...registerData } = data;
+      const registerData = { ...data };
       await registerUser(registerData).unwrap();
       router.replace(pathname);
       setTimeout(() => {

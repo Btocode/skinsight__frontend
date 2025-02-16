@@ -15,12 +15,30 @@ const AuthActionModal = () => {
   const authAction = useSearchParams().get("auth");
   const onClose = useCallback(() => router.push(pathname), [pathname, router]);
 
+  // Define the onSubmit function for ForgotPasswordForm
+  const handleForgotPasswordSubmit = (data: { email: string }) => {
+    console.log("Forgot password data:", data);
+    // Handle the forgot password logic here
+  };
+
+  // Define the onSubmit function for CodeValidationForm
+  const handleCodeValidationSubmit = (data: { code: string }) => {
+    console.log("Code validation data:", data);
+    // Handle the code validation logic here
+  };
+
+  // Define the onSubmit function for SetNewPasswordForm
+  const handleSetNewPasswordSubmit = (data: { password: string; repeatPassword: string }) => {
+    console.log("Set new password data:", data);
+    // Handle the set new password logic here
+  };
+
   const components: { [key: string]: JSX.Element } = {
     "sign-in": <SignInForm />,
     "sign-up": <SignUpForm />,
-    "forgot-password": <ForgotPasswordForm />,
-    "code-validation": <CodeValidationForm />,
-    "set-new-password": <SetNewPasswordForm />,
+    "forgot-password": <ForgotPasswordForm onSubmit={handleForgotPasswordSubmit} />, // Pass the onSubmit prop
+    "code-validation": <CodeValidationForm onSubmit={handleCodeValidationSubmit} />, // Pass the onSubmit prop
+    "set-new-password": <SetNewPasswordForm onSubmit={handleSetNewPasswordSubmit} />, // Pass the onSubmit prop
   };
 
   const keys = Object.keys(components);
