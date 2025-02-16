@@ -12,7 +12,7 @@ const MatchesProductFilter = () => {
       <Button
         onClick={() => setIsOpen(true)}
         variant={"outline"}
-        className="w-[87px] lg:w-[102px] h-[40px] text-base lg:text-xl font-medium leading-[26px] p-0 border"
+        className="w-[60px] lg:w-[102px] h-[40px] text-base lg:text-xl font-medium leading-[26px] p-0 border"
         icon={
           <svg
             width="18"
@@ -31,8 +31,9 @@ const MatchesProductFilter = () => {
             />
           </svg>
         }
+        iconClassName="mr-0 lg:mr-2"
       >
-        Filter
+        <span className="hidden lg:inline-block">Filter</span>
       </Button>
       <Modal
         isOpen={isOpen}
