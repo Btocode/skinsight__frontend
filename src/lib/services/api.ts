@@ -1,5 +1,5 @@
-// src/lib/services/api.ts
 import axios from "axios";
+import { getStorageItem } from '@/utils/storage';
 
 const api = axios.create({
   baseURL: process.env.NEXT_PUBLIC_API_URL,
@@ -10,7 +10,7 @@ const api = axios.create({
 
 // Add request interceptor for adding auth token
 api.interceptors.request.use((config) => {
-  const token = localStorage.getItem("token");
+  const token = getStorageItem("token");
   if (token) {
     config.headers.Authorization = `Bearer ${token}`;
   }

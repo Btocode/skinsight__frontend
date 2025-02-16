@@ -15,7 +15,7 @@ const getSavedItems = async (): Promise<Product[]> => {
 const SavedItemsPage = async () => {
   const products = await getSavedItems();
   return (
-    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 pt-4 pb-8">
+    <div className="grid grid-cols-2 md:grid-cols-2 lg:grid-cols-3 gap-4 lg:gap-8 pt-4 pb-8">
       {products.map((item, index) => (
         <ProductCard key={index} item={item} />
       ))}

@@ -1,4 +1,6 @@
-const products = [
+import { Product } from "@/types/products";
+
+const products: Product[][] = [
   [
     {
       productImage: "/products/product1.png",

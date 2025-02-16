@@ -14,6 +14,8 @@ export interface ComboboxProps {
   onChange?: (value: Option) => void;
   placeholder?: string;
   className?: string;
+  buttonClassName?: string;
+  valueClassName?: string;
 }
 
 export function Combobox({
@@ -22,6 +24,8 @@ export function Combobox({
   onChange,
   placeholder = "Select...",
   className,
+  buttonClassName,
+  valueClassName,
 }: ComboboxProps) {
   const [open, setOpen] = useState(false);
   const [highlightedIndex, setHighlightedIndex] = useState(-1);
@@ -81,11 +85,11 @@ export function Combobox({
     }
   }, [highlightedIndex, open]);
 
-  useEffect(() => {
-    if (!open) {
-      buttonRef.current?.focus();
-    }
-  }, [open]);
+  // useEffect(() => {
+  //   if (!open) {
+  //     buttonRef.current?.focus();
+  //   }
+  // }, [open]);
 
   useEffect(() => {
     const handleOutsideClick = (event: MouseEvent) => {
@@ -115,15 +119,18 @@ export function Combobox({
         onClick={() => setOpen(!open)}
         onKeyDown={handleKeyDown}
         className={cn(
-          "flex h-14 w-full items-center justify-between rounded-md border border-input bg-[#8599FE26] px-3 py-3 text-sm ring-offset-[#8599FE26] placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-1 disabled:cursor-not-allowed disabled:opacity-50",
-          open && "ring-1 ring-ring ring-offset-1"
+          "flex h-[60px] w-full items-center justify-between rounded-md border border-input bg-[#8599FE26] px-3 py-3 text-sm ring-offset-[#8599FE26] placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-1 disabled:cursor-not-allowed disabled:opacity-50",
+          open && "ring-1 ring-ring ring-offset-1",
+          buttonClassName
         )}
         aria-expanded={open}
         aria-haspopup="listbox"
         aria-controls={open ? "dropdown-list" : undefined}
         type="button"
       >
-        <span className="truncate">{value ? value.label : placeholder}</span>
+        <span className={cn("truncate text-lg", valueClassName)}>
+          {value ? value.label : placeholder}
+        </span>
         <div
           className={cn(
             "ml-2 h-4 w-4 shrink-0 opacity-50 transition-transform duration-200",
@@ -159,7 +166,7 @@ export function Combobox({
             <li
               key={option.value}
               className={cn(
-                "relative flex cursor-default select-none items-center rounded-sm px-2 py-3 text-sm outline-none transition-colors",
+                "relative flex cursor-default select-none items-center rounded-sm px-2 py-3 text-base outline-none transition-colors",
                 index === highlightedIndex &&
                   "bg-[#EDF0FF] text-accent-foreground",
                 value?.value === option.value && "font-medium text-primary"

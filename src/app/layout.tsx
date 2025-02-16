@@ -2,6 +2,15 @@
 import { ReduxProvider } from "@/lib/redux/ReduxProvider";
 import { DM_Sans } from "next/font/google";
 import "./globals.css";
+import { Metadata } from "next";
+import { AuthCheck } from '@/components/auth/AuthCheck';
+
+export const metadata: Metadata = {
+  title: {
+    default: "Skinsight",
+    template: "%s | Skinsight",
+  },
+};
 
 const dmSans = DM_Sans({
   subsets: ["latin"],
@@ -22,9 +31,11 @@ export default function RootLayout({
         suppressHydrationWarning
       >
         <ReduxProvider>
+          <AuthCheck />
           {children}
           {modal}
         </ReduxProvider>
+        <div id="modal" />
       </body>
     </html>
   );

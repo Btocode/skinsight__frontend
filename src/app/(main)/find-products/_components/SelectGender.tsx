@@ -1,10 +1,17 @@
+"use client";
 import Card from "./Card";
+import { genders } from "@/utils/products";
+import { RecommendationComponentProps } from "@/types/products";
 
-const SelectGender = () => {
+const SelectGender = ({ value, onChange }: RecommendationComponentProps) => {
   return (
-    <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-x-4 gap-y-8">
-      {["Male", "Female", "I do prefer not to say"].map((item, index) => (
-        <Card key={index}>
+    <div className="w-full grid grid-cols-2 md:grid-cols-3 mt-[32px] lg:mt-0 gap-5">
+      {genders.map((item, index) => (
+        <Card
+          key={index}
+          onClick={() => onChange("gender", item)}
+          checked={value === item}
+        >
           <h3 className="text-xl font-semibold">{item}</h3>
         </Card>
       ))}

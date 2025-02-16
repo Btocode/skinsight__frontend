@@ -2,7 +2,7 @@
 import Button from "@/components/common/Button";
 import Modal from "@/components/common/Modal";
 import { useRouter } from "next/navigation";
-import { useCallback, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 
 const AddFavorite = () => {
   const [open, setOpen] = useState(false);
@@ -14,25 +14,28 @@ const AddFavorite = () => {
     onClose();
   };
 
+  // Reset modal state on mount and clear localStorage
+  useEffect(() => {
+    localStorage.removeItem('hasShownFavoriteModal');
+    setOpen(false);
+  }, []);
+
+  // Show modal once after 4 seconds if not previously closed
+  useEffect(() => {
+    const hasShownModal = localStorage.getItem('hasShownFavoriteModal');
+    if (!hasShownModal) {
+      const timer = setTimeout(() => {
+        setOpen(true);
+        localStorage.setItem('hasShownFavoriteModal', 'true');
+      }, 4000);
+      return () => clearTimeout(timer);
+    }
+  }, []);
+
   return (
     <>
-      <button
-        type="button"
-        onClick={() => setOpen(true)}
-        className="flex flex-1 items-center justify-center gap-2 rounded-full bg-violet-100 py-3 text-violet-600 transition-colors hover:bg-violet-200"
-      >
-        <svg width="25" height="24" viewBox="0 0 25 24" fill="none">
-          <path
-            d="M6.5 7.2002V16.6854C6.5 18.0464 6.5 18.7268 6.70412 19.1433C7.08245 19.9151 7.91157 20.3588 8.76367 20.2454C9.2234 20.1842 9.78964 19.8067 10.9221 19.0518L10.9248 19.0499C11.3737 18.7507 11.5981 18.6011 11.833 18.5181C12.2642 18.3656 12.7348 18.3656 13.166 18.5181C13.4013 18.6012 13.6266 18.7515 14.0773 19.0519C15.2098 19.8069 15.7767 20.1841 16.2364 20.2452C17.0885 20.3586 17.9176 19.9151 18.2959 19.1433C18.5 18.7269 18.5 18.0462 18.5 16.6854V7.19691C18.5 6.07899 18.5 5.5192 18.2822 5.0918C18.0905 4.71547 17.7837 4.40973 17.4074 4.21799C16.9796 4 16.4203 4 15.3002 4H9.7002C8.58009 4 8.01962 4 7.5918 4.21799C7.21547 4.40973 6.90973 4.71547 6.71799 5.0918C6.5 5.51962 6.5 6.08009 6.5 7.2002Z"
-            stroke="currentColor"
-            strokeWidth={2}
-          />
-        </svg>
-
-        <span>Add to routine</span>
-      </button>
       <Modal isOpen={open} onClose={onClose}>
-        <div className="bg-white rounded-3xl max-w-lg w-full mx-auto p-8 relative">
+        <div className="bg-white rounded-3xl  max-w-[440px] w-full mx-auto py-8 lg:p-8 relative">
           {/* User Icon */}
           <div className="flex justify-center mb-2">
             <svg
@@ -69,7 +72,7 @@ const AddFavorite = () => {
 
           {/* Content */}
           <div className="text-center space-y-2">
-            <h2 className="text-2xl font-semibold leading-[32px] tracking-[-0.03em] text-center text-accent">
+            <h2 className="text-lg lg:text-2xl font-semibold leading-[26px] lg:leading-[32px] tracking-[-0.03em] text-center text-accent">
               Would you like to add your favorite products now and match with
               hundreds of skintwins?
             </h2>
@@ -78,8 +81,15 @@ const AddFavorite = () => {
               can also see how popular these products are with your skintwins.
             </p>
             {/* Buttons */}
-            <div className="flex flex-col sm:flex-row gap-4 justify-center pt-4">
-              <Button onClick={onConfirm}>Yes, Let&apos;s go</Button>
+            <div className="flex  gap-4 justify-center pt-4">
+              <Button
+                onClick={(e) => {
+                  e.stopPropagation();
+                  onConfirm();
+                }}
+              >
+                Yes, Let&apos;s go
+              </Button>
               <Button variant={"outline"} onClick={onClose}>
                 No, thanks
               </Button>

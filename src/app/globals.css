@@ -8,6 +8,29 @@
   --foreground: #1e0e62;
 }
 
+/* Scrollbar style */
+::-webkit-scrollbar {
+  width: 8px;
+}
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+::-webkit-scrollbar-thumb {
+  background: linear-gradient(
+    90deg,
+    rgba(143, 128, 232, 0.6),
+    rgba(128, 173, 232, 0.6)
+  );
+  border-radius: 10px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: linear-gradient(
+    90deg,
+    rgba(143, 128, 232, 0.8),
+    rgba(128, 173, 232, 0.8)
+  );
+}
+
 @layer utilities {
   .menu-link {
     @apply text-base font-normal leading-[26px]  text-foreground;
@@ -30,5 +53,24 @@
 
   .heading-primary {
     @apply text-4xl lg:text-6xl leading-[70px] font-semibold mb-4 bg-gradient-to-r from-blue-400 to-violet-400 text-transparent bg-clip-text;
+  }
+
+  .hide-scrollbar {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+  }
+  .hide-scrollbar::-webkit-scrollbar {
+    display: none;
+  }
+
+  /* Hide scrollbar for Chrome, Safari and Opera */
+  .no-scrollbar::-webkit-scrollbar {
+    display: none;
+  }
+
+  /* Hide scrollbar for IE, Edge and Firefox */
+  .no-scrollbar {
+    -ms-overflow-style: none;  /* IE and Edge */
+    scrollbar-width: none;  /* Firefox */
   }
 }

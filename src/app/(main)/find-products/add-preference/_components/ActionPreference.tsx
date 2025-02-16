@@ -7,14 +7,18 @@ import AddProduct from "./AddProduct";
 const ActionPreference = () => {
   const [open, setOpen] = useState(false);
   const router = useRouter();
+
   return (
     <>
-      <div className="flex items-center gap-4">
-        <Button onClick={() => setOpen(true)} className="px-8">
+      <div className="flex items-center gap-3 lg:gap-[20px]">
+        <Button
+          onClick={() => setOpen(true)}
+          className="w-[119px] lg:w-[126px] h-[44px] lg:h-[60px] text-base lg:text-xl font-medium leading-[26px]"
+        >
           Add
         </Button>
         <Button
-          className="px-8"
+          className="w-[109px] lg:w-[126px] h-[44px] lg:h-[60px] border text-base lg:text-xl font-medium leading-[26px]"
           variant={"outline"}
           onClick={() => router.back()}
         >

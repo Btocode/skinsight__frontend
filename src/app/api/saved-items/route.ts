@@ -74,6 +74,6 @@ const products = [
 ];
 
 export async function GET() {
-  await new Promise((resolve) => setTimeout(resolve, 2000));
+  await new Promise((resolve) => setTimeout(resolve, 4000));
   return new Response(JSON.stringify(products));
 }

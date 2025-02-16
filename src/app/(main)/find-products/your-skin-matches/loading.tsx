@@ -1,5 +1,5 @@
-import { cn } from "@/lib/utils";
-import Image from "next/image";
+import GradientImage from "@/components/common/GradientImage";
+import Skeleton from "@/components/common/Skeleton";
 
 export default function SkeletonLoader() {
   return (
@@ -7,46 +7,25 @@ export default function SkeletonLoader() {
       <div className="lg:flex justify-between items-center space-y-2">
         <div className="space-y-4">
           <Skeleton className="w-[100px] h-[30px]" />
-          <Skeleton className="w-[500px] h-[50px]" />
-          <Skeleton className="w-[450px] h-[40px]" />
+          <Skeleton className="w-9/12 lg:w-[500px] h-[50px]" />
+          <Skeleton className="w-4/5 lg:w-[450px] h-[40px]" />
         </div>
         <Skeleton className="w-[100px] h-[40px]" />
       </div>
 
-      <Skeleton className="w-[100px] h-[40px] ml-10" />
+      <Skeleton className="w-[100px] h-[40px] ml-4 lg:ml-8" />
 
       {/* Three square skeletons */}
-      <div className="max-w-[1420px] mx-auto grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 lg:gap-8">
+      <div className="lg:px-[43px] grid grid-cols-2 md:grid-cols-2 lg:grid-cols-3 gap-4 lg:gap-[40px]">
         {[...Array(6)].map((_, i) => (
-          <Skeleton key={i} className="w-full h-[450px]" />
+          <Skeleton
+            key={i}
+            className="w-full lg:w-[340px] h-[260px] lg:h-[410px]"
+          />
         ))}
       </div>
 
-      <Image
-        src={"/gradient1.png"}
-        alt="gradient1"
-        width={550}
-        height={420}
-        className="absolute -left-[250px] -top-20 lg:top-10 -z-10"
-      />
-      <Image
-        src={"/gradient2.png"}
-        alt="gradient1"
-        width={800}
-        height={475}
-        className="absolute top-[700px] lg:top-[520px] -right-20 lg:right-64 -z-10"
-      />
+      <GradientImage />
     </div>
-  );
-}
-
-function Skeleton({ className }: { className?: string }) {
-  return (
-    <div
-      className={cn(
-        "bg-gray-500 bg-clip-padding backdrop-filter backdrop-blur-sm bg-opacity-10 rounded-lg animate-pulse",
-        className
-      )}
-    />
   );
 }
