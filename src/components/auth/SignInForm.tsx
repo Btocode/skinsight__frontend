@@ -8,14 +8,12 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
 import { Controller, useForm } from "react-hook-form";
-import { useEffect, useState } from "react";
 import Image from "next/image";
+import Button from "../common/Button";
 
 const SignInForm = () => {
   const pathname = usePathname();
   const router = useRouter();
-  const [mounted, setMounted] = useState(false);
-  const [isSuccess, setIsSuccess] = useState(false);
   const {
     control,
     handleSubmit,
@@ -27,20 +25,18 @@ const SignInForm = () => {
       password: "",
     },
   });
-  const [loginUser, { isLoading, isError, error: apiError }] =
+  const [loginUser, { isLoading, isError, error: apiError, isSuccess }] =
     useLoginMutation();
 
   const onSubmit = async (data: LoginSchema) => {
     try {
       await loginUser(data).unwrap();
-      setIsSuccess(true);
       // Only redirect if login was successful
       setTimeout(() => {
         router.push(pathname);
       }, 500);
     } catch (err) {
       console.log(err);
-      setIsSuccess(false);
       // Don't redirect or change URL on error
     }
   };
@@ -82,90 +78,73 @@ const SignInForm = () => {
     );
   };
 
-  useEffect(() => {
-    setMounted(true);
-  }, []);
-
-  if (!mounted) {
-    return null;
-  }
-
   const handleSocialLogin = (provider: string) => {
     // redirect to authentication url
     const url = `${process.env.NEXT_PUBLIC_API_URL}/auth/sign_in_with_provider/${provider}`;
-    window.location.href = url;
+    router.push(url);
   };
 
   return (
-    <div className="bg-white w-[620px] h-[460px] mx-auto rounded-[12px] flex flex-col gap-[10px] lg:px-[60px] py-4 lg:py-[40px]">
-      <div className="text-center mb-4">
-        <HeadingPrimary  className="text-[28px] leading-8 lg:text-4xl lg:leading-10 lg:tracking-[-2%]">
-          Log into your account
-        </HeadingPrimary>
-        <p className="text-[#2C2C2C] text-base leading-6 tracking-[-0.5px]">
-          View your saved searches, skincare routine and more
-        </p>
-      </div>
+    <div className="bg-white lg:px-[112px] lg:pt-[52px] lg:pb-[25px]">
+      <form onSubmit={handleSubmit(onSubmit)} className="lg:px-[23.5px]">
+        <div className="text-center mb-[19px]">
+          <HeadingPrimary className="text-[26px] lg:text-[36px] leading-[30.94px] lg:leading-[42.84px] tracking-[-2%]">
+            Log into your account
+          </HeadingPrimary>
+          <p className="text-accent text-base leading-[24px] tracking-[-3%]">
+            View your saved searches, skincare routine and more
+          </p>
+        </div>
+        <div className="space-y-[24px]">
+          <Controller
+            name="email"
+            control={control}
+            render={({ field, fieldState: { error } }) => (
+              <InputBox
+                type="email"
+                placeholder="Enter email address"
+                id="email"
+                value={field.value}
+                onChange={field.onChange}
+                required
+                disabled={isLoading}
+                error={error?.message}
+                className={isSuccess ? "bg-green-50" : ""}
+              />
+            )}
+          />
 
-      <form
-        onSubmit={handleSubmit(onSubmit)}
-        className="lg:px-[50px] space-y-5 lg:space-y-7"
-      >
-        <Controller
-          name="email"
-          control={control}
-          render={({ field, fieldState: { error } }) => (
-            <InputBox
-              type="email"
-              placeholder="Enter email address"
-              id="email"
-              value={field.value}
-              onChange={field.onChange}
-              required
-              disabled={isLoading}
-              error={error?.message}
-              className={isSuccess ? "bg-green-50" : ""}
-            />
-          )}
-        />
+          <Controller
+            name="password"
+            control={control}
+            render={({ field, fieldState: { error } }) => (
+              <InputBox
+                type="password"
+                placeholder="Enter password"
+                id="password"
+                value={field.value}
+                onChange={field.onChange}
+                required
+                disabled={isLoading}
+                error={error?.message}
+                className={isSuccess ? "bg-green-50" : ""}
+              />
+            )}
+          />
 
-        <Controller
-          name="password"
-          control={control}
-          render={({ field, fieldState: { error } }) => (
-            <InputBox
-              type="password"
-              placeholder="Enter password"
-              id="password"
-              value={field.value}
-              onChange={field.onChange}
-              required
-              disabled={isLoading}
-              error={error?.message}
-              className={isSuccess ? "bg-green-50" : ""}
-            />
-          )}
-        />
+          {isError && renderError()}
 
-        {isError && renderError()}
+          <div className="flex gap-[9px]">
+            <Button type="submit" disabled={isLoading} className="w-full">
+              {isLoading ? "Signing in..." : "Sign in"}
+            </Button>
 
-        <div className="flex gap-4 w-full">
-        <button
-            type="submit"
-            disabled={isLoading}
-            className="bg-[#8599FE] hover:bg-blue-500 text-white rounded-xl text-lg font-medium transition-colors disabled:opacity-50 w-[50%]"
-          >
-            {isLoading ? "Signing in..." : "Sign in"}
-          </button>
-
-          <div className="flex w-[50%] gap-3 justify-end">
             <Image
-
               src="/icons/google.png"
               width={56}
               height={56}
               alt="Google"
-              className="cursor-pointer transition-colors hover:opacity-80"
+              className="cursor-pointer transition-colors hover:opacity-80 flex-shrink-0"
               onClick={() => handleSocialLogin("google")}
             />
             <Image
@@ -173,7 +152,7 @@ const SignInForm = () => {
               width={56}
               height={56}
               alt="Facebook"
-              className="cursor-pointer transition-colors hover:opacity-80"
+              className="cursor-pointer transition-colors hover:opacity-80 flex-shrink-0"
               onClick={() => handleSocialLogin("facebook")}
             />
             <Image
@@ -181,22 +160,16 @@ const SignInForm = () => {
               width={56}
               height={56}
               alt="Apple"
-              className="cursor-pointer transition-colors hover:opacity-80"
+              className="cursor-pointer transition-colors hover:opacity-80 flex-shrink-0"
               onClick={() => handleSocialLogin("apple")}
             />
           </div>
         </div>
-
-        <p className="text-center text-lg">
-          <span className="text-[18px] leading-[26px] font-medium text-[#8599FE]">
-            Don&apos;t have an account?{" "}
-            <Link
-            href={`/${pathname}?auth=sign-up`}
-            className="text-[#8599FE] hover:text-blue-600 decoration-skip-ink-none font-bold"
-          >
-              Sign Up
-            </Link>
-          </span>
+        <p className="text-center text-lg leading-[26px] text-primary mt-[34px]">
+          <span>Don&apos;t have an account? </span>
+          <Link href={`${pathname}?auth=sign-up`} className="font-bold">
+            Sign Up
+          </Link>
         </p>
       </form>
     </div>

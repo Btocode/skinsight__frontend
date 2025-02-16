@@ -1,6 +1,5 @@
 "use client";
 
-import { useState, useEffect } from "react";
 import { useRegisterMutation } from "@/lib/services/authApi";
 import { registerSchema, RegisterSchema } from "@/schema/auth";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -10,17 +9,18 @@ import { InputBox } from "@/components/common/InputBox";
 import Link from "next/link";
 import HeadingPrimary from "../common/HeadingPrimary";
 import Image from "next/image";
+import Button from "../common/Button";
 
 const SignUpForm = () => {
   const router = useRouter();
   const pathname = usePathname();
-  const [mounted, setMounted] = useState(false);
-  const [registerUser, { isLoading, isError, error: apiError }] = useRegisterMutation();
+  const [registerUser, { isLoading, isError, error: apiError }] =
+    useRegisterMutation();
 
   const {
     control,
     handleSubmit,
-    formState: { errors }
+    formState: { errors },
   } = useForm<RegisterSchema>({
     resolver: zodResolver(registerSchema),
     defaultValues: {
@@ -49,123 +49,108 @@ const SignUpForm = () => {
     if (isError) {
       return (
         <span className="text-red-600">
-          {(apiError as { data: { detail: string } })?.data?.detail || "Registration failed"}
+          {(apiError as { data: { detail: string } })?.data?.detail ||
+            "Registration failed"}
         </span>
       );
     }
     return null;
   };
 
-  useEffect(() => {
-    setMounted(true);
-  }, []);
-
-  if (!mounted) {
-    return null; // or loading spinner
-  }
-
   const handleSocialLogin = (provider: string) => {
     // redirect to authentication url
     const url = `${process.env.NEXT_PUBLIC_API_URL}/auth/sign_in_with_provider/${provider}`;
-    window.location.href = url;
+    router.push(url);
   };
 
   return (
-    <div className="bg-white w-[620px] mx-auto rounded-[12px] flex flex-col gap-[10px] lg:px-[70px] py-4 lg:py-[50px]">
-      <div className="text-center mb-4">
-        <HeadingPrimary className="text-[28px] leading-8 lg:text-4xl lg:leading-10 lg:tracking-[-3%]">
+    <div className="bg-white lg:px-[100px] pt-[23px] lg:pt-[80px] lg:pb-[25px]">
+      <div className="text-center mb-[19px]">
+        <HeadingPrimary className="text-[26px] lg:text-[36px] leading-[30.94px] lg:leading-[42.84px] tracking-[-2%]">
           Sign up to get personalized recommendations
         </HeadingPrimary>
-        <p className="text-[#2C2C2C] text-base leading-6 tracking-[-0.5px]">
+        <p className="text-accent text-base leading-[24px] tracking-[-3%]">
           Discover products that work for you - no more guessing!
         </p>
       </div>
+      <form onSubmit={handleSubmit(onSubmit)} className="lg:px-[23.5px]">
+        <div className="space-y-[24px]">
+          <Controller
+            name="display_name"
+            control={control}
+            render={({ field }) => (
+              <InputBox
+                type="text"
+                placeholder="Your name"
+                id="display_name"
+                {...field}
+                required
+                disabled={isLoading}
+                error={errors.display_name?.message}
+              />
+            )}
+          />
 
-      <form
-        onSubmit={handleSubmit(onSubmit)}
-        className="lg:px-[32px] space-y-5 lg:space-y-7"
-      >
-        <Controller
-          name="display_name"
-          control={control}
-          render={({ field }) => (
-            <InputBox
-              type="text"
-              placeholder="Your name"
-              id="display_name"
-              {...field}
-              required
-              disabled={isLoading}
-              error={errors.display_name?.message}
-            />
-          )}
-        />
+          <Controller
+            name="email"
+            control={control}
+            render={({ field }) => (
+              <InputBox
+                type="email"
+                placeholder="Enter email address"
+                id="email"
+                {...field}
+                required
+                disabled={isLoading}
+                error={errors.email?.message}
+              />
+            )}
+          />
 
-        <Controller
-          name="email"
-          control={control}
-          render={({ field }) => (
-            <InputBox
-              type="email"
-              placeholder="Enter email address"
-              id="email"
-              {...field}
-              required
-              disabled={isLoading}
-              error={errors.email?.message}
-            />
-          )}
-        />
+          <Controller
+            name="password"
+            control={control}
+            render={({ field }) => (
+              <InputBox
+                type="password"
+                placeholder="Enter password"
+                id="password"
+                {...field}
+                required
+                disabled={isLoading}
+                error={errors.password?.message}
+              />
+            )}
+          />
 
-        <Controller
-          name="password"
-          control={control}
-          render={({ field }) => (
-            <InputBox
-              type="password"
-              placeholder="Enter password"
-              id="password"
-              {...field}
-              required
-              disabled={isLoading}
-              error={errors.password?.message}
-            />
-          )}
-        />
+          <Controller
+            name="confirm_password"
+            control={control}
+            render={({ field }) => (
+              <InputBox
+                type="password"
+                placeholder="Confirm password"
+                id="confirm_password"
+                {...field}
+                required
+                disabled={isLoading}
+                error={errors.confirm_password?.message}
+              />
+            )}
+          />
 
-        <Controller
-          name="confirm_password"
-          control={control}
-          render={({ field }) => (
-            <InputBox
-              type="password"
-              placeholder="Confirm password"
-              id="confirm_password"
-              {...field}
-              required
-              disabled={isLoading}
-              error={errors.confirm_password?.message}
-            />
-          )}
-        />
+          {renderError()}
 
-        {renderError()}
-
-        <div className="flex gap-4 w-full">
-          <button
-            type="submit"
-            disabled={isLoading}
-            className="bg-[#8599FE] hover:bg-blue-500 text-white rounded-xl text-lg font-medium transition-colors disabled:opacity-50 w-[50%]"
-          >
-            {isLoading ? "Signing up..." : "Sign up"}
-          </button>
-          <div className="flex w-[50%] gap-4 justify-end">
+          <div className="flex gap-[9px]">
+            <Button type="submit" disabled={isLoading} className="w-full">
+              {isLoading ? "Signing up..." : "Sign up"}
+            </Button>
             <Image
               src="/icons/google.png"
               width={56}
               height={56}
               alt="Google"
-              className="cursor-pointer transition-colors hover:opacity-80"
+              className="cursor-pointer transition-colors hover:opacity-80 flex-shrink-0"
               onClick={() => handleSocialLogin("google")}
             />
             <Image
@@ -173,7 +158,7 @@ const SignUpForm = () => {
               width={56}
               height={56}
               alt="Facebook"
-              className="cursor-pointer transition-colors hover:opacity-80"
+              className="cursor-pointer transition-colors hover:opacity-80 flex-shrink-0"
               onClick={() => handleSocialLogin("facebook")}
             />
             <Image
@@ -181,22 +166,16 @@ const SignUpForm = () => {
               width={56}
               height={56}
               alt="Apple"
-              className="cursor-pointer transition-colors hover:opacity-80"
+              className="cursor-pointer transition-colors hover:opacity-80 flex-shrink-0"
               onClick={() => handleSocialLogin("apple")}
             />
           </div>
         </div>
-
-        <p className="text-center text-lg">
-          <span className=" text-[18px] leading-[26px] font-medium text-[#8599FE]">
-            Already have an account?{" "}
-            <Link
-              href={`/${pathname}?auth=sign-in`}
-              className="text-[#8599FE] hover:text-blue-600 decoration-skip-ink-none font-bold"
-            >
-              Sign In
-            </Link>
-          </span>
+        <p className="text-center text-lg leading-[26px] text-primary mt-[34px]">
+          <span>Already have an account? </span>
+          <Link href={`${pathname}?auth=sign-in`} className="font-bold">
+            Sign In
+          </Link>
         </p>
       </form>
     </div>
