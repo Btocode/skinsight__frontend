@@ -2,7 +2,25 @@ import { InputBox } from "@/components/common/InputBox";
 import React from "react";
 import HeadingPrimary from "../common/HeadingPrimary";
 
-const SetNewPasswordForm = () => {
+interface SetNewPasswordFormProps {
+  onSubmit: (data: { password: string; repeatPassword: string }) => void;
+}
+
+const SetNewPasswordForm: React.FC<SetNewPasswordFormProps> = ({ onSubmit }) => {
+  const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+    const target = event.currentTarget;
+    const password = (target.elements.namedItem('password') as HTMLInputElement).value;
+    const repeatPassword = (target.elements.namedItem('repeatPassword') as HTMLInputElement).value;
+
+    // Validate that passwords match
+    if (password !== repeatPassword) {
+      return; // Prevent submission if passwords do not match
+    }
+
+    onSubmit({ password, repeatPassword });
+  };
+
   return (
     <div className="bg-white rounded-3xl w-full relative lg:px-[112px] py-4 lg:py-[52px]">
       <div className="text-center mb-8">
@@ -15,12 +33,13 @@ const SetNewPasswordForm = () => {
       </div>
 
       {/* Form */}
-      <form className="space-y-5 lg:space-y-7 lg:px-[20px]">
-        <InputBox type="password" placeholder="Enter password" id="password" />
+      <form className="space-y-5 lg:space-y-7 lg:px-[20px]" onSubmit={handleSubmit}>
+        <InputBox type="password" placeholder="Enter password" id="password" name="password" />
         <InputBox
           type="password"
           placeholder="Repeat password"
           id="repeat-password"
+          name="repeatPassword"
         />
 
         <div className="lg:max-w-[240px] mx-auto">

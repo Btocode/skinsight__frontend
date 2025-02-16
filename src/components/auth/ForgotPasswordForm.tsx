@@ -1,6 +1,10 @@
 import { InputBox } from "@/components/common/InputBox";
 import HeadingPrimary from "../common/HeadingPrimary";
 
+interface ForgotPasswordFormProps {
+  onSubmit: (data: { email: string }) => void;
+}
+
 /**
  * A form for users to enter their email address and receive a password reset link.
  *
@@ -11,7 +15,13 @@ import HeadingPrimary from "../common/HeadingPrimary";
  *
  * @returns A JSX element containing the forgot password form.
  */
-const ForgotPasswordForm = () => {
+const ForgotPasswordForm: React.FC<ForgotPasswordFormProps> = ({ onSubmit }) => {
+  const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+    const email = (event.currentTarget.elements.namedItem('email') as HTMLInputElement).value;
+    onSubmit({ email });
+  };
+
   return (
     <div className="bg-white rounded-3xl w-full relative lg:px-[112px] py-4 lg:py-[52px]">
       <div className="text-center mb-8">
@@ -24,13 +34,13 @@ const ForgotPasswordForm = () => {
       </div>
 
       {/* Form */}
-      <form className=" space-y-5 lg:pace-y-7 lg:px-[20px]">
-        <InputBox type="email" placeholder="Enter email address" id="email" />
+      <form className="space-y-5 lg:space-y-7 lg:px-[20px]" onSubmit={handleSubmit}>
+        <InputBox type="email" placeholder="Enter email address" id="email" name="email" />
 
         <div className="lg:max-w-[240px] mx-auto">
           <button
             type="submit"
-            className=" w-full bg-[#8599FE] hover:bg-blue-500 text-white rounded-xl py-4 text-lg font-medium transition-colors"
+            className="w-full bg-[#8599FE] hover:bg-blue-500 text-white rounded-xl py-4 text-lg font-medium transition-colors"
           >
             Send
           </button>
