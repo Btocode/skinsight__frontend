@@ -113,11 +113,13 @@ const HelpPage = () => {
               </h2>
 
               <p className="text-[18px] leading-[28px] font-medium text-[#8F80E8]">
-                Reach out to us on help@skinsight.me
+                Reach out to us
               </p>
-              <Button className="bg-[#E77CCF] hover:bg-[#E77CCF]/90 rounded-full">
-                Email us
-              </Button>
+              <Link href={"mailto:"}>
+                <Button className="bg-[#E77CCF] hover:bg-[#E77CCF]/90 rounded-full">
+                  Email us
+                </Button>
+              </Link>
             </div>
           </div>
         </div>
