@@ -28,7 +28,10 @@ const AuthActionModal = () => {
   };
 
   // Define the onSubmit function for SetNewPasswordForm
-  const handleSetNewPasswordSubmit = (data: { password: string; repeatPassword: string }) => {
+  const handleSetNewPasswordSubmit = (data: {
+    password: string;
+    repeatPassword: string;
+  }) => {
     console.log("Set new password data:", data);
     // Handle the set new password logic here
   };
@@ -36,9 +39,15 @@ const AuthActionModal = () => {
   const components: { [key: string]: JSX.Element } = {
     "sign-in": <SignInForm />,
     "sign-up": <SignUpForm />,
-    "forgot-password": <ForgotPasswordForm onSubmit={handleForgotPasswordSubmit} />, // Pass the onSubmit prop
-    "code-validation": <CodeValidationForm onSubmit={handleCodeValidationSubmit} />, // Pass the onSubmit prop
-    "set-new-password": <SetNewPasswordForm onSubmit={handleSetNewPasswordSubmit} />, // Pass the onSubmit prop
+    "forgot-password": (
+      <ForgotPasswordForm onSubmit={handleForgotPasswordSubmit} />
+    ), // Pass the onSubmit prop
+    "code-validation": (
+      <CodeValidationForm onSubmit={handleCodeValidationSubmit} />
+    ), // Pass the onSubmit prop
+    "set-new-password": (
+      <SetNewPasswordForm onSubmit={handleSetNewPasswordSubmit} />
+    ), // Pass the onSubmit prop
   };
 
   const keys = Object.keys(components);
