@@ -49,7 +49,7 @@ const SelectLayout = ({ name }: { name: string }) => {
     gender: "What’s your gender?",
     "skin-type": "What’s your skin type?",
     complexion: "What’s your complexion?",
-    "skin-concern": "What's are skin concerns?",
+    "skin-concern": "What's your skin concerns?",
     age: "What’s your age?",
     region: "Select your region",
     "find-perfect-match": (
