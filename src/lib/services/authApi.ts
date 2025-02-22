@@ -1,4 +1,4 @@
-import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
+import { createApi } from "@reduxjs/toolkit/query/react";
 import {
   AuthResponse,
   LoginRequest,
@@ -6,22 +6,35 @@ import {
   RegisterRequest,
 } from "@/types/auth";
 import { logout } from "@/redux/slices/authSlice";
+import api from './api';
+
+// Custom baseQuery using our API client
+const baseQuery = async (args: any) => {
+  try {
+    const result = await api({
+      url: args.url,
+      method: args.method,
+      data: args.body,
+    });
+    return { data: result.data };
+  } catch (error: any) {
+    return {
+      error: {
+        status: error.response?.status,
+        data: error.response?.data,
+      },
+    };
+  }
+};
 
 export const authApi = createApi({
   reducerPath: "authApi",
-  baseQuery: fetchBaseQuery({
-    baseUrl: process.env.NEXT_PUBLIC_API_URL,
-    credentials: "include",
-    prepareHeaders: (headers) => {
-      headers.set("Content-Type", "application/json");
-      return headers;
-    },
-  }),
+  baseQuery,
   tagTypes: ["Auth"],
   endpoints: (builder) => ({
     login: builder.mutation<AuthResponse, LoginRequest>({
       query: (credentials) => ({
-        url: "/auth/sign_in",
+        url: "/auth/sign-in",
         method: "POST",
         body: credentials,
       }),
@@ -29,14 +42,14 @@ export const authApi = createApi({
     }),
     register: builder.mutation<MessageResponse, RegisterRequest>({
       query: (userData) => ({
-        url: "/auth/sign_up",
+        url: "/auth/sign-up",
         method: "POST",
         body: userData,
       }),
     }),
     logout: builder.mutation<void, void>({
       query: () => ({
-        url: "/auth/sign_out",
+        url: "/auth/sign-out",
         method: "POST",
       }),
       async onQueryStarted(_, { dispatch }) {
