@@ -8,7 +8,12 @@ export const getStorageItem = (key: string): string | null => {
  */
 
   if (isClient()) {
-    return localStorage.getItem(key);
+    try {
+      return localStorage.getItem(key);
+    } catch (error) {
+      console.error(`Error getting item from localStorage: ${error}`);
+      return null;
+    }
   }
   return null;
 };
@@ -20,7 +25,11 @@ export const setStorageItem = (key: string, value: string): void => {
    * @param value - The value to set.
    */
   if (isClient()) {
-    localStorage.setItem(key, value);
+    try {
+      localStorage.setItem(key, value);
+    } catch (error) {
+      console.error(`Error setting item in localStorage: ${error}`);
+    }
   }
 };
 
@@ -30,7 +39,11 @@ export const removeStorageItem = (key: string): void => {
    * @param key - The key of the item to remove.
    */
   if (isClient()) {
-    localStorage.removeItem(key);
+    try {
+      localStorage.removeItem(key);
+    } catch (error) {
+      console.error(`Error removing item from localStorage: ${error}`);
+    }
   }
 };
 
@@ -39,7 +52,11 @@ export const clearStorage = (): void => {
    * Clears all items from localStorage.
    */
   if (isClient()) {
-    localStorage.clear();
+    try {
+      localStorage.clear();
+    } catch (error) {
+      console.error(`Error clearing localStorage: ${error}`);
+    }
   }
 };
 
