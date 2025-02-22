@@ -2,10 +2,13 @@ import { render, screen } from '@testing-library/react';
 import RegimenCard from '../RegimenCard';
 import '@testing-library/jest-dom';
 
-// Mock next/image
+// Mock Next/Image
 jest.mock('next/image', () => ({
   __esModule: true,
-  default: (props: any) => <img {...props} />,
+  default: (props: any) => {
+    // eslint-disable-next-line @next/next/no-img-element
+    return <img alt={props.alt} src={props.src} {...props} />
+  },
 }));
 
 describe('RegimenCard', () => {
