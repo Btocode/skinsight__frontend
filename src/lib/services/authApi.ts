@@ -27,6 +27,15 @@ const baseQuery = async (args: any) => {
   }
 };
 
+// Add this interface for the forgot password request
+interface ForgotPasswordRequest {
+  email: string;
+}
+
+interface UpdatePasswordRequest {
+  new_password: string;
+}
+
 export const authApi = createApi({
   reducerPath: "authApi",
   baseQuery,
@@ -72,6 +81,20 @@ export const authApi = createApi({
       }),
       providesTags: ["Auth"],
     }),
+    forgotPassword: builder.mutation<MessageResponse, ForgotPasswordRequest>({
+      query: (data) => ({
+        url: "/auth/forgot-password",
+        method: "POST",
+        body: data,
+      }),
+    }),
+    updatePassword: builder.mutation<MessageResponse, UpdatePasswordRequest>({
+      query: (data) => ({
+        url: "/auth/update-password",
+        method: "POST",
+        body: data,
+      }),
+    }),
   }),
 });
 
@@ -80,4 +103,6 @@ export const {
   useRegisterMutation,
   useLogoutMutation,
   useCheckAuthQuery,
+  useForgotPasswordMutation,
+  useUpdatePasswordMutation,
 } = authApi;
