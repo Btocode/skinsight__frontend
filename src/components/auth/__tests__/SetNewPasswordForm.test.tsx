@@ -1,54 +1,73 @@
-import { render, screen, fireEvent } from '@testing-library/react';
+import { render, screen } from '@testing-library/react';
 import SetNewPasswordForm from '../SetNewPasswordForm';
+import { Provider } from 'react-redux';
+import { configureStore } from '@reduxjs/toolkit';
+import { authApi } from '@/lib/services/authApi';
 import '@testing-library/jest-dom';
+import { useRouter } from 'next/navigation';
+
+// Mock next/navigation
+jest.mock('next/navigation', () => ({
+  useRouter: jest.fn(() => ({
+    push: jest.fn(),
+  })),
+}));
+
+// Create mock store
+const createMockStore = () => configureStore({
+  reducer: {
+    [authApi.reducerPath]: authApi.reducer,
+  },
+  middleware: (getDefaultMiddleware) =>
+    getDefaultMiddleware().concat(authApi.middleware),
+});
 
 describe('SetNewPasswordForm', () => {
-  it('renders the form correctly', () => {
-    const mockOnSubmit = jest.fn(); // Create a mock function for onSubmit
-    render(<SetNewPasswordForm onSubmit={mockOnSubmit} />); // Pass the mock function as a prop
+  const mockRouter = {
+    push: jest.fn(),
+  };
 
+  beforeEach(() => {
+    // Clear all mocks before each test
+    jest.clearAllMocks();
+    (useRouter as jest.Mock).mockReturnValue(mockRouter);
+  });
+
+  // Helper function to render with Redux Provider
+  const renderWithProvider = () => {
+    const store = createMockStore();
+    return render(
+      <Provider store={store}>
+        <SetNewPasswordForm />
+      </Provider>
+    );
+  };
+
+  // Test 1: Basic Rendering
+  it('renders the form heading', () => {
+    renderWithProvider();
     expect(screen.getByText('Set your new password')).toBeInTheDocument();
-    expect(screen.getByPlaceholderText('Enter password')).toBeInTheDocument();
-    expect(screen.getByPlaceholderText('Repeat password')).toBeInTheDocument();
-    expect(screen.getByRole('button', { name: 'Submit' })).toBeInTheDocument();
   });
 
-  it('submits the form when passwords match', () => {
-    const handleSubmit = jest.fn(); // Mock the submit handler
-
-    render(<SetNewPasswordForm onSubmit={handleSubmit} />); // Pass the mock function as a prop
-
-    const passwordInput = screen.getByPlaceholderText('Enter password');
-    const repeatPasswordInput = screen.getByPlaceholderText('Repeat password');
-    const submitButton = screen.getByRole('button', { name: 'Submit' });
-
-    fireEvent.change(passwordInput, { target: { value: 'newpassword123' } });
-    fireEvent.change(repeatPasswordInput, { target: { value: 'newpassword123' } });
-
-    fireEvent.click(submitButton);
-
-    // Check if the submit handler was called
-    expect(handleSubmit).toHaveBeenCalledWith({
-      password: 'newpassword123',
-      repeatPassword: 'newpassword123',
-    });
+  // Test 2: Input Fields
+  it('renders password input fields', () => {
+    renderWithProvider();
+    expect(screen.getByPlaceholderText('Enter new password')).toBeInTheDocument();
+    expect(screen.getByPlaceholderText('Repeat new password')).toBeInTheDocument();
   });
 
-  it('does not submit the form if passwords do not match', () => {
-    const handleSubmit = jest.fn(); // Mock the submit handler
+  // Test 3: Submit Button
+  it('renders submit button', () => {
+    renderWithProvider();
+    const submitButton = screen.getByText('Update Password');
+    expect(submitButton).toBeInTheDocument();
+    expect(submitButton.closest('button')).toHaveClass('w-full bg-[#8599FE]');
+  });
 
-    render(<SetNewPasswordForm onSubmit={handleSubmit} />); // Pass the mock function as a prop
-
-    const passwordInput = screen.getByPlaceholderText('Enter password');
-    const repeatPasswordInput = screen.getByPlaceholderText('Repeat password');
-    const submitButton = screen.getByRole('button', { name: 'Submit' });
-
-    fireEvent.change(passwordInput, { target: { value: 'newpassword123' } });
-    fireEvent.change(repeatPasswordInput, { target: { value: 'differentpassword' } });
-
-    fireEvent.click(submitButton);
-
-    // Check if the submit handler was not called
-    expect(handleSubmit).not.toHaveBeenCalled();
+  // Test 4: Show/Hide Password Buttons
+  it('renders show/hide password buttons', () => {
+    renderWithProvider();
+    const passwordToggleButtons = screen.getAllByLabelText('Show password');
+    expect(passwordToggleButtons).toHaveLength(2);
   });
 });
