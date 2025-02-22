@@ -1,9 +1,7 @@
+import { useState } from "react";
 import { InputBox } from "@/components/common/InputBox";
 import HeadingPrimary from "../common/HeadingPrimary";
-
-interface ForgotPasswordFormProps {
-  onSubmit: (data: { email: string }) => void;
-}
+import { useForgotPasswordMutation } from "@/lib/services/authApi";
 
 /**
  * A form for users to enter their email address and receive a password reset link.
@@ -15,37 +13,59 @@ interface ForgotPasswordFormProps {
  *
  * @returns A JSX element containing the forgot password form.
  */
-const ForgotPasswordForm: React.FC<ForgotPasswordFormProps> = ({ onSubmit }) => {
-  const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
+const ForgotPasswordForm = () => {
+  const [forgotPassword, { isLoading }] = useForgotPasswordMutation();
+  const [isSuccess, setIsSuccess] = useState(false);
+
+  const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     const email = (event.currentTarget.elements.namedItem('email') as HTMLInputElement).value;
-    onSubmit({ email });
+    try {
+      await forgotPassword({ email });
+      setIsSuccess(true);
+    } catch (error) {
+      console.error(error);
+    }
   };
 
   return (
     <div className="bg-white rounded-3xl w-full relative lg:px-[112px] py-4 lg:py-[52px]">
       <div className="text-center mb-8">
-        <HeadingPrimary className="text-[28px] leading-8 lg:text-4xl lg:leading-10 lg:tracking-[-3%] ">
-          Enter your email address
-        </HeadingPrimary>
-        <p className="text-gray-600 text-base leading-6 tracking-[-2%]">
-          We’ll send you a password reset link
-        </p>
+        {isSuccess ? (
+          <>
+            <HeadingPrimary className="text-[28px] leading-8 lg:text-4xl lg:leading-10 lg:tracking-[-3%]">
+              Email Sent
+            </HeadingPrimary>
+            <p className="text-gray-600 text-base leading-6 tracking-[-2%]">
+              Password recovery email sent, please check your inbox
+            </p>
+          </>
+        ) : (
+          <>
+            <HeadingPrimary className="text-[28px] leading-8 lg:text-4xl lg:leading-10 lg:tracking-[-3%]">
+              Enter your email address
+            </HeadingPrimary>
+            <p className="text-gray-600 text-base leading-6 tracking-[-2%]">
+              We&apos;ll send you a password reset link
+            </p>
+          </>
+        )}
       </div>
 
-      {/* Form */}
-      <form className="space-y-5 lg:space-y-7 lg:px-[20px]" onSubmit={handleSubmit}>
-        <InputBox type="email" placeholder="Enter email address" id="email" name="email" />
-
-        <div className="lg:max-w-[240px] mx-auto">
-          <button
-            type="submit"
-            className="w-full bg-[#8599FE] hover:bg-blue-500 text-white rounded-xl py-4 text-lg font-medium transition-colors"
-          >
-            Send
-          </button>
-        </div>
-      </form>
+      {!isSuccess && (
+        <form className="space-y-5 lg:space-y-7" onSubmit={handleSubmit}>
+          <InputBox type="email" placeholder="Enter email address" id="email" name="email" />
+          <div className="lg:max-w-[240px] mx-auto">
+            <button
+              type="submit"
+              disabled={isLoading}
+              className="w-full bg-[#8599FE] hover:bg-blue-500 text-white rounded-xl py-4 text-lg font-medium transition-colors disabled:opacity-50"
+            >
+              {isLoading ? "Sending..." : "Send"}
+            </button>
+          </div>
+        </form>
+      )}
     </div>
   );
 };

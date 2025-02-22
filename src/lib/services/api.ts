@@ -5,7 +5,7 @@ const api = axios.create({
   headers: {
     "Content-Type": "application/json",
   },
-  withCredentials: true, // Important for handling cookies
+  withCredentials: true,
 });
 
 interface QueueItem {
@@ -27,11 +27,14 @@ const processQueue = (error: Error | null = null) => {
   failedQueue = [];
 };
 
-// Add response interceptor for token rotation
 api.interceptors.response.use(
   (response) => response,
   async (error: AxiosError) => {
     const originalRequest: any = error.config;
+
+    if (originalRequest.url === '/auth/sign-in' && error.response?.status === 401) {
+      return Promise.reject(error);
+    }
 
     if (error.response?.status === 401 && !originalRequest._retry) {
       if (isRefreshing) {
@@ -51,7 +54,7 @@ api.interceptors.response.use(
         return api(originalRequest);
       } catch (refreshError) {
         processQueue(refreshError as Error);
-        window.location.href = '/login'; // Redirect to login instead of using Redux
+        window.location.href = '/?auth=sign-in';
         return Promise.reject(refreshError);
       } finally {
         isRefreshing = false;
