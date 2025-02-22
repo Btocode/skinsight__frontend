@@ -6,4 +6,9 @@ const authActions = [
   "set-new-password",
 ] as const;
 
+/**
+ * The type of authentication action.
+ */
+export type AuthAction = (typeof authActions)[number];
+
 export { authActions };
