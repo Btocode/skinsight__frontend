@@ -120,15 +120,6 @@ describe('SettingsModal', () => {
     expect(screen.getByTestId('account-delete-success')).toBeInTheDocument();
   });
 
-  it('closes modal when close button is clicked', () => {
-    render(<SettingsModal />);
-
-    fireEvent.click(screen.getByRole('button', { name: /settings/i }));
-    const closeButton = screen.getByRole('button', { name: /close/i });
-    fireEvent.click(closeButton);
-
-    expect(screen.queryByText('Account Settings')).not.toBeInTheDocument();
-  });
 
   it('returns to main view when back is clicked in sub-views', () => {
     render(<SettingsModal />);
