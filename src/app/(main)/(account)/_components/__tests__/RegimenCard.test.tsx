@@ -6,8 +6,9 @@ import '@testing-library/jest-dom';
 jest.mock('next/image', () => ({
   __esModule: true,
   default: (props: any) => {
-    // eslint-disable-next-line @next/next/no-img-element
-    return <img alt={props.alt} src={props.src} {...props} />
+    // Convert boolean 'fill' to a string
+    const { fill, ...rest } = props;
+    return <img {...rest} data-testid="next-image" fill={fill ? "true" : undefined} />;
   },
 }));
 
