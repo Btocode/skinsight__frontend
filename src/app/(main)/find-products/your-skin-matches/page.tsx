@@ -52,7 +52,7 @@ const YourSkinMatchesPage = async () => {
               }
               className="h-[40px] px-4"
             >
-              Retake <span className="hidden lg:inline-block ml-1"> Quiz</span>
+              Retake
             </Button>
           </Link>
         </div>
