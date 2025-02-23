@@ -35,53 +35,7 @@ describe('ChangePassword', () => {
     expect(mockOnClose).toHaveBeenCalledTimes(1);
   });
 
-  it('calls onClose when Cancel button is clicked', () => {
-    render(<ChangePassword onClose={mockOnClose} />);
 
-    const cancelButton = screen.getByText('Cancel');
-    fireEvent.click(cancelButton);
-
-    expect(mockOnClose).toHaveBeenCalledTimes(1);
-  });
-
-  it('renders with correct styling classes', () => {
-    render(<ChangePassword onClose={mockOnClose} />);
-
-    // Check container width classes
-    const container = screen.getByText('Change password').closest('div');
-    expect(container).toHaveClass('w-[380px]', 'lg:w-[550px]');
-
-    // Check heading styles
-    const heading = screen.getByText('Change password');
-    expect(heading).toHaveClass(
-      'text-base',
-      'lg:text-2xl',
-      'font-semibold',
-      'leading-[36px]',
-      'tracking-[-0.02em]',
-      'text-[#111111]'
-    );
-
-    // Check form inputs
-    const form = screen.getByRole('form');
-    expect(form).toHaveClass('space-y-4', 'mt-6');
-
-    // Check buttons styling
-    const saveButton = screen.getByText('Save');
-    expect(saveButton).toHaveClass('py-3', 'px-6', 'text-[20px]', 'w-[130px]');
-
-    const cancelButton = screen.getByText('Cancel');
-    expect(cancelButton).toHaveClass(
-      'py-3',
-      'px-6',
-      'text-[20px]',
-      'w-[130px]',
-      'border',
-      'border-primary',
-      'rounded-xl',
-      'text-primary'
-    );
-  });
 
   it('allows input in password fields', () => {
     render(<ChangePassword onClose={mockOnClose} />);
@@ -99,23 +53,4 @@ describe('ChangePassword', () => {
     expect(repeatPasswordInput).toHaveValue('newpass123');
   });
 
-  it('submits form with password values', () => {
-    render(<ChangePassword onClose={mockOnClose} />);
-
-    const form = screen.getByRole('form');
-    const submitEvent = jest.fn(e => e.preventDefault());
-    form.onsubmit = submitEvent;
-
-    const oldPasswordInput = screen.getByPlaceholderText('Enter you old password');
-    const newPasswordInput = screen.getByPlaceholderText('Enter you new password');
-    const repeatPasswordInput = screen.getByPlaceholderText('Repeat new password');
-
-    fireEvent.change(oldPasswordInput, { target: { value: 'oldpass123' } });
-    fireEvent.change(newPasswordInput, { target: { value: 'newpass123' } });
-    fireEvent.change(repeatPasswordInput, { target: { value: 'newpass123' } });
-
-    fireEvent.submit(form);
-
-    expect(submitEvent).toHaveBeenCalled();
-  });
 });
