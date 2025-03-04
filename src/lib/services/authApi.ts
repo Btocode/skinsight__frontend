@@ -8,8 +8,14 @@ import {
 import { logout } from "@/redux/slices/authSlice";
 import api from './api';
 
+interface BaseQueryArgs {
+  url: string;
+  method: string;
+  body?: unknown;
+}
+
 // Custom baseQuery using our API client
-const baseQuery = async (args: any) => {
+const baseQuery = async (args: BaseQueryArgs) => {
   try {
     const result = await api({
       url: args.url,
@@ -17,11 +23,12 @@ const baseQuery = async (args: any) => {
       data: args.body,
     });
     return { data: result.data };
-  } catch (error: any) {
+  } catch (error: unknown) {
+    const err = error as { response?: { status: number; data: unknown } };
     return {
       error: {
-        status: error.response?.status,
-        data: error.response?.data,
+        status: err.response?.status,
+        data: err.response?.data,
       },
     };
   }

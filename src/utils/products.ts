@@ -52,7 +52,7 @@ const ages = [
   "35-44",
   "45-54",
   ["54+ &", "fabulous"],
-  "I do prefer not to say",
+  "I'd prefer not to say",
 ];
 
 export { genders, skinTypes, complexionOptions, skinConcerns, ages };
