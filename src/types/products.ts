@@ -50,6 +50,7 @@ export type FindAlternativesState = {
 };
 
 export type Product = {
+  id?: string;
   productImage: string;
   productTitle: string;
   brand: string;
