@@ -55,6 +55,7 @@ export function MatchesProductCard({ item }: { item: Product }) {
           {/* <AddFavorite /> */}
           <button
             id="add-favorite"
+            data-testid="add-favorite"
             type="button"
             className="w-full lg:w-[141px] h-[45.89px] lg:h-[48px] flex items-center justify-center gap-[7px] rounded-[11.47px] lg:rounded-[12px] bg-[#8F80E833] transition-colors"
           >
@@ -78,6 +79,7 @@ export function MatchesProductCard({ item }: { item: Product }) {
           <button
             type="button"
             id="buy-now"
+            data-testid="buy-now"
             className="w-full lg:w-[141px] h-[45.89px] lg:h-[48px] flex items-center justify-center gap-[10px] rounded-[9.56px] lg:rounded-[12px] bg-[#EDAFDF4D] transition-colors"
           >
             <svg width="25" height="24" viewBox="0 0 25 24" fill="none">
