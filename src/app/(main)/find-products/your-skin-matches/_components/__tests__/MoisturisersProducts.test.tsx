@@ -1,14 +1,14 @@
 import React from "react";
 import { render, screen, fireEvent } from "@testing-library/react";
+import MoisturisersProducts from "../MoisturisersProducts";
 import { Product } from "@/types/products";
-import TonersProducts from "../TonersProducts";
 
-// Sample product data for Toners
+// Sample product data
 const mockProducts: Product[] = [
   {
     id: "1",
-    productImage: "/tonner1.png",
-    productTitle: "Tonner 1",
+    productImage: "/toner1.png",
+    productTitle: "Toner 1",
     brand: "Brand A",
     price: "20",
     matched: true,
@@ -17,8 +17,8 @@ const mockProducts: Product[] = [
   },
   {
     id: "2",
-    productImage: "/tonner2.png",
-    productTitle: "Tonner 2",
+    productImage: "/toner2.png",
+    productTitle: "Toner 2",
     brand: "Brand B",
     price: "25",
     matched: false,
@@ -27,8 +27,8 @@ const mockProducts: Product[] = [
   },
   {
     id: "3",
-    productImage: "/tonner3.png",
-    productTitle: "Tonner 3",
+    productImage: "/toner3.png",
+    productTitle: "Toner 3",
     brand: "Brand C",
     price: "30",
     matched: true,
@@ -48,13 +48,15 @@ jest.mock("../MatchesProductCard", () => ({
 
 // Step 2: Mock the Lucide icons
 jest.mock("lucide-react", () => ({
-  ChevronLeft: () => <div data-testid="chevron-left-toners">ChevronLeft</div>,
+  ChevronLeft: () => (
+    <div data-testid="chevron-left-moisturisers">ChevronLeft</div>
+  ),
   ChevronRight: () => (
-    <div data-testid="chevron-right-toners">ChevronRight</div>
+    <div data-testid="chevron-right-moisturisers">ChevronRight</div>
   ),
 }));
 
-describe("TonersProducts Component", () => {
+describe("MoisturisersProducts Component", () => {
   // Step 3: Set up the test environment
   beforeEach(() => {
     // Reset all mocks
@@ -85,16 +87,16 @@ describe("TonersProducts Component", () => {
 
   // Step 4: Render the component with mock product data
   it("renders the component with the correct title", () => {
-    render(<TonersProducts products={mockProducts} />);
+    render(<MoisturisersProducts products={mockProducts} />);
 
     // Check if the title is rendered
-    const title = screen.getByText("Toners");
+    const title = screen.getByText("Moisturisers");
     expect(title).toBeInTheDocument();
   });
 
   // Step 5: Ensure that duplicated products are rendered correctly
   it("renders the correct number of product cards (3x duplicated)", () => {
-    render(<TonersProducts products={mockProducts} />);
+    render(<MoisturisersProducts products={mockProducts} />);
 
     // Check if the products are rendered (3 products x 3 duplications)
     const productCards = screen.getAllByTestId("product-card");
@@ -103,11 +105,11 @@ describe("TonersProducts Component", () => {
 
   // Step 6: Test navigation buttons
   it("renders navigation buttons", () => {
-    render(<TonersProducts products={mockProducts} />);
+    render(<MoisturisersProducts products={mockProducts} />);
 
     // Check if navigation buttons are rendered with correct test IDs
-    const leftButton = screen.getByTestId("chevron-left-toners");
-    const rightButton = screen.getByTestId("chevron-right-toners");
+    const leftButton = screen.getByTestId("chevron-left-moisturisers");
+    const rightButton = screen.getByTestId("chevron-right-moisturisers");
 
     expect(leftButton).toBeInTheDocument();
     expect(rightButton).toBeInTheDocument();
@@ -115,11 +117,11 @@ describe("TonersProducts Component", () => {
 
   // Step 7: Test the scroll functionality
   it("slides left when left button is clicked", () => {
-    render(<TonersProducts products={mockProducts} />);
+    render(<MoisturisersProducts products={mockProducts} />);
 
     // Find the left button and click it
     const leftButton = screen
-      .getByTestId("chevron-left-toners")
+      .getByTestId("chevron-left-moisturisers")
       .closest("button");
     fireEvent.click(leftButton!);
 
@@ -132,11 +134,11 @@ describe("TonersProducts Component", () => {
 
   // Step 8: Test the scroll functionality
   it("slides right when right button is clicked", () => {
-    render(<TonersProducts products={mockProducts} />);
+    render(<MoisturisersProducts products={mockProducts} />);
 
     // Find the right button and click it
     const rightButton = screen
-      .getByTestId("chevron-right-toners")
+      .getByTestId("chevron-right-moisturisers")
       .closest("button");
     fireEvent.click(rightButton!);
 
@@ -149,25 +151,25 @@ describe("TonersProducts Component", () => {
 
   // Step 9: Ensure that duplicated products are rendered correctly
   it("duplicates products correctly", () => {
-    render(<TonersProducts products={mockProducts} />);
+    render(<MoisturisersProducts products={mockProducts} />);
 
     // Get all product cards
     const productCards = screen.getAllByTestId("product-card");
 
     // Check if the products are duplicated correctly
     // First set of 3 products
-    expect(productCards[0]).toHaveAttribute("data-product-id", "Tonner 1");
-    expect(productCards[1]).toHaveAttribute("data-product-id", "Tonner 2");
-    expect(productCards[2]).toHaveAttribute("data-product-id", "Tonner 3");
+    expect(productCards[0]).toHaveAttribute("data-product-id", "Toner 1");
+    expect(productCards[1]).toHaveAttribute("data-product-id", "Toner 2");
+    expect(productCards[2]).toHaveAttribute("data-product-id", "Toner 3");
 
     // Second set of 3 products
-    expect(productCards[3]).toHaveAttribute("data-product-id", "Tonner 1");
-    expect(productCards[4]).toHaveAttribute("data-product-id", "Tonner 2");
-    expect(productCards[5]).toHaveAttribute("data-product-id", "Tonner 3");
+    expect(productCards[3]).toHaveAttribute("data-product-id", "Toner 1");
+    expect(productCards[4]).toHaveAttribute("data-product-id", "Toner 2");
+    expect(productCards[5]).toHaveAttribute("data-product-id", "Toner 3");
 
     // Third set of 3 products
-    expect(productCards[6]).toHaveAttribute("data-product-id", "Tonner 1");
-    expect(productCards[7]).toHaveAttribute("data-product-id", "Tonner 2");
-    expect(productCards[8]).toHaveAttribute("data-product-id", "Tonner 3");
+    expect(productCards[6]).toHaveAttribute("data-product-id", "Toner 1");
+    expect(productCards[7]).toHaveAttribute("data-product-id", "Toner 2");
+    expect(productCards[8]).toHaveAttribute("data-product-id", "Toner 3");
   });
 });
