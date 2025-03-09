@@ -1,8 +1,10 @@
 import React from 'react';
 import { render, screen, fireEvent, act } from '@testing-library/react';
 import Drawer from '../Drawer';
+import type { ImageProps } from 'next/image';
+import type { LinkProps } from 'next/link';
 
-// Mock createPortal
+// Mock createPortal to render children directly
 jest.mock('react-dom', () => ({
   ...jest.requireActual('react-dom'),
   createPortal: (node: React.ReactNode) => node,
@@ -11,16 +13,26 @@ jest.mock('react-dom', () => ({
 // Mock Next.js components
 jest.mock('next/image', () => ({
   __esModule: true,
-  default: ({ src, alt, width, height }: any) => (
-    <img src={src} alt={alt} width={width} height={height} data-testid="drawer-logo" />
+  default: (props: ImageProps) => (
+    // eslint-disable-next-line @next/next/no-img-element
+    <img
+      src={typeof props.src === 'string' ? props.src : ''}
+      alt={props.alt?.toString() || ''}
+      width={props.width}
+      height={props.height}
+      className={props.className}
+      style={props.style}
+      priority={props.priority ? '' : undefined}
+      data-testid="drawer-logo"
+    />
   ),
 }));
 
 jest.mock('next/link', () => {
-  const MockedLink = ({ children, href }: any) => {
+  const MockedLink = (props: LinkProps) => {
     return (
-      <a href={href} data-testid="logo-link">
-        {children}
+      <a href={props.href.toString()} className={props.className} data-testid="logo-link">
+        {props.children}
       </a>
     );
   };
@@ -29,89 +41,19 @@ jest.mock('next/link', () => {
   return { __esModule: true, default: MockedLink };
 });
 
-// Mock the entire Drawer component to force it to return the createPortal path
-jest.mock('../Drawer', () => {
-  const originalModule = jest.requireActual('../Drawer');
-
-  // Create a wrapper that returns the component but with the second return statement
-  const DrawerMock = (props: any) => {
-    const { isOpen, onClose, children, logo } = props;
-
-    if (!isOpen) return null;
-
-    // This is a simplified version of the second return statement
-    return (
-      <>
-        <div
-          data-testid="portal-backdrop"
-          className={`fixed inset-0 bg-[#20293B8C] transition-opacity duration-300 ease-in-out ${
-            isOpen ? "opacity-100" : "opacity-0 pointer-events-none"
-          }`}
-          onClick={onClose}
-          aria-hidden="true"
-        />
-        <div
-          data-testid="portal-drawer"
-          className={`fixed inset-x-0 bottom-0 w-full bg-white shadow-xl transform transition-transform duration-300 ease-in-out rounded-t-2xl ${
-            isOpen ? "translate-y-0 z-50" : "translate-y-full z-0"
-          }`}
-          style={{ maxHeight: "90vh" }}
-          role="dialog"
-          aria-modal="true"
-          aria-labelledby="drawer-title"
-        >
-          <div className="flex flex-col h-full max-h-[90vh]">
-            <div className="flex justify-between items-center px-6 py-4">
-              {logo && (
-                <a href="/" data-testid="logo-link">
-                  <img
-                    src="/logo.png"
-                    alt="Skinsight Logo"
-                    width={180}
-                    height={80}
-                    data-testid="drawer-logo"
-                  />
-                </a>
-              )}
-              <button
-                className="absolute top-4 right-4 text-gray-600 hover:text-gray-900 transition-colors duration-200 focus:outline-none"
-                onClick={onClose}
-                aria-label="Close drawer"
-              >
-                <svg
-                  className="h-6 w-6"
-                  fill="none"
-                  viewBox="0 0 24 24"
-                  stroke="currentColor"
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth={2}
-                    d="M6 18L18 6M6 6l12 12"
-                  />
-                </svg>
-              </button>
-            </div>
-            <div className="flex-grow overflow-y-auto px-6 py-4">{children}</div>
-          </div>
-        </div>
-      </>
-    );
-  };
-
-  return {
-    __esModule: true,
-    default: DrawerMock,
-  };
-});
-
 describe('Drawer', () => {
   const mockOnClose = jest.fn();
   const defaultProps = {
     isOpen: true,
     onClose: mockOnClose,
     children: <div data-testid="drawer-content">Drawer Content</div>,
+  };
+
+  const logo = {
+    src: '/logo.png',
+    alt: 'Skinsight Logo',
+    width: 180,
+    height: 80,
   };
 
   beforeEach(() => {
@@ -135,28 +77,29 @@ describe('Drawer', () => {
   it('renders content when isOpen is true', () => {
     render(<Drawer {...defaultProps} />);
 
-    expect(screen.getByText('Drawer Content')).toBeInTheDocument();
+    expect(screen.getByTestId('drawer-content')).toBeInTheDocument();
   });
 
   it('renders logo when provided', () => {
-    const logo = {
-      src: '/logo.png',
-      alt: 'Skinsight Logo',
-      width: 180,
-      height: 80,
-    };
-
     render(<Drawer {...defaultProps} logo={logo} />);
 
     expect(screen.getByTestId('drawer-logo')).toBeInTheDocument();
+    expect(screen.getByTestId('logo-link')).toBeInTheDocument();
+  });
+
+  it('does not render logo when not provided', () => {
+    render(<Drawer {...defaultProps} />);
+
+    expect(screen.queryByTestId('drawer-logo')).not.toBeInTheDocument();
+    expect(screen.queryByTestId('logo-link')).not.toBeInTheDocument();
   });
 
   it('calls onClose when backdrop is clicked', () => {
     render(<Drawer {...defaultProps} />);
 
     // Find backdrop and click it
-    const backdrop = screen.getByTestId('portal-backdrop');
-    fireEvent.click(backdrop);
+    const backdrop = screen.getByRole('dialog').previousSibling;
+    fireEvent.click(backdrop as Element);
 
     expect(mockOnClose).toHaveBeenCalledTimes(1);
   });
@@ -171,32 +114,124 @@ describe('Drawer', () => {
     expect(mockOnClose).toHaveBeenCalledTimes(1);
   });
 
-  // Test for the createPortal path
-  it('renders with createPortal styling', () => {
-    // Import the original module to restore after test
-    jest.unmock('../Drawer');
-    const originalDrawer = jest.requireActual('../Drawer').default;
-
-    // Render with our mocked version that uses the createPortal path
+  it('calls onClose when Escape key is pressed', () => {
     render(<Drawer {...defaultProps} />);
 
-    // Check if portal elements are rendered with correct classes
-    const backdrop = screen.getByTestId('portal-backdrop');
-    expect(backdrop).toHaveClass('fixed');
-    expect(backdrop).toHaveClass('inset-0');
-    expect(backdrop).toHaveClass('bg-[#20293B8C]');
+    // Simulate Escape key press
+    fireEvent.keyDown(document, { key: 'Escape' });
 
-    const drawer = screen.getByTestId('portal-drawer');
+    expect(mockOnClose).toHaveBeenCalledTimes(1);
+  });
+
+  it('does not call onClose for other key presses', () => {
+    render(<Drawer {...defaultProps} />);
+
+    // Simulate other key press
+    fireEvent.keyDown(document, { key: 'Enter' });
+
+    expect(mockOnClose).not.toHaveBeenCalled();
+  });
+
+  it('disables body scroll when open', () => {
+    render(<Drawer {...defaultProps} />);
+
+    expect(document.body.style.overflow).toBe('hidden');
+  });
+
+  it('enables body scroll when closed', () => {
+    const { rerender } = render(<Drawer {...defaultProps} />);
+
+    // Initially overflow should be hidden
+    expect(document.body.style.overflow).toBe('hidden');
+
+    // Re-render with isOpen=false
+    rerender(<Drawer {...defaultProps} isOpen={false} />);
+
+    // Overflow should be unset
+    expect(document.body.style.overflow).toBe('unset');
+  });
+
+  it('updates isModalOpen state when isOpen prop changes', () => {
+    const { rerender } = render(<Drawer {...defaultProps} isOpen={false} />);
+
+    // Initially the drawer should not be rendered
+    expect(screen.queryByTestId('drawer-content')).not.toBeInTheDocument();
+
+    // Update isOpen prop to true
+    rerender(<Drawer {...defaultProps} isOpen={true} />);
+
+    // Now the drawer should be rendered
+    expect(screen.getByTestId('drawer-content')).toBeInTheDocument();
+  });
+
+  it('removes event listener when isOpen changes to false', () => {
+    const removeEventListenerSpy = jest.spyOn(document, 'removeEventListener');
+    const { rerender } = render(<Drawer {...defaultProps} />);
+
+    // Update isOpen prop to false
+    rerender(<Drawer {...defaultProps} isOpen={false} />);
+
+    // Event listener should be removed
+    expect(removeEventListenerSpy).toHaveBeenCalledWith('keydown', expect.any(Function));
+
+    removeEventListenerSpy.mockRestore();
+  });
+
+  it('cleans up event listeners on unmount', () => {
+    const removeEventListenerSpy = jest.spyOn(document, 'removeEventListener');
+
+    const { unmount } = render(<Drawer {...defaultProps} />);
+
+    // Unmount the component
+    unmount();
+
+    // Check if removeEventListener was called
+    expect(removeEventListenerSpy).toHaveBeenCalledWith('keydown', expect.any(Function));
+
+    removeEventListenerSpy.mockRestore();
+  });
+
+  it('applies correct transition classes when open', () => {
+    render(<Drawer {...defaultProps} />);
+
+    const drawer = screen.getByRole('dialog');
+    expect(drawer).toHaveClass('translate-y-0');
+    expect(drawer).toHaveClass('z-50');
+    expect(drawer).not.toHaveClass('translate-y-full');
+  });
+
+  it('has the correct styling for mobile view', () => {
+    render(<Drawer {...defaultProps} />);
+
+    const drawer = screen.getByRole('dialog');
+    expect(drawer).toHaveClass('block');
+    expect(drawer).toHaveClass('lg:hidden');
     expect(drawer).toHaveClass('fixed');
     expect(drawer).toHaveClass('inset-x-0');
     expect(drawer).toHaveClass('bottom-0');
-    expect(drawer).toHaveClass('translate-y-0');
-    expect(drawer).toHaveClass('z-50');
+    expect(drawer).toHaveClass('w-full');
+    expect(drawer).toHaveClass('bg-white');
+    expect(drawer).toHaveClass('rounded-t-2xl');
+  });
 
-    // Restore the original implementation
-    jest.doMock('../Drawer', () => ({
-      __esModule: true,
-      default: originalDrawer,
-    }));
+  it('has correct accessibility attributes', () => {
+    render(<Drawer {...defaultProps} />);
+
+    const dialog = screen.getByRole('dialog');
+    expect(dialog).toHaveAttribute('aria-modal', 'true');
+    expect(dialog).toHaveAttribute('aria-labelledby', 'drawer-title');
+  });
+
+  it('has correct header and content structure', () => {
+    render(<Drawer {...defaultProps} />);
+
+    // Check for header and content sections
+    const dialog = screen.getByRole('dialog');
+    const headerSection = dialog.querySelector('.flex.justify-between.items-center');
+    const contentSection = dialog.querySelector('.flex-grow.overflow-y-auto');
+
+    expect(headerSection).toBeInTheDocument();
+    expect(contentSection).toBeInTheDocument();
+    expect(contentSection).toContainElement(screen.getByTestId('drawer-content'));
   });
 });
