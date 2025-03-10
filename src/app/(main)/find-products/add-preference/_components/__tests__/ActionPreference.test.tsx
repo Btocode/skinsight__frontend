@@ -8,9 +8,21 @@ jest.mock('next/navigation', () => ({
   useRouter: jest.fn(),
 }));
 
+interface MockButtonProps {
+  children: React.ReactNode;
+  onClick?: () => void;
+  className?: string;
+  variant?: string;
+}
+
+interface MockAddProductProps {
+  open: boolean;
+  onClose: () => void;
+}
+
 // Mock the Button component
 jest.mock('@/components/common/Button', () => {
-  return function MockButton({ children, onClick, className, variant }: any) {
+  return function MockButton({ children, onClick, className, variant }: MockButtonProps) {
     return (
       <button
         data-testid="button"
@@ -26,7 +38,7 @@ jest.mock('@/components/common/Button', () => {
 
 // Mock the AddProduct component
 jest.mock('../AddProduct', () => {
-  return function MockAddProduct({ open, onClose }: any) {
+  return function MockAddProduct({ open, onClose }: MockAddProductProps) {
     return (
       <div
         data-testid="add-product"

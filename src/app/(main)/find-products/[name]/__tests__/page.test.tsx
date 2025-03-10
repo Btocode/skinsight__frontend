@@ -2,7 +2,6 @@ import React from 'react';
 import { render, screen, cleanup } from '@testing-library/react';
 import Page, { generateStaticParams } from '../page';
 import { notFound } from 'next/navigation';
-import SelectLayout from '../../_components/SelectLayout';
 
 // Mock the next/navigation module
 jest.mock('next/navigation', () => ({
@@ -48,11 +47,7 @@ describe('Page Component', () => {
   it('calls notFound() with an invalid name', async () => {
     const params = Promise.resolve({ name: 'invalid-name' });
 
-    try {
-      await Page({ params });
-    } catch (error) {
-      // This is expected, as notFound() might throw an error in tests
-    }
+    await Page({ params });
 
     // Check if notFound() is called
     expect(notFound).toHaveBeenCalled();

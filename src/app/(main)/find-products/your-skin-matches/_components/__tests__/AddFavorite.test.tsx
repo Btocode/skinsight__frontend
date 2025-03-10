@@ -10,7 +10,15 @@ jest.mock('next/navigation', () => ({
 
 // Mock the common components
 jest.mock('@/components/common/Button', () => {
-  return function MockButton({ children, onClick, variant }: any) {
+  return function MockButton({
+    children,
+    onClick,
+    variant
+  }: {
+    children: React.ReactNode;
+    onClick?: (e: React.MouseEvent<HTMLButtonElement>) => void;
+    variant?: string;
+  }) {
     return (
       <button
         data-testid="button"
@@ -24,11 +32,21 @@ jest.mock('@/components/common/Button', () => {
 });
 
 jest.mock('@/components/common/Modal', () => {
-  return function MockModal({ isOpen, onClose, children }: any) {
+  return function MockModal({
+    children,
+    isOpen,
+    onClose
+  }: {
+    children: React.ReactNode;
+    isOpen: boolean;
+    onClose: () => void;
+  }) {
     if (!isOpen) return null;
     return (
       <div data-testid="modal">
-        <button data-testid="modal-close" onClick={onClose}>Close Modal</button>
+        <button data-testid="modal-close" onClick={onClose}>
+          Close
+        </button>
         <div>{children}</div>
       </div>
     );

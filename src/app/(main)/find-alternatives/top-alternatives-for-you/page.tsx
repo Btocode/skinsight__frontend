@@ -1,3 +1,6 @@
+export const dynamic = 'force-dynamic';
+export const generateStaticParams = () => [];
+
 import HeadingPrimary from "@/components/common/HeadingPrimary";
 import Image from "next/image";
 import TopAlternativesProducts from "./_components/TopAlternativesProducts";

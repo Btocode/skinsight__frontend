@@ -42,8 +42,7 @@ interface AvatarProps {
   className?: string;
 }
 
-// Export the Avatar component for testing
-export function Avatar({ initials, color, className = "" }: AvatarProps) {
+function Avatar({ initials, color, className = "" }: AvatarProps) {
   return (
     <div
       className={`h-[38px] w-[38px] rounded-full flex items-center justify-center text-white font-medium text-sm ${color} ${className}`}

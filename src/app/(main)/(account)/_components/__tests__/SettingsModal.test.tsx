@@ -1,11 +1,23 @@
 import { render, screen, fireEvent } from '@testing-library/react';
 import SettingsModal from '../SettingsModal';
+import { ImageProps } from 'next/image';
 
 // Mock Next/Image
 jest.mock('next/image', () => ({
   __esModule: true,
-  default: (props: any) => {
-    return <img {...props} />
+  default: (props: ImageProps) => {
+    const { src, alt, className, width, height } = props;
+    return (
+      // eslint-disable-next-line @next/next/no-img-element
+      <img
+        src={typeof src === 'string' ? src : ''}
+        alt={alt || ''}
+        className={className}
+        width={width}
+        height={height}
+        data-testid="next-image"
+      />
+    );
   },
 }));
 

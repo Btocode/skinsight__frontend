@@ -1,3 +1,6 @@
+export const dynamic = 'force-dynamic';
+export const generateStaticParams = () => [];
+
 import ReviewProductCard from "../_components/ReviewProductCard";
 import WriteReviewModal from "../_components/WriteReviewModal";
 
@@ -17,7 +20,7 @@ const MyReviewsPage = async () => {
     <div className="flex items-center justify-center min-h-[40svh]">
       <div className="flex flex-col items-center justify-center gap-2">
         <h2 className="text-xl font-semibold text-accent">
-          You don’t have any reviews yet
+          You don&apos;t have any reviews yet
         </h2>
         <p className="text-lg font-normal text-accent">
           Click on the button below to get started

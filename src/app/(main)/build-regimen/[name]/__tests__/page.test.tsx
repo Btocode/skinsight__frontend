@@ -1,6 +1,6 @@
 import React from 'react';
 import { render, screen } from '@testing-library/react';
-import BuilderRegimen from '../page';
+import BuilderRegimen, { generateStaticParams } from '../page';
 import { notFound } from 'next/navigation';
 
 // Mock the next/navigation
@@ -23,14 +23,21 @@ jest.mock('react', () => {
   };
 });
 
+interface DynamicImportOptions {
+  loading?: React.ComponentType;
+}
+
+interface DynamicImportFunction {
+  toString(): string;
+}
+
 // Mock the dynamic imports
 jest.mock('next/dynamic', () => ({
   __esModule: true,
-  default: (importFunc: any, options: any) => {
-    const { loading: LoadingComponent } = options || {};
+  default: (importFunc: DynamicImportFunction, options: DynamicImportOptions = {}) => {
+    const { loading: LoadingComponent } = options;
 
-    // Create a mock component that will be returned by dynamic import
-    const MockComponent = (props: any) => {
+    const MockComponent = () => {
       const componentName = importFunc.toString().includes('ComfortableProductCount')
         ? 'comfortable-product-count'
         : 'using-products-selection';
@@ -38,7 +45,6 @@ jest.mock('next/dynamic', () => ({
       return <div data-testid={componentName}>Mock Dynamic Component</div>;
     };
 
-    // If a loading component is provided, we'll use it for testing loading states
     if (LoadingComponent) {
       MockComponent.loading = LoadingComponent;
     }
@@ -47,10 +53,15 @@ jest.mock('next/dynamic', () => ({
   },
 }));
 
+interface SectionTransformProps {
+  children: React.ReactNode;
+  type: 'up' | 'left';
+}
+
 // Mock the SectionTransform component
 jest.mock('@/components/animations/SectionTransform', () => ({
   __esModule: true,
-  default: ({ children, type }: any) => (
+  default: ({ children, type }: SectionTransformProps) => (
     <div data-testid="section-transform" data-type={type}>
       {children}
     </div>
@@ -192,13 +203,7 @@ describe('BuilderRegimen Page', () => {
    * - The generateStaticParams function returns the correct paths
    */
   it('generateStaticParams returns the correct paths', () => {
-    // Import the generateStaticParams function
-    const { generateStaticParams } = require('../page');
-
-    // Call the function
     const params = generateStaticParams();
-
-    // Check if the function returns the correct paths
     expect(params).toEqual([
       { name: 'comfortable-products-count' },
       { name: 'using-products-selection' },

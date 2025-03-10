@@ -1,3 +1,6 @@
+export const dynamic = 'force-dynamic';
+export const generateStaticParams = () => [];
+
 import { notFound } from "next/navigation";
 import MatchesProductFilter from "./_components/MatchesProductFilter";
 import MatchesProductHeader from "./_components/MatchesProductHeader";

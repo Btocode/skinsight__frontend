@@ -36,49 +36,56 @@ jest.mock('@/components/common/GradientImage', () => {
   };
 });
 
-jest.mock('@/components/common/HeadingPrimary', () => {
-  return {
-    __esModule: true,
-    default: ({ children, className }: any) => (
-      <h1 data-testid="heading-primary" className={className}>
-        {children}
-      </h1>
-    ),
-  };
-});
+interface HeadingPrimaryProps {
+  children: React.ReactNode;
+  className?: string;
+}
 
-jest.mock('@/components/animations/SectionTransform', () => {
-  return {
-    __esModule: true,
-    default: ({ children, type }: any) => (
-      <div data-testid="section-transform" data-type={type}>
-        {children}
-      </div>
-    ),
-  };
-});
+interface SectionTransformProps {
+  children: React.ReactNode;
+  type: 'left' | 'up';
+}
 
-// Mock the select components with a function that captures the onChange prop
-let capturedOnChange: any = null;
+interface SelectComponentProps {
+  value: string | string[];
+  onChange: (key: string, value: string | string[]) => void;
+}
 
-jest.mock('../SelectGender', () => {
-  return {
-    __esModule: true,
-    default: ({ value, onChange }: any) => {
-      capturedOnChange = onChange;
-      return (
-        <div data-testid="select-gender" data-value={value}>
-          Select Gender Component
-        </div>
-      );
-    },
-  };
-});
+interface ProgressbarProps {
+  name: string;
+}
+
+// Update the mocks
+jest.mock('@/components/common/HeadingPrimary', () => ({
+  __esModule: true,
+  default: ({ children, className }: HeadingPrimaryProps) => (
+    <h1 data-testid="heading-primary" className={className}>{children}</h1>
+  ),
+}));
+
+jest.mock('@/components/animations/SectionTransform', () => ({
+  __esModule: true,
+  default: ({ children, type }: SectionTransformProps) => (
+    <div data-testid="section-transform" data-type={type}>{children}</div>
+  ),
+}));
+
+// Update capturedOnChange type
+let capturedOnChange: ((key: string, value: string | string[]) => void) | null = null;
+
+// Update the select component mocks to use SelectComponentProps
+jest.mock('../SelectGender', () => ({
+  __esModule: true,
+  default: ({ value, onChange }: SelectComponentProps) => {
+    capturedOnChange = onChange;
+    return <div data-testid="select-gender" data-value={value}>Select Gender Component</div>;
+  },
+}));
 
 jest.mock('../SelectSkinType', () => {
   return {
     __esModule: true,
-    default: ({ value, onChange }: any) => {
+    default: ({ value, onChange }: SelectComponentProps) => {
       capturedOnChange = onChange;
       return (
         <div data-testid="select-skin-type" data-value={value}>
@@ -92,7 +99,7 @@ jest.mock('../SelectSkinType', () => {
 jest.mock('../SelectComplexion', () => {
   return {
     __esModule: true,
-    default: ({ value, onChange }: any) => {
+    default: ({ value, onChange }: SelectComponentProps) => {
       capturedOnChange = onChange;
       return (
         <div data-testid="select-complexion" data-value={value}>
@@ -106,7 +113,7 @@ jest.mock('../SelectComplexion', () => {
 jest.mock('../SelectSkinConcern', () => {
   return {
     __esModule: true,
-    default: ({ value, onChange }: any) => {
+    default: ({ value, onChange }: SelectComponentProps) => {
       capturedOnChange = onChange;
       return (
         <div data-testid="select-skin-concern" data-value={value}>
@@ -120,7 +127,7 @@ jest.mock('../SelectSkinConcern', () => {
 jest.mock('../SelectAge', () => {
   return {
     __esModule: true,
-    default: ({ value, onChange }: any) => {
+    default: ({ value, onChange }: SelectComponentProps) => {
       capturedOnChange = onChange;
       return (
         <div data-testid="select-age" data-value={value}>
@@ -134,7 +141,7 @@ jest.mock('../SelectAge', () => {
 jest.mock('../SelectRegion', () => {
   return {
     __esModule: true,
-    default: ({ value, onChange }: any) => {
+    default: ({ value, onChange }: SelectComponentProps) => {
       capturedOnChange = onChange;
       return (
         <div data-testid="select-region" data-value={value}>
@@ -145,16 +152,12 @@ jest.mock('../SelectRegion', () => {
   };
 });
 
-jest.mock('../Progressbar', () => {
-  return {
-    __esModule: true,
-    default: ({ name }: any) => (
-      <div data-testid="progressbar" data-name={name}>
-        Progressbar Component
-      </div>
-    ),
-  };
-});
+jest.mock('../Progressbar', () => ({
+  __esModule: true,
+  default: ({ name }: ProgressbarProps) => (
+    <div data-testid="progressbar" data-name={name}>Progressbar Component</div>
+  ),
+}));
 
 describe('SelectLayout Component', () => {
   // Setup mock router, dispatch, and selector

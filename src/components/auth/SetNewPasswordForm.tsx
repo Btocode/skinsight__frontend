@@ -5,7 +5,17 @@ import HeadingPrimary from "../common/HeadingPrimary";
 import { useUpdatePasswordMutation } from "@/lib/services/authApi";
 import { useRouter } from "next/navigation";
 
-const SetNewPasswordForm = () => {
+interface ApiError {
+  message: string;
+  code?: string;
+  status?: number;
+}
+
+interface SetNewPasswordFormProps {
+  onSubmit?: (data: { password: string; repeatPassword: string }) => void;
+}
+
+const SetNewPasswordForm: React.FC<SetNewPasswordFormProps> = ({ onSubmit }) => {
   const [updatePassword, { isLoading }] = useUpdatePasswordMutation();
   const [error, setError] = useState<string | null>(null);
   const [isSuccess, setIsSuccess] = useState(false);
@@ -26,8 +36,8 @@ const SetNewPasswordForm = () => {
     setPasswords(prev => ({ ...prev, [name]: value }));
   };
 
-  const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
-    event.preventDefault();
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
 
     if (!passwordsMatch) {
       setError("Passwords do not match");
@@ -35,6 +45,11 @@ const SetNewPasswordForm = () => {
     }
 
     try {
+      if (onSubmit) {
+        onSubmit(passwords);
+        return;
+      }
+
       await updatePassword({ new_password: passwords.password }).unwrap();
       setIsSuccess(true);
       setError(null);
@@ -42,9 +57,15 @@ const SetNewPasswordForm = () => {
       setTimeout(()=> {
         router.push("/")
       }, 2000)
-    } catch (err: any) {
-      console.error(err);
-      setError(err.data?.detail || "Failed to update password");
+    } catch (err: unknown) {
+      if (typeof err === 'object' && err !== null && 'message' in err) {
+        const apiError = err as ApiError;
+        setError(apiError.message);
+      } else if (err instanceof Error) {
+        setError(err.message);
+      } else {
+        setError('An unknown error occurred');
+      }
       setIsSuccess(false);
     }
   };

@@ -1,14 +1,26 @@
 import { render, screen } from '@testing-library/react';
 import RegimenCard from '../RegimenCard';
 import '@testing-library/jest-dom';
+import { ImageProps } from 'next/image';
+
 
 // Mock Next/Image
 jest.mock('next/image', () => ({
   __esModule: true,
-  default: (props: any) => {
-    // Convert boolean 'fill' to a string
-    const { fill, ...rest } = props;
-    return <img {...rest} data-testid="next-image" fill={fill ? "true" : undefined} />;
+  default: (props: ImageProps) => {
+    const { src, alt, fill, className, width, height } = props;
+    return (
+      // eslint-disable-next-line @next/next/no-img-element
+      <img
+        src={typeof src === 'string' ? src : ''}
+        alt={alt || ''}
+        className={className}
+        width={width}
+        height={height}
+        data-testid="next-image"
+        data-fill={fill ? "true" : "false"}
+      />
+    );
   },
 }));
 

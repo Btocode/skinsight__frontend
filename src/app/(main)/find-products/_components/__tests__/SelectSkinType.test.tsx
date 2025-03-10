@@ -3,11 +3,17 @@ import { render, screen, fireEvent } from '@testing-library/react';
 import SelectSkinType from '../SelectSkinType';
 import { skinTypes } from '@/utils/products';
 
+interface MockCardProps {
+  children: React.ReactNode;
+  onClick?: () => void;
+  checked: boolean;
+}
+
 // Mock the Card component
 jest.mock('../Card', () => {
   return {
     __esModule: true,
-    default: ({ children, onClick, checked }: any) => (
+    default: ({ children, onClick, checked }: MockCardProps) => (
       <div
         data-testid="card"
         data-checked={checked}
@@ -152,7 +158,7 @@ describe('SelectSkinType Component', () => {
    */
   it('handles null value correctly', () => {
     const mockOnChange = jest.fn();
-    render(<SelectSkinType value={null as any} onChange={mockOnChange} />);
+    render(<SelectSkinType value={null as string | null} onChange={mockOnChange} />);
 
     // Check if all cards are not checked when value is null
     const skinTypeCards = screen.getAllByTestId('card');
@@ -166,7 +172,7 @@ describe('SelectSkinType Component', () => {
    */
   it('handles undefined value correctly', () => {
     const mockOnChange = jest.fn();
-    render(<SelectSkinType value={undefined as any} onChange={mockOnChange} />);
+    render(<SelectSkinType value={undefined as string | undefined} onChange={mockOnChange} />);
 
     // Check if all cards are not checked when value is undefined
     const skinTypeCards = screen.getAllByTestId('card');

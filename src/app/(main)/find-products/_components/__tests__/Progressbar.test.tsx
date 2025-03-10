@@ -1,13 +1,19 @@
 import React from 'react';
-import { render, screen, act } from '@testing-library/react';
+import { render, act } from '@testing-library/react';
 import Progressbar from '../Progressbar';
 import { useRouter } from 'next/navigation';
-import { motion, useAnimation } from 'motion/react';
+import { useAnimation } from 'motion/react';
 
 // Mock the next/navigation module
 jest.mock('next/navigation', () => ({
   useRouter: jest.fn(),
 }));
+
+interface MotionSpanProps {
+  className?: string;
+  initial?: { width: string };
+  children?: React.ReactNode;
+}
 
 // Mock the motion/react module
 jest.mock('motion/react', () => {
@@ -20,7 +26,7 @@ jest.mock('motion/react', () => {
     ...originalModule,
     motion: {
       ...originalModule.motion,
-      span: ({ className, initial, animate, transition, children }: any) => (
+      span: ({ className, initial, children }: MotionSpanProps) => (
         <span
           className={className}
           style={{ ...initial }}
@@ -31,10 +37,7 @@ jest.mock('motion/react', () => {
       ),
     },
     useAnimation: () => ({
-      start: jest.fn().mockImplementation(async (props) => {
-        // Simulate the animation by returning a resolved promise
-        return Promise.resolve();
-      }),
+      start: jest.fn().mockImplementation(() => Promise.resolve()),
       stop: mockStop,
     }),
   };
@@ -141,7 +144,7 @@ describe('Progressbar Component', () => {
    */
   it('cleans up when unmounted', async () => {
     // Get the mock stop function from our mocked useAnimation
-    const mockStop = require('motion/react').useAnimation().stop;
+    const mockStop = useAnimation().stop;
 
     // Render and unmount the component
     const { unmount } = render(<Progressbar name="find-perfect-match" />);

@@ -2,9 +2,26 @@ import React from 'react';
 import { render, screen, fireEvent } from '@testing-library/react';
 import HelpPage from '../page';
 
+interface AccordionProps {
+  title: string;
+  content: React.ReactNode;
+  isActive: boolean;
+  onToggle: () => void;
+}
+
+interface ButtonProps {
+  children: React.ReactNode;
+  className?: string;
+}
+
+interface HeadingProps {
+  children: React.ReactNode;
+  className?: string;
+}
+
 // Mock the Accordion component
 jest.mock('@/components/common/Accordion', () => ({
-  Accordion: ({ title, content, isActive, onToggle }: any) => (
+  Accordion: ({ title, content, isActive, onToggle }: AccordionProps) => (
     <div data-testid="accordion">
       <button onClick={onToggle} data-testid="accordion-title">
         {title}
@@ -17,7 +34,7 @@ jest.mock('@/components/common/Accordion', () => ({
 // Mock the Button component
 jest.mock('@/components/common/Button', () => ({
   __esModule: true,
-  default: ({ children, className }: any) => (
+  default: ({ children, className }: ButtonProps) => (
     <button className={className} data-testid="button">
       {children}
     </button>
@@ -27,7 +44,7 @@ jest.mock('@/components/common/Button', () => ({
 // Mock the HeadingPrimary component
 jest.mock('@/components/common/HeadingPrimary', () => ({
   __esModule: true,
-  default: ({ children, className }: any) => (
+  default: ({ children, className }: HeadingProps) => (
     <h1 data-testid="heading-primary" className={className}>
       {children}
     </h1>

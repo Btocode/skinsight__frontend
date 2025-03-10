@@ -9,10 +9,17 @@ global.fetch = jest.fn(() =>
   })
 ) as jest.Mock;
 
+interface ReviewProductCardProps {
+  item: {
+    productImage: string;
+    productTitle: string;
+  };
+}
+
 // Mock the ReviewProductCard component
 jest.mock('../../_components/ReviewProductCard', () => ({
   __esModule: true,
-  default: ({ item }: { item: any }) => (
+  default: ({ item }: ReviewProductCardProps) => (
     <div data-testid="review-product-card">
       <div>{item.productTitle}</div>
     </div>
@@ -44,7 +51,7 @@ describe('MyReviewsPage', () => {
     render(await MyReviewsPage());
 
     // Check if the no reviews message is displayed
-    expect(screen.getByText(/You don’t have any reviews yet/i)).toBeInTheDocument();
+    expect(screen.getByText(/You don't have any reviews yet/i)).toBeInTheDocument();
     expect(screen.getByText(/Click on the button below to get started/i)).toBeInTheDocument();
 
     // Check if the "Write a new review" button is rendered

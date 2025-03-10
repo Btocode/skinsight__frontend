@@ -29,22 +29,41 @@ jest.mock('country-region-data', () => ({
   ],
 }));
 
+interface ComboboxOption {
+  value: string;
+  label: string;
+}
+
+interface ComboboxProps {
+  options: ComboboxOption[];
+  placeholder: string;
+  value?: ComboboxOption;
+  onChange: (option: ComboboxOption) => void;
+}
+
+interface ButtonProps {
+  children: React.ReactNode;
+  className?: string;
+  disabled?: boolean;
+  onClick?: () => void;
+}
+
 // Mock the Combobox component
 jest.mock('@/components/common/Combobox', () => {
   return {
     __esModule: true,
-    Combobox: ({ options, placeholder, value, onChange }: any) => (
+    Combobox: ({ options, placeholder, value, onChange }: ComboboxProps) => (
       <div data-testid="combobox" data-placeholder={placeholder}>
         <select
           data-testid={`combobox-select-${placeholder}`}
           value={value?.value || ''}
           onChange={(e) => {
-            const selectedOption = options.find((opt: any) => opt.value === e.target.value);
-            onChange(selectedOption);
+            const selectedOption = options.find((opt) => opt.value === e.target.value);
+            onChange(selectedOption!);
           }}
         >
           <option value="">Select</option>
-          {options.map((option: any, index: number) => (
+          {options.map((option, index) => (
             <option key={index} value={option.value}>
               {option.label}
             </option>
@@ -52,7 +71,7 @@ jest.mock('@/components/common/Combobox', () => {
         </select>
       </div>
     ),
-    Option: ({ value, label }: any) => ({ value, label }),
+    Option: ({ value, label }: ComboboxOption) => ({ value, label }),
   };
 });
 
@@ -60,7 +79,7 @@ jest.mock('@/components/common/Combobox', () => {
 jest.mock('@/components/common/Button', () => {
   return {
     __esModule: true,
-    default: ({ children, className, disabled, onClick, variant }: any) => (
+    default: ({ children, className, disabled, onClick, variant }: ButtonProps) => (
       <button
         data-testid="button"
         className={className}

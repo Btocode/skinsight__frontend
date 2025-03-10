@@ -3,19 +3,40 @@ import { render, screen, fireEvent } from '@testing-library/react';
 import SelectComplexion from '../SelectComplexion';
 import { complexionOptions } from '@/utils/products';
 
+
 // Mock the next/image component
 jest.mock('next/image', () => ({
   __esModule: true,
-  default: ({ src, alt, width, height, className }: any) => (
-    <img
-      src={src}
-      alt={alt}
-      width={width}
-      height={height}
-      className={className}
-      data-testid={`image-${alt.replace(/\s+/g, '-').toLowerCase()}`}
-    />
-  ),
+  default: ({
+    src,
+    alt,
+    width,
+    height,
+    className
+  }: {
+    src: string;
+    alt?: string;
+    width?: number;
+    height?: number;
+    className?: string;
+  }) => {
+    // Extract the complexion type from the src or alt
+    const complexionType = alt?.toLowerCase() ||
+                          src.split('/').pop()?.split('.')[0] ||
+                          'unknown';
+
+    return (
+      // eslint-disable-next-line @next/next/no-img-element
+      <img
+        src={src}
+        alt={alt || 'Complexion image'}
+        width={width}
+        height={height}
+        className={className}
+        data-testid={`image-${complexionType}`}
+      />
+    );
+  },
 }));
 
 describe('SelectComplexion Component', () => {

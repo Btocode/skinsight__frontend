@@ -1,6 +1,7 @@
 import React from 'react';
 import { render, screen } from '@testing-library/react';
 import BuildRegimenPage from '../page';
+import { ImageProps } from 'next/image';
 
 // Mock the BackButton component
 jest.mock('@/components/common/BackButton', () => ({
@@ -38,13 +39,15 @@ jest.mock('@/components/animations/SectionOpacity', () => ({
   ),
 }));
 
+
 // Mock the next/image component
 jest.mock('next/image', () => ({
   __esModule: true,
-  default: ({ src, alt, className, width, height, priority }: any) => (
+  default: ({ src, alt, className, width, height, priority }: ImageProps) => (
+    // eslint-disable-next-line @next/next/no-img-element
     <img
-      src={src}
-      alt={alt}
+      src={typeof src === 'string' ? src : ''}
+      alt={alt || ''}
       className={className}
       width={width}
       height={height}
@@ -57,7 +60,7 @@ jest.mock('next/image', () => ({
 // Mock the next/link component
 jest.mock('next/link', () => ({
   __esModule: true,
-  default: ({ href, children }: any) => (
+  default: ({ href, children }: { href: string, children: React.ReactNode }) => (
     <a href={href} data-testid="next-link">{children}</a>
   ),
 }));

@@ -1,7 +1,6 @@
 import React from 'react';
 import { render, screen } from '@testing-library/react';
 import SavedItemsPage from '../page';
-import * as pageModule from '../page';
 
 // Mock the fetch function
 global.fetch = jest.fn(() =>
@@ -10,9 +9,18 @@ global.fetch = jest.fn(() =>
   })
 ) as jest.Mock;
 
+interface ProductCardProps {
+  item: {
+    productImage: string;
+    brandName: string;
+    productTitle: string;
+    price: string;
+  };
+}
+
 // Mock the ProductCard component
 jest.mock('../../_components/ProductCard', () => ({
-  ProductCard: ({ item }: { item: any }) => (
+  ProductCard: ({ item }: ProductCardProps) => (
     <div data-testid="product-card">
       <div>{item.brandName}</div>
       <div>{item.productTitle}</div>
@@ -70,14 +78,14 @@ describe('SavedItemsPage', () => {
 
   it('renders the correct grid layout', async () => {
     // Mock data
-    const mockProducts = [
-      {
-        productImage: '/image1.jpg',
-        brandName: 'Brand 1',
-        productTitle: 'Product 1',
-        price: '10.99'
-      }
-    ];
+    // const mockProducts = [
+    //   {
+    //     productImage: '/image1.jpg',
+    //     brandName: 'Brand 1',
+    //     productTitle: 'Product 1',
+    //     price: '10.99'
+    //   }
+    // ];
 
     // Mock the getSavedItems function
     // jest.spyOn(pageModule, 'getSavedItems').mockResolvedValue(mockProducts);

@@ -2,6 +2,13 @@ import React from 'react';
 import { render, screen } from '@testing-library/react';
 import TopAlternativesProducts from '../TopAlternativesProducts';
 import { FindAlternativesProduct } from '@/types/alternatives';
+import { ImageProps } from 'next/image';
+
+interface ImageProps {
+  src: string;
+  alt: string;
+  className?: string;
+}
 
 // Mock the AlternativesProductCard component
 jest.mock('../AlternativesProductCard', () => ({
@@ -15,10 +22,11 @@ jest.mock('../AlternativesProductCard', () => ({
 // Mock the next/image component
 jest.mock('next/image', () => ({
   __esModule: true,
-  default: ({ src, alt, className }: any) => (
+  default: ({ src, alt, className }: ImageProps) => (
+    // eslint-disable-next-line @next/next/no-img-element
     <img
-      src={src}
-      alt={alt}
+      src={typeof src === 'string' ? src : ''}
+      alt={alt || ''}
       className={className}
       data-testid="next-image"
     />
