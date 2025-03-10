@@ -1,137 +1,212 @@
-import { render, screen, waitFor } from "@testing-library/react";
-import YourSkinMatchesPage from "../page"; // Adjust the import according to your project structure
+import { render, screen } from "@testing-library/react";
+import YourSkinMatchesPage from "../page"; // Adjust the import path as needed
 import { notFound } from "next/navigation";
 import { Product } from "@/types/products";
 
-// Mocking the API call and other components used in the page
+// Mock the Next.js navigation functions
 jest.mock("next/navigation", () => ({
   notFound: jest.fn(),
 }));
 
-jest.mock("../_components/MatchesProductFilter", () => {
-  const MatchesProductFilter = () => <div>MatchesProductFilter</div>;
-  MatchesProductFilter.displayName = "MatchesProductFilter";
-  return MatchesProductFilter;
-});
+// Mock child components to simplify testing
+jest.mock("../_components/MatchesProductHeader", () => ({
+  __esModule: true,
+  default: () => <div data-testid="matches-product-header">Mocked Header</div>,
+}));
 
-jest.mock("../_components/MatchesProductHeader", () => {
-  const MatchesProductHeader = () => <div>MatchesProductHeader</div>;
-  MatchesProductHeader.displayName = "MatchesProductHeader";
-  return MatchesProductHeader;
-});
+jest.mock("../_components/MatchesProductFilter", () => ({
+  __esModule: true,
+  default: () => <div data-testid="matches-product-filter">Mocked Filter</div>,
+}));
 
-jest.mock("../_components/TonersProducts", () => {
-  const TonersProducts = ({ products }: { products: Product[] }) => (
-    <div>{`TonersProducts: ${products.length}`}</div>
-  );
-  TonersProducts.displayName = "TonersProducts";
-  return TonersProducts;
-});
-jest.mock("../_components/CleansersProducts", () => {
-  const CleansersProducts = ({ products }: { products: Product[] }) => (
-    <div>{`CleansersProducts: ${products.length}`}</div>
-  );
-  CleansersProducts.displayName = "CleansersProducts";
-  return CleansersProducts;
-});
-jest.mock("../_components/MoisturisersProducts", () => {
-  const MoisturisersProducts = ({ products }: { products: Product[] }) => (
-    <div>{`MoisturisersProducts: ${products.length}`}</div>
-  );
-  MoisturisersProducts.displayName = "MoisturisersProducts";
-  return MoisturisersProducts;
-});
+jest.mock("../_components/TonersProducts", () => ({
+  __esModule: true,
+  default: ({ products }: { products: Product[] }) => (
+    <div data-testid="toners-products">
+      Mocked Toners Products: {products?.length || 0}
+    </div>
+  ),
+}));
 
-jest.mock("@/components/common/Advertisement", () => <div>Advertisement</div>);
-jest.mock("@/components/common/GradientImage", () => <div>GradientImage</div>);
-jest.mock("../_components/AddFavorite", () => <div>AddFavorite</div>);
-jest.mock("@/components/common/Button", () => {
-  const Button = ({ children }: { children: React.ReactNode }) => (
-    <button>{children}</button>
-  );
-  Button.displayName = "Button";
-  return Button;
-});
-jest.mock("next/link", () => {
-  const Link = ({ children }: { children: React.ReactNode }) => (
-    <div>{children}</div>
-  );
-  Link.displayName = "Link";
-  return Link;
-});
+jest.mock("../_components/CleansersProducts", () => ({
+  __esModule: true,
+  default: ({ products }: { products: Product[] }) => (
+    <div data-testid="cleansers-products">
+      Mocked Cleansers Products: {products?.length || 0}
+    </div>
+  ),
+}));
+
+jest.mock("../_components/MoisturisersProducts", () => ({
+  __esModule: true,
+  default: ({ products }: { products: Product[] }) => (
+    <div data-testid="moisturisers-products">
+      Mocked Moisturisers Products: {products?.length || 0}
+    </div>
+  ),
+}));
+
+jest.mock("@/components/common/Advertisement", () => ({
+  __esModule: true,
+  default: () => <div data-testid="advertisement">Mocked Advertisement</div>,
+}));
+
+jest.mock("@/components/common/GradientImage", () => ({
+  __esModule: true,
+  default: () => <div data-testid="gradient-image">Mocked Gradient Image</div>,
+}));
+
+jest.mock("../_components/AddFavorite", () => ({
+  __esModule: true,
+  default: () => <div data-testid="add-favorite">Mocked Add Favorite</div>,
+}));
+
+jest.mock("next/link", () => ({
+  __esModule: true,
+  default: ({
+    children,
+    href,
+  }: {
+    children: React.ReactNode;
+    href: string;
+  }) => (
+    <a href={href} data-testid="next-link">
+      {children}
+    </a>
+  ),
+}));
+
+// Mock the fetch function
+global.fetch = jest.fn();
 
 describe("YourSkinMatchesPage", () => {
-  // Step 1: Setup test data for the products
-  const mockProducts = [
-    [{ id: "1", productTitle: "Cleanser 1" }],
-    [{ id: "2", productTitle: "Toner 1" }],
-    [{ id: "3", productTitle: "Moisturiser 1" }],
-  ];
-
-  // Step 2: Mock the `getProducts` function to return the mock data
-  beforeAll(() => {
-    global.fetch = jest.fn().mockResolvedValue({
-      json: jest.fn().mockResolvedValue(mockProducts),
-    });
+  beforeEach(() => {
+    jest.clearAllMocks();
   });
 
-  beforeAll(() => {
-    global.fetch = jest.fn().mockResolvedValue({
-      json: jest.fn().mockResolvedValue(mockProducts),
+  /**
+   * Test case: Component renders successfully with products
+   *
+   * This test verifies that when products are returned from the API,
+   * the component renders all expected child components with the correct data.
+   */
+  it("renders the page with products correctly", async () => {
+    // Mock successful API response with sample products
+    const mockProducts = [
+      [
+        { id: 1, name: "Cleanser 1" },
+        { id: 2, name: "Cleanser 2" },
+      ],
+      [
+        { id: 3, name: "Toner 1" },
+        { id: 4, name: "Toner 2" },
+      ],
+      [
+        { id: 5, name: "Moisturiser 1" },
+        { id: 6, name: "Moisturiser 2" },
+      ],
+    ];
+
+    (global.fetch as jest.Mock).mockResolvedValueOnce({
+      json: jest.fn().mockResolvedValueOnce(mockProducts),
     });
+
+    // Render the component
+    const { findByTestId } = render(await YourSkinMatchesPage());
+
+    // Verify API was called correctly
+    expect(global.fetch).toHaveBeenCalledWith(
+      "http://localhost:3000/api/your-skin-matches"
+    );
+
+    // Verify all components are rendered
+    expect(await findByTestId("matches-product-header")).toBeInTheDocument();
+    expect(await findByTestId("matches-product-filter")).toBeInTheDocument();
+    expect(await findByTestId("toners-products")).toBeInTheDocument();
+    expect(await findByTestId("cleansers-products")).toBeInTheDocument();
+    expect(await findByTestId("moisturisers-products")).toBeInTheDocument();
+    expect(await findByTestId("gradient-image")).toBeInTheDocument();
+    expect(await findByTestId("add-favorite")).toBeInTheDocument();
+
+    // Verify the heading text
+    expect(screen.getByText("Top products for you")).toBeInTheDocument();
+
+    // Verify the retake button is rendered
+    expect(screen.getByText("Retake")).toBeInTheDocument();
   });
 
-  // Step 3: Test case to ensure the page renders correctly when products are available
-  it("renders the page with products", async () => {
-    render(<YourSkinMatchesPage />);
-
-    // Step 3.1: Verify if the header "Top products for you" is rendered
-    const header = screen.getByText("Top products for you");
-    expect(header).toBeInTheDocument();
-
-    // Step 3.2: Verify that the child components (like MatchesProductFilter, MatchesProductHeader) are rendered
-    expect(screen.getByText("MatchesProductFilter")).toBeInTheDocument();
-    expect(screen.getByText("MatchesProductHeader")).toBeInTheDocument();
-
-    await waitFor(() => expect(global.fetch).toHaveBeenCalledTimes(1));
-
-    // Step 3.3: Check if the product components are rendered with the correct product count
-    await waitFor(() => {
-      expect(screen.getByText("TonersProducts: 1")).toBeInTheDocument();
-      expect(screen.getByText("CleansersProducts: 1")).toBeInTheDocument();
-      expect(screen.getByText("MoisturisersProducts: 1")).toBeInTheDocument();
+  /**
+   * Test case: notFound is called when products array is empty
+   *
+   * This test verifies that the notFound function is called
+   * when the API returns an empty products array.
+   */
+  it("calls notFound when products array is empty", async () => {
+    // Mock API response with empty products array
+    (global.fetch as jest.Mock).mockResolvedValueOnce({
+      json: jest.fn().mockResolvedValueOnce([]),
     });
 
-    // Step 3.4: Verify if Advertisement and GradientImage components are rendered
-    expect(screen.getByText("Advertisement")).toBeInTheDocument();
-    expect(screen.getByText("GradientImage")).toBeInTheDocument();
+    // Attempt to render the component
+    try {
+      await YourSkinMatchesPage();
+      // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    } catch (error: unknown) {
+      // Expected to throw since notFound() is called
+    }
 
-    // Step 3.5: Check if AddFavorite component is rendered
-    expect(screen.getByText("AddFavorite")).toBeInTheDocument();
+    // Verify notFound was called
+    expect(notFound).toHaveBeenCalled();
   });
 
-  // Step 4: Test case when no products are available (API returns empty array)
-  it("calls notFound when no products are found", async () => {
-    // Mock the API response to return an empty array
-    global.fetch = jest.fn().mockResolvedValue({
-      json: jest.fn().mockResolvedValue([]),
-    });
+  /**
+   * Test case: Handles API error gracefully
+   *
+   * This test verifies that the component handles API errors appropriately.
+   */
+  it("handles API errors gracefully", async () => {
+    // Mock API failure
+    (global.fetch as jest.Mock).mockRejectedValueOnce(new Error("API error"));
 
-    // Render the page
-    render(<YourSkinMatchesPage />);
-
-    // Step 4.1: Verify if the notFound function is called
-    await waitFor(() => {
-      expect(notFound).toHaveBeenCalled();
-    });
+    // Expect the component to throw an error when rendered
+    await expect(YourSkinMatchesPage()).rejects.toThrow("API error");
   });
 
-  // Step 5: Test the "Retake" button in the page
-  it("renders and tests the 'Retake' button", async () => {
-    render(<YourSkinMatchesPage />);
+  /**
+   * Test case: Passes correct data to child components
+   *
+   * This test verifies that the correct product data is passed to each
+   * product component (Toners, Cleansers, Moisturisers).
+   */
+  it("passes correct data to child components", async () => {
+    // Mock successful API response with sample products
+    const mockProducts = [
+      [
+        { id: 1, name: "Cleanser 1" },
+        { id: 2, name: "Cleanser 2" },
+      ],
+      [
+        { id: 3, name: "Toner 1" },
+        { id: 4, name: "Toner 2" },
+      ],
+      [
+        { id: 5, name: "Moisturiser 1" },
+        { id: 6, name: "Moisturiser 2" },
+      ],
+    ];
 
-    // Step 5.1: Check if the "Retake" button is present
-    const retakeButton = screen.getByText("Retake");
-    expect(retakeButton).toBeInTheDocument();
+    (global.fetch as jest.Mock).mockResolvedValueOnce({
+      json: jest.fn().mockResolvedValueOnce(mockProducts),
+    });
+
+    // Render the component
+    render(await YourSkinMatchesPage());
+
+    // Check that each product component receives the correct data
+    expect(screen.getByTestId("cleansers-products").textContent).toContain("2");
+    expect(screen.getByTestId("toners-products").textContent).toContain("2");
+    expect(screen.getByTestId("moisturisers-products").textContent).toContain(
+      "2"
+    );
   });
 });
