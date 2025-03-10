@@ -30,6 +30,23 @@ jest.mock('@/redux/slices/authSlice', () => ({
   selectUserDisplayName: jest.fn(),
 }));
 
+beforeAll(() => {
+  // Suppress the error messages from jsdom
+  const originalConsoleError = console.error;
+  console.error = (...args) => {
+    if (args[0]?.includes?.('Not implemented: navigation') ||
+        args[0]?.message?.includes?.('Not implemented: navigation')) {
+      return;
+    }
+    originalConsoleError(...args);
+  };
+});
+
+afterAll(() => {
+  // Restore console.error
+  jest.restoreAllMocks();
+});
+
 describe('UserMenu', () => {
   const mockDispatch = jest.fn();
   const mockLogout = jest.fn();
