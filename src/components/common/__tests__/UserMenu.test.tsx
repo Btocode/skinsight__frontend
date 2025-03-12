@@ -4,12 +4,14 @@ import UserMenu, { MENU_ITEMS } from '../UserMenu';
 import { useAppSelector, useAppDispatch } from '@/lib/redux/hook';
 import { useLogoutMutation } from '@/lib/services/authApi';
 import { logout } from '@/redux/slices/authSlice';
-
+import { ImageProps } from 'next/image';
 // Mock Next.js Image component
 jest.mock('next/image', () => ({
   __esModule: true,
-  default: (props: any) => {
-    return <img {...props} />;
+  default: (props: ImageProps) => {
+    const { src, alt, width, height } = props;
+    // eslint-disable-next-line @next/next/no-img-element
+    return <img src={src as string} alt={alt} width={width} height={height} data-testid={`image-${alt.replace(/\s+/g, '-').toLowerCase()}`} />;
   },
 }));
 
@@ -49,16 +51,14 @@ afterAll(() => {
 
 describe('UserMenu', () => {
   const mockDispatch = jest.fn();
-  const mockLogout = jest.fn();
-  const mockLogoutMutation = jest.fn().mockResolvedValue({});
   const mockUnwrap = jest.fn().mockResolvedValue({});
 
   beforeEach(() => {
     jest.clearAllMocks();
 
     // Setup mocks
-    (useAppSelector as jest.Mock).mockReturnValue('John Doe');
-    (useAppDispatch as jest.Mock).mockReturnValue(mockDispatch);
+    (useAppSelector as unknown as jest.Mock).mockReturnValue('John Doe');
+    (useAppDispatch as unknown as jest.Mock).mockReturnValue(mockDispatch);
     (useLogoutMutation as jest.Mock).mockReturnValue([
       () => ({ unwrap: mockUnwrap }),
       { isLoading: false }
@@ -82,7 +82,7 @@ describe('UserMenu', () => {
   });
 
   it('displays "User" when no display name is available', () => {
-    (useAppSelector as jest.Mock).mockReturnValue(null);
+    (useAppSelector as unknown as jest.Mock).mockReturnValue(null);
     render(<UserMenu />);
 
     expect(screen.getByText('Hi, User!')).toBeInTheDocument();
