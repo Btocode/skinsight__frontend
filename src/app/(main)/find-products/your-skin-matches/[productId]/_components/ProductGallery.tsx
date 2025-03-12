@@ -5,7 +5,7 @@ import Image from "next/image";
 import { useRef, useState } from "react";
 import GalleryModal from "./GalleryModal";
 
-const galleryItems = [
+export const galleryItems = [
   { id: 1, image: "/actions/img1.png", label: "Review" },
   { id: 2, image: "/actions/img2.png", label: "How to use" },
   { id: 3, image: "/actions/img3.png", label: "Toner hacks" },
