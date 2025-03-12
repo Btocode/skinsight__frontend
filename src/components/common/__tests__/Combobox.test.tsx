@@ -244,7 +244,7 @@ describe('Combobox', () => {
   });
 
   it('sets correct ARIA attributes on button', () => {
-    const { rerender } = render(<Combobox {...defaultProps} />);
+    render(<Combobox {...defaultProps} />);
 
     // Button should have correct initial ARIA attributes
     const button = screen.getByRole('button');
