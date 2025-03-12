@@ -3,6 +3,14 @@ import { render, screen, fireEvent } from '@testing-library/react';
 import BackButton from '../BackButton';
 import { useRouter } from 'next/navigation';
 
+interface ButtonProps {
+  children: React.ReactNode;
+  onClick: () => void;
+  icon?: React.ReactNode;
+  className?: string;
+  variant?: string;
+}
+
 // Mock next/navigation
 jest.mock('next/navigation', () => ({
   useRouter: jest.fn(),
@@ -12,7 +20,7 @@ jest.mock('next/navigation', () => ({
 jest.mock('../Button', () => {
   return {
     __esModule: true,
-    default: ({ children, onClick, icon, className, variant }: any) => (
+    default: ({ children, onClick, icon, className, variant }: ButtonProps) => (
       <button
         onClick={onClick}
         className={className}
@@ -94,8 +102,8 @@ describe('BackButton', () => {
     render(
       <BackButton
         svgProps={{
-          className: 'custom-svg-class',
-          'data-testid': 'custom-svg'
+          "className": 'custom-svg-class',
+          "data-testid": 'custom-svg'
         }}
       />
     );
