@@ -23,7 +23,7 @@ jest.mock('@/components/auth/SignUpForm', () => ({
 
 jest.mock('@/components/auth/ForgotPasswordForm', () => ({
   __esModule: true,
-  default: ({ onSubmit }: { onSubmit: (data: any) => void }) => (
+  default: ({ onSubmit }: { onSubmit: (data: { email: string }) => void }) => (
     <div data-testid="forgot-password-form">
       <button onClick={() => onSubmit({ email: 'test@example.com' })}>
         Submit Forgot Password
@@ -34,7 +34,7 @@ jest.mock('@/components/auth/ForgotPasswordForm', () => ({
 
 jest.mock('@/components/auth/CodeValidationForm', () => ({
   __esModule: true,
-  default: ({ onSubmit }: { onSubmit: (data: any) => void }) => (
+  default: ({ onSubmit }: { onSubmit: (data: { code: string }) => void }) => (
     <div data-testid="code-validation-form">
       <button onClick={() => onSubmit({ code: '123456' })}>
         Submit Code
@@ -45,7 +45,7 @@ jest.mock('@/components/auth/CodeValidationForm', () => ({
 
 jest.mock('@/components/auth/SetNewPasswordForm', () => ({
   __esModule: true,
-  default: ({ onSubmit }: { onSubmit: (data: any) => void }) => (
+  default: ({ onSubmit }: { onSubmit: (data: { password: string, repeatPassword: string }) => void }) => (
     <div data-testid="set-new-password-form">
       <button onClick={() => onSubmit({ password: 'newpassword', repeatPassword: 'newpassword' })}>
         Submit New Password
@@ -84,7 +84,7 @@ describe('AuthActionModal', () => {
     push: jest.fn(),
   };
   const mockPathname = '/test-path';
-  let mockSearchParams: any;
+  let mockSearchParams: { get: jest.Mock };
 
   beforeEach(() => {
     jest.clearAllMocks();
