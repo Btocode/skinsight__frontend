@@ -39,7 +39,7 @@ jest.mock("@/components/common/Button", () => {
   CustomButton.displayName = "CustomButton";
   return CustomButton;
 });
-jest.mock("../_components/ProductGallary", () => {
+jest.mock("../_components/ProductGallery", () => {
   const ProductGallery = () => <div data-testid="product-gallery" />;
   ProductGallery.displayName = "ProductGallery";
   return ProductGallery;
