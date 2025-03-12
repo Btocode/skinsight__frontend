@@ -1,5 +1,5 @@
 import React from 'react';
-import { render, screen, fireEvent, act } from '@testing-library/react';
+import { render, screen, fireEvent } from '@testing-library/react';
 import Drawer from '../Drawer';
 import type { ImageProps } from 'next/image';
 import type { LinkProps } from 'next/link';

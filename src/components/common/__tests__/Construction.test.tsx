@@ -2,17 +2,25 @@ import React from 'react';
 import { render, screen } from '@testing-library/react';
 import UnderConstructionPage from '../Construction';
 
+import type { ImageProps } from 'next/image';
+
+interface LinkProps {
+  children: React.ReactNode;
+  href: string;
+  className?: string;
+}
+
 // Mock Next.js components
 jest.mock('next/image', () => ({
   __esModule: true,
-  default: ({ src, alt, width, height }: any) => {
+  default: ({ src, alt, width, height }: ImageProps) => {
     // eslint-disable-next-line @next/next/no-img-element
-    return <img src={src} alt={alt} width={width} height={height} data-testid="construction-image" />;
+    return <img src={src as string} alt={alt} width={width} height={height} data-testid="construction-image" />;
   },
 }));
 
 jest.mock('next/link', () => {
-  const MockedLink = ({ children, href, className }: any) => {
+  const MockedLink = ({ children, href, className }: LinkProps) => {
     return (
       <a href={href} className={className} data-testid="home-link">
         {children}
@@ -59,7 +67,7 @@ describe('UnderConstructionPage', () => {
     render(<UnderConstructionPage />);
 
     // Main container
-    const container = screen.getByText(/We're working hard/i).closest('div').parentElement;
+    const container = screen.getByText(/We're working hard/i).closest('div')?.parentElement;
     expect(container).toHaveClass('flex');
     expect(container).toHaveClass('flex-col');
     expect(container).toHaveClass('items-center');
