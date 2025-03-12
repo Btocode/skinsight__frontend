@@ -3,6 +3,9 @@ import { render, screen, fireEvent } from '@testing-library/react';
 import { Header } from '../Header';
 import { usePathname, useRouter } from 'next/navigation';
 import { useAppSelector } from '@/lib/redux/hook';
+import type { TypedUseSelectorHook } from 'react-redux';
+import type { RootState } from '@/lib/redux/store';
+import { ImageProps } from 'next/image';
 
 // Mock dependencies
 jest.mock('next/navigation', () => ({
@@ -10,19 +13,27 @@ jest.mock('next/navigation', () => ({
   useRouter: jest.fn(),
 }));
 
+// Update the mock
 jest.mock('@/lib/redux/hook', () => ({
-  useAppSelector: jest.fn(),
+  useAppSelector: jest.fn() as jest.MockedFunction<TypedUseSelectorHook<RootState>>,
 }));
 
 jest.mock('next/image', () => ({
   __esModule: true,
-  default: (props: any) => {
-    // Convert boolean props to strings to avoid React warnings
-    const imgProps = { ...props };
-    if (typeof imgProps.fill === 'boolean') imgProps.fill = imgProps.fill.toString();
-    if (typeof imgProps.priority === 'boolean') imgProps.priority = imgProps.priority.toString();
-
-    return <img {...imgProps} alt={props.alt} data-testid="next-image" />;
+  default: (props: ImageProps) => {
+    const { src, alt, className, width, height } = props;
+    return (
+      // eslint-disable-next-line @next/next/no-img-element
+      <img
+        src={typeof src === 'string' ? src : ''}
+        alt={alt || ''}
+        className={className}
+        width={width}
+        height={height}
+        data-testid="product-image"
+        data-fill="true"
+      />
+    );
   },
 }));
 
@@ -49,7 +60,7 @@ describe('Header', () => {
     jest.clearAllMocks();
     (usePathname as jest.Mock).mockReturnValue('/');
     (useRouter as jest.Mock).mockReturnValue(mockRouter);
-    (useAppSelector as jest.Mock).mockReturnValue({ isAuthenticated: false });
+    (useAppSelector as unknown as jest.Mock).mockReturnValue({ isAuthenticated: false });
   });
 
   it('renders the header with logo', () => {
@@ -78,8 +89,7 @@ describe('Header', () => {
   });
 
   it('renders user menu when authenticated', () => {
-    // Set authenticated state
-    (useAppSelector as jest.Mock).mockReturnValue({ isAuthenticated: true });
+    (useAppSelector as unknown as jest.Mock).mockReturnValue({ isAuthenticated: true });
 
     // Need to mock mounted state
     jest.spyOn(React, 'useState').mockImplementationOnce(() => [true, jest.fn()]);
