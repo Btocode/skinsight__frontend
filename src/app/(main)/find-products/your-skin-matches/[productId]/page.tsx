@@ -5,7 +5,7 @@ import ProductImageCarousel from "./_components/ProductImageCarousel";
 import ProductAccordion from "./_components/ProductAccordion";
 import BackButton from "@/components/common/BackButton";
 import Button from "@/components/common/Button";
-import ProductGallery from "./_components/ProductGallary";
+import ProductGallery from "./_components/ProductGallery";
 import { Accordion } from "@/components/common/Accordion";
 import Image from "next/image";
 import ProductTabs from "./_components/ProductTabs";
@@ -17,7 +17,6 @@ const ProductDetails = () => {
   const handleToggle = (id: string) => {
     setActiveId(id === activeId ? "" : id);
   };
-
 
   return (
     <section className="container mt-4 lg:mt-[74px]">
