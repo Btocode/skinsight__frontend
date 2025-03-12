@@ -2,13 +2,16 @@ import React from 'react';
 import { render, screen } from '@testing-library/react';
 import Footer from '../Footer';
 import '@testing-library/jest-dom';
+import { ImageProps } from 'next/image';
 
 // Mock next/image
 jest.mock('next/image', () => ({
   __esModule: true,
-  default: ({ src, alt, width, height }: { src: string, alt: string, width: number, height: number }) => (
-    <img src={src} alt={alt} width={width} height={height} data-testid={`image-${alt.replace(/\s+/g, '-').toLowerCase()}`} />
-  ),
+  default: (props: ImageProps) => {
+    const { src, alt, width, height } = props;
+    // eslint-disable-next-line @next/next/no-img-element
+    return <img src={src as string} alt={alt} width={width} height={height} data-testid={`image-${alt.replace(/\s+/g, '-').toLowerCase()}`} />;
+  },
 }));
 
 // Mock next/link
