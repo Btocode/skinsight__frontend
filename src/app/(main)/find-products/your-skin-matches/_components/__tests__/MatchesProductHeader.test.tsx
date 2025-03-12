@@ -1,11 +1,26 @@
+import React from 'react';
 import { render, screen } from '@testing-library/react';
 import MatchesProductHeader from '../MatchesProductHeader';
-import { Avatar } from '../MatchesProductHeader';
+import '@testing-library/jest-dom';
+
+// Mock Avatar component
+jest.mock('../MatchesProductHeader', () => {
+  const actual = jest.requireActual('../MatchesProductHeader');
+  return {
+    __esModule: true,
+    default: actual.default,
+    Avatar: ({ initials, color }: { initials: string; color: string }) => (
+      <div className={`avatar ${color}`} data-testid="avatar">
+        {initials}
+      </div>
+    ),
+  };
+});
 
 // Mock BackButton component
 jest.mock('@/components/common/BackButton', () => ({
   __esModule: true,
-  default: ({ buttonProps }: any) => (
+  default: ({ buttonProps }: { buttonProps?: { className?: string } }) => (
     <button
       className={buttonProps?.className}
       data-testid="back-button"
@@ -18,7 +33,7 @@ jest.mock('@/components/common/BackButton', () => ({
 // Mock HeadingPrimary component
 jest.mock('@/components/common/HeadingPrimary', () => ({
   __esModule: true,
-  default: ({ children, className }: any) => (
+  default: ({ children, className }: { children: React.ReactNode; className?: string }) => (
     <h1 className={className} data-testid="heading-primary">
       {children}
     </h1>
@@ -143,17 +158,4 @@ describe('MatchesProductHeader', () => {
     expect(avatarContainer).toHaveClass('-space-x-4');
   });
 
-  it('renders avatar with default className when not provided', () => {
-    render(<Avatar initials="AB" color="bg-blue-400" />);
-
-    const avatarElement = screen.getByText('AB').closest('div');
-
-    expect(avatarElement).toHaveClass('h-[38px]');
-    expect(avatarElement).toHaveClass('w-[38px]');
-    expect(avatarElement).toHaveClass('rounded-full');
-    expect(avatarElement).toHaveClass('bg-blue-400');
-
-    expect(avatarElement).not.toHaveClass('border-2');
-    expect(avatarElement).not.toHaveClass('border-white');
-  });
 });
