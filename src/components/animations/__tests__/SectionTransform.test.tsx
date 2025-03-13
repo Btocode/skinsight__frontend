@@ -2,10 +2,18 @@ import React from 'react';
 import { render } from '@testing-library/react';
 import SectionTransform from '../SectionTransform';
 
+interface MotionDivProps {
+  children: React.ReactNode;
+  initial: string;
+  animate: string;
+  variants: Record<string, unknown>;
+  transition: Record<string, unknown>;
+}
+
 // Mock the motion component from framer-motion
 jest.mock('motion/react', () => ({
   motion: {
-    div: ({ children, initial, animate, variants, transition, ...props }: any) => (
+    div: ({ children, initial, animate, variants, transition, ...props }: MotionDivProps) => (
       <div
         data-testid="motion-div"
         data-initial={initial}
@@ -117,7 +125,7 @@ describe('SectionTransform', () => {
   });
 
   it('applies default variants for invalid type', () => {
-    // @ts-ignore - Testing invalid type
+    // @ts-expect-error - Testing invalid type
     const { getByTestId } = render(
       <SectionTransform type="invalid">Test content</SectionTransform>
     );
@@ -150,7 +158,7 @@ describe('SectionTransform', () => {
   });
 
   it('uses "down" as default type when not specified', () => {
-    // @ts-ignore - Testing missing required prop
+    // @ts-expect-error - Testing missing required prop
     const { getByTestId } = render(
       <SectionTransform>Test content</SectionTransform>
     );
