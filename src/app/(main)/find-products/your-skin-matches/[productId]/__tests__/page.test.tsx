@@ -50,8 +50,9 @@ jest.mock('@/components/common/Accordion', () => ({
 
 jest.mock('next/image', () => ({
   __esModule: true,
-  default: ({ src, alt, fill }: { src: string, alt: string, fill?: boolean }) => (
-    <img data-testid="image" src={src} alt={alt} style={fill ? { objectFit: 'cover' } : {}} />
+  default: ({ src, alt, className }: { src: string, alt: string, className: string }) => (
+    // eslint-disable-next-line @next/next/no-img-element
+    <img data-testid="image" src={src} alt={alt} className={className} />
   ),
 }));
 
