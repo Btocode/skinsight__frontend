@@ -1,10 +1,36 @@
 import { render, screen, fireEvent } from '@testing-library/react';
 import MatchesProductFilter from '../MatchesProductFilter';
 
+interface ButtonProps {
+  children: React.ReactNode;
+  onClick: () => void;
+  variant: string;
+  className: string;
+  icon: React.ReactNode;
+  iconClassName: string;
+}
+
+interface CheckboxProps {
+  label: string;
+  checked: boolean;
+  onChange: () => void;
+  className: string;
+  iconClassName: string;
+  labelClassName: string;
+}
+
+interface ModalProps {
+  isOpen: boolean;
+  onClose: () => void;
+  contentClassName: string;
+  isCloseIconVisible: boolean;
+  children: React.ReactNode;
+}
+
 // Mock the Button component
 jest.mock('@/components/common/Button', () => ({
   __esModule: true,
-  default: ({ children, onClick, variant, className, icon, iconClassName }: any) => (
+  default: ({ children, onClick, variant, className, icon, iconClassName }: ButtonProps) => (
     <button
       onClick={onClick}
       className={className}
@@ -19,7 +45,7 @@ jest.mock('@/components/common/Button', () => ({
 // Mock the Checkbox component
 jest.mock('@/components/common/CheckBox', () => ({
   __esModule: true,
-  default: ({ label, checked, onChange, className, iconClassName, labelClassName }: any) => (
+  default: ({ label, checked, onChange, className, iconClassName, labelClassName }: CheckboxProps) => (
     <div className={className} data-testid={`checkbox-${label}`}>
       <input
         type="checkbox"
@@ -36,7 +62,7 @@ jest.mock('@/components/common/CheckBox', () => ({
 // Mock the Modal component
 jest.mock('@/components/common/Modal', () => ({
   __esModule: true,
-  default: ({ isOpen, onClose, contentClassName, isCloseIconVisible, children }: any) => (
+  default: ({ isOpen, onClose, contentClassName, isCloseIconVisible, children }: ModalProps) => (
     isOpen ? (
       <div data-testid="modal" className={contentClassName}>
         {!isCloseIconVisible ? null : (
