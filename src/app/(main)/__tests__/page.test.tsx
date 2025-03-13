@@ -6,7 +6,7 @@ import '@testing-library/jest-dom';
 // Mock the components
 jest.mock('@/components/animations/SectionOpacity', () => ({
   __esModule: true,
-  default: ({ children }) => <div data-testid="section-opacity">{children}</div>,
+  default: ({ children }: { children: React.ReactNode }) => <div data-testid="section-opacity">{children}</div>,
 }));
 
 jest.mock('@/components/common/GradientImage', () => ({
@@ -16,7 +16,7 @@ jest.mock('@/components/common/GradientImage', () => ({
 
 jest.mock('@/components/common/HeadingPrimary', () => ({
   __esModule: true,
-  default: ({ children, className }) => (
+  default: ({ children, className }: { children: React.ReactNode, className: string }) => (
     <h1 data-testid="heading-primary" className={className}>
       {children}
     </h1>
@@ -25,7 +25,7 @@ jest.mock('@/components/common/HeadingPrimary', () => ({
 
 jest.mock('@/components/common/Button', () => ({
   __esModule: true,
-  default: ({ children, variant, className }) => (
+  default: ({ children, variant, className }: { children: React.ReactNode, variant: string, className: string }) => (
     <button data-testid={`button-${variant || 'primary'}`} className={className}>
       {children}
     </button>
@@ -34,7 +34,8 @@ jest.mock('@/components/common/Button', () => ({
 
 jest.mock('next/image', () => ({
   __esModule: true,
-  default: ({ src, alt, width, height, className }) => (
+  default: ({ src, alt, width, height, className }: { src: string, alt: string, width: number, height: number, className: string }) => (
+    // eslint-disable-next-line @next/next/no-img-element
     <img
       src={typeof src === 'object' ? '/mock-path.jpg' : src}
       alt={alt}
@@ -48,7 +49,7 @@ jest.mock('next/image', () => ({
 
 jest.mock('next/link', () => ({
   __esModule: true,
-  default: ({ href, children }) => (
+  default: ({ href, children }: { href: string, children: React.ReactNode }) => (
     <a href={href} data-testid={`link-to-${href.toString().replace(/\//g, '-')}`}>
       {children}
     </a>
@@ -75,7 +76,7 @@ describe('HomePage', () => {
     (cookies as jest.Mock).mockResolvedValue(mockCookies);
 
     const Component = await HomePage();
-    const { container } = render(Component);
+    render(Component);
 
     // Check that SectionOpacity is rendered
     expect(screen.getByTestId('section-opacity')).toBeInTheDocument();
