@@ -8,14 +8,10 @@ jest.mock('@/components/common/Button', () => ({
   __esModule: true,
   default: ({
     children,
-    variant,
-    size,
     className,
     onClick
   }: {
     children: React.ReactNode,
-    variant?: string,
-    size?: string,
     className?: string,
     onClick?: () => void
   }) => (
@@ -34,20 +30,19 @@ jest.mock('next/image', () => ({
   default: ({
     src,
     alt,
-    fill,
     className
   }: {
     src: string,
     alt: string,
-    fill?: boolean,
     className?: string
   }) => (
+    // eslint-disable-next-line @next/next/no-img-element
     <img
       src={src}
       alt={alt}
       data-testid={`gallery-image-${alt.toLowerCase().replace(/\s+/g, '-')}-${src.split('/').pop()?.replace(/\./g, '-')}`}
       className={className}
-      style={fill ? { objectFit: 'cover' } : {}}
+      style={{ objectFit: 'cover' }}
     />
   ),
 }));
