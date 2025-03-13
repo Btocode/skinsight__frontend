@@ -6,7 +6,7 @@ import '@testing-library/jest-dom';
 // Mock the dependencies
 jest.mock('@/components/common/Button', () => ({
   __esModule: true,
-  default: ({ children, variant, size, className, onClick }) => (
+  default: ({ children, variant, className, onClick }: { children: React.ReactNode, variant: string, className: string, onClick: () => void }) => (
     <button
       data-testid={`button-${variant || 'default'}`}
       className={className}
@@ -19,7 +19,7 @@ jest.mock('@/components/common/Button', () => ({
 
 jest.mock('@/components/common/Tag', () => ({
   __esModule: true,
-  default: ({ children, variant }) => (
+  default: ({ children, variant }: { children: React.ReactNode, variant: string }) => (
     <div
       data-testid={`tag-${variant}`}
     >
@@ -30,13 +30,14 @@ jest.mock('@/components/common/Tag', () => ({
 
 jest.mock('next/image', () => ({
   __esModule: true,
-  default: ({ src, alt, fill, className }) => (
+  default: ({ src, alt, className }: { src: string, alt: string, className: string }) => (
+    // eslint-disable-next-line @next/next/no-img-element
     <img
       src={src}
       alt={alt}
       data-testid={`image-${alt.replace(/\s+/g, '-')}`}
       className={className}
-      style={fill ? { objectFit: 'contain' } : {}}
+      style={{ objectFit: 'contain' }}
     />
   ),
 }));
