@@ -2,10 +2,17 @@ import React from 'react';
 import { render } from '@testing-library/react';
 import SectionOpacity from '../SectionOpacity';
 
+interface MotionDivProps {
+  children: React.ReactNode;
+  initial: string;
+  animate: string;
+  transition: string;
+}
+
 // Mock the motion component from framer-motion
 jest.mock('motion/react', () => ({
   motion: {
-    div: ({ children, initial, animate, transition, ...props }: any) => (
+    div: ({ children, initial, animate, transition, ...props }: MotionDivProps) => (
       <div
         data-testid="motion-div"
         data-initial={JSON.stringify(initial)}
