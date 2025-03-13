@@ -1,7 +1,6 @@
 import React from 'react';
 import { render, screen } from '@testing-library/react';
 import YourSkinMatchesLayout from '../layout';
-import Footer from '@/components/layout/Footer';
 import '@testing-library/jest-dom';
 
 // Mock the Footer component
