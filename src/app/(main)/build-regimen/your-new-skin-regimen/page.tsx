@@ -8,6 +8,9 @@ import { notFound } from "next/navigation";
 import SkinRegimenTabs from "./_components/SkinRegimenTabs";
 import { RegimenProduct } from "@/types/regimen";
 
+export const dynamic = 'force-dynamic';
+export const generateStaticParams = () => [];
+
 const getYourSkinRegimen = async (): Promise<RegimenProduct[]> => {
   const response = await fetch("http://localhost:3000/api/build-regimen");
   return await response.json();

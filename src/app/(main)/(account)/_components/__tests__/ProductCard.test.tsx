@@ -1,10 +1,18 @@
-import { render, screen, fireEvent } from '@testing-library/react';
+import { render, screen } from '@testing-library/react';
 import { ProductCard } from '../ProductCard';
 
 // Mock Next/Image since it's used in the component
 jest.mock('next/image', () => ({
   __esModule: true,
-  default: (props: any) => <img {...props} alt={props.alt} fill="true" />,
+  default: (props: React.ComponentProps<'img'>) => {
+    // eslint-disable-next-line @next/next/no-img-element
+    return <img
+      src={props.src as string}
+      alt={props.alt as string}
+      style={props.style}
+      className={props.className}
+    />;
+  },
 }));
 
 describe('ProductCard', () => {

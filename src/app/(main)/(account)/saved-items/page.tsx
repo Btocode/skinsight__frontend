@@ -12,6 +12,9 @@ const getSavedItems = async (): Promise<Product[]> => {
   return response.json();
 };
 
+export const dynamic = 'force-dynamic';
+export const generateStaticParams = () => [];
+
 const SavedItemsPage = async () => {
   const products = await getSavedItems();
   return (

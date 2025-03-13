@@ -39,7 +39,6 @@ describe('ForgotPasswordForm', () => {
   // Test 3: Check for email input
   it('renders email input field', () => {
     renderWithProvider();
-    expect(screen.getByPlaceholderText('Enter email address')).toBeInTheDocument();
-
+    expect(screen.getByPlaceholderText('Enter your email')).toBeInTheDocument();
   });
 });

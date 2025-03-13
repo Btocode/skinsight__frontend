@@ -3,6 +3,7 @@ import { render, screen, fireEvent, cleanup } from '@testing-library/react';
 import SelectProductForSkinRegimen from '../SelectProductForSkinRegimen';
 import { useAppDispatch } from '@/lib/redux/hook';
 import { updatePersonalRegimen } from '@/redux/slices/regimenSlice';
+import { ImageProps } from 'next/image';
 
 // Mock the redux hooks
 jest.mock('@/lib/redux/hook', () => ({
@@ -17,7 +18,7 @@ jest.mock('@/redux/slices/regimenSlice', () => ({
 // Mock the BackButton component
 jest.mock('@/components/common/BackButton', () => ({
   __esModule: true,
-  default: ({ buttonProps }: any) => (
+  default: ({ buttonProps }: { buttonProps?: { className?: string } }) => (
     <button data-testid="back-button" className={buttonProps?.className}>
       Back
     </button>
@@ -27,7 +28,17 @@ jest.mock('@/components/common/BackButton', () => ({
 // Mock the Button component
 jest.mock('@/components/common/Button', () => ({
   __esModule: true,
-  default: ({ children, onClick, className, variant }: any) => (
+  default: ({
+    children,
+    onClick,
+    className,
+    variant
+  }: {
+    children: React.ReactNode;
+    onClick?: () => void;
+    className?: string;
+    variant?: string;
+  }) => (
     <button
       onClick={onClick}
       className={className}
@@ -40,18 +51,28 @@ jest.mock('@/components/common/Button', () => ({
 
 // Mock the Combobox component
 jest.mock('@/components/common/Combobox', () => ({
-  Combobox: ({ options, value, onChange, placeholder }: any) => (
+  Combobox: ({
+    options,
+    value,
+    onChange,
+    placeholder
+  }: {
+    options: Array<{ value: string; label: string }>;
+    value?: { value: string; label: string } | null;
+    onChange: (option: { value: string; label: string }) => void;
+    placeholder: string;
+  }) => (
     <div data-testid={`combobox-${placeholder.replace(/\s+/g, '-').toLowerCase()}`}>
       <select
         value={value?.value || ''}
         onChange={(e) => {
-          const selectedOption = options.find((opt: any) => opt.value === e.target.value);
-          onChange(selectedOption);
+          const selectedOption = options.find((opt) => opt.value === e.target.value);
+          onChange(selectedOption || { value: '', label: '' });
         }}
         data-testid={`select-${placeholder.replace(/\s+/g, '-').toLowerCase()}`}
       >
         <option value="">{placeholder}</option>
-        {options.map((option: any) => (
+        {options.map((option) => (
           <option key={option.value} value={option.value}>
             {option.label}
           </option>
@@ -64,7 +85,13 @@ jest.mock('@/components/common/Combobox', () => ({
 // Mock the HeadingPrimary component
 jest.mock('@/components/common/HeadingPrimary', () => ({
   __esModule: true,
-  default: ({ children, className }: any) => (
+  default: ({
+    children,
+    className
+  }: {
+    children: React.ReactNode;
+    className?: string;
+  }) => (
     <h1 data-testid="heading-primary" className={className}>
       {children}
     </h1>
@@ -74,7 +101,15 @@ jest.mock('@/components/common/HeadingPrimary', () => ({
 // Mock the Modal component
 jest.mock('@/components/common/Modal', () => ({
   __esModule: true,
-  default: ({ isOpen, onClose, children, contentClassName }: any) => (
+  default: ({
+    isOpen,
+    children,
+    contentClassName
+  }: {
+    isOpen?: boolean;
+    children: React.ReactNode;
+    contentClassName?: string;
+  }) => (
     isOpen ? (
       <div data-testid="modal" className={contentClassName}>
         {children}
@@ -86,10 +121,11 @@ jest.mock('@/components/common/Modal', () => ({
 // Mock the next/image component
 jest.mock('next/image', () => ({
   __esModule: true,
-  default: ({ src, alt, width, height, className }: any) => (
+  default: ({ src, alt, width, height, className }: ImageProps) => (
+    // eslint-disable-next-line @next/next/no-img-element
     <img
-      src={src}
-      alt={alt}
+      src={typeof src === 'string' ? src : ''}
+      alt={alt || ''}
       width={width}
       height={height}
       className={className}

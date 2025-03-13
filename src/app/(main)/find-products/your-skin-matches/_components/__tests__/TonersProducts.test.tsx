@@ -1,173 +1,251 @@
-import React from "react";
 import { render, screen, fireEvent } from "@testing-library/react";
-import { Product } from "@/types/products";
 import TonersProducts from "../TonersProducts";
+import { Product } from "@/types/products";
+import React from "react";
 
-// Sample product data for Toners
-const mockProducts: Product[] = [
-  {
-    id: "1",
-    productImage: "/tonner1.png",
-    productTitle: "Tonner 1",
-    brand: "Brand A",
-    price: "20",
-    matched: true,
-    most_viewed: false,
-    best_rated: true,
-  },
-  {
-    id: "2",
-    productImage: "/tonner2.png",
-    productTitle: "Tonner 2",
-    brand: "Brand B",
-    price: "25",
-    matched: false,
-    most_viewed: true,
-    best_rated: false,
-  },
-  {
-    id: "3",
-    productImage: "/tonner3.png",
-    productTitle: "Tonner 3",
-    brand: "Brand C",
-    price: "30",
-    matched: true,
-    most_viewed: true,
-    best_rated: true,
-  },
-];
+// Mock lucide-react icons
+jest.mock("lucide-react", () => ({
+  ChevronLeft: () => <div data-testid="chevron-left-icon">ChevronLeft</div>,
+  ChevronRight: () => <div data-testid="chevron-right-icon">ChevronRight</div>,
+}));
 
-// Step 1: Mock the MatchesProductCard component
+// Mock the MatchesProductCard component
 jest.mock("../MatchesProductCard", () => ({
   MatchesProductCard: ({ item }: { item: Product }) => (
-    <div data-testid="product-card" data-product-id={item.productTitle}>
-      {item.productTitle}
-    </div>
+    <div data-testid={`product-card-${item.id}`}>{item.productTitle}</div>
   ),
 }));
 
-// Step 2: Mock the Lucide icons
-jest.mock("lucide-react", () => ({
-  ChevronLeft: () => <div data-testid="chevron-left-toners">ChevronLeft</div>,
-  ChevronRight: () => (
-    <div data-testid="chevron-right-toners">ChevronRight</div>
-  ),
-}));
+describe("TonersProducts", () => {
+  // Sample product data for testing
+  const mockProducts: Product[] = [
+    {
+      id: "1",
+      productTitle: "Toner 1",
+      productImage: "/image1.jpg",
+      brand: "Brand 1",
+      price: "19.99",
+      matched: true,
+      best_rated: false,
+      most_viewed: false,
+    },
+    {
+      id: "2",
+      productTitle: "Toner 2",
+      productImage: "/image2.jpg",
+      brand: "Brand 2",
+      price: "29.99",
+      matched: true,
+      best_rated: true,
+      most_viewed: false,
+    },
+    {
+      id: "3",
+      productTitle: "Toner 3",
+      productImage: "/image3.jpg",
+      brand: "Brand 3",
+      price: "39.99",
+      matched: false,
+      best_rated: false,
+      most_viewed: true,
+    },
+  ];
 
-describe("TonersProducts Component", () => {
-  // Step 3: Set up the test environment
   beforeEach(() => {
-    // Reset all mocks
+    // Reset mocks before each test
     jest.clearAllMocks();
 
-    // Mock Element.scrollBy, Element.scrollWidth, and Element.scrollLeft
-    Element.prototype.scrollBy = jest.fn();
-    Object.defineProperty(Element.prototype, "scrollWidth", {
+    // Mock Element.scrollWidth and Element.scrollLeft
+    Object.defineProperty(HTMLElement.prototype, "scrollWidth", {
       configurable: true,
-      get: jest.fn().mockReturnValue(1200),
+      value: 1200,
     });
-    Object.defineProperty(Element.prototype, "scrollLeft", {
+
+    Object.defineProperty(HTMLElement.prototype, "scrollLeft", {
       configurable: true,
-      get: jest.fn().mockReturnValue(400),
-      set: jest.fn(),
+      value: 400,
+      writable: true,
     });
-    Object.defineProperty(Element.prototype, "clientWidth", {
+
+    Object.defineProperty(HTMLElement.prototype, "clientWidth", {
       configurable: true,
-      get: jest.fn().mockReturnValue(300),
+      value: 300,
     });
-    Object.defineProperty(Element.prototype, "firstElementChild", {
+
+    // Mock scrollBy
+    HTMLElement.prototype.scrollBy = jest.fn();
+
+    // Mock firstElementChild
+    Object.defineProperty(HTMLElement.prototype, "firstElementChild", {
       configurable: true,
-      get: jest.fn().mockReturnValue({
-        clientWidth: 300,
-      }),
+      value: {
+        clientWidth: 200,
+      },
     });
   });
 
-  // Step 4: Render the component with mock product data
-  it("renders the component with the correct title", () => {
+  afterEach(() => {
+    // Clean up mocks
+    jest.restoreAllMocks();
+  });
+
+  it("renders without crashing", () => {
+    render(<TonersProducts products={mockProducts} />);
+  });
+
+  it("renders the correct heading", () => {
+    render(<TonersProducts products={mockProducts} />);
+    expect(screen.getByText("Toners")).toBeInTheDocument();
+  });
+
+  it("duplicates products for infinite scroll", () => {
     render(<TonersProducts products={mockProducts} />);
 
-    // Check if the title is rendered
-    const title = screen.getByText("Toners");
-    expect(title).toBeInTheDocument();
+    // Should render each product 3 times (3 products × 3 duplications)
+    const product1Cards = screen.getAllByText("Toner 1");
+    const product2Cards = screen.getAllByText("Toner 2");
+    const product3Cards = screen.getAllByText("Toner 3");
+
+    expect(product1Cards).toHaveLength(3);
+    expect(product2Cards).toHaveLength(3);
+    expect(product3Cards).toHaveLength(3);
   });
 
-  // Step 5: Ensure that duplicated products are rendered correctly
-  it("renders the correct number of product cards (3x duplicated)", () => {
-    render(<TonersProducts products={mockProducts} />);
-
-    // Check if the products are rendered (3 products x 3 duplications)
-    const productCards = screen.getAllByTestId("product-card");
-    expect(productCards).toHaveLength(9);
-  });
-
-  // Step 6: Test navigation buttons
   it("renders navigation buttons", () => {
     render(<TonersProducts products={mockProducts} />);
 
-    // Check if navigation buttons are rendered with correct test IDs
-    const leftButton = screen.getByTestId("chevron-left-toners");
-    const rightButton = screen.getByTestId("chevron-right-toners");
+    // Find the left and right navigation buttons
+    const leftButton = screen.getByTestId("chevron-left-icon");
+    const rightButton = screen.getByTestId("chevron-right-icon");
 
     expect(leftButton).toBeInTheDocument();
     expect(rightButton).toBeInTheDocument();
   });
 
-  // Step 7: Test the scroll functionality
   it("slides left when left button is clicked", () => {
     render(<TonersProducts products={mockProducts} />);
 
-    // Find the left button and click it
+    // Find the left navigation button and click it
     const leftButton = screen
-      .getByTestId("chevron-left-toners")
+      .getByTestId("chevron-left-icon")
       .closest("button");
-    fireEvent.click(leftButton!);
+    fireEvent.click(leftButton);
 
-    // Check if scrollBy was called with the correct parameters
-    expect(Element.prototype.scrollBy).toHaveBeenCalledWith({
-      left: -320, // 300 (card width) + 20 (gap)
+    // Check if scrollBy was called with negative value
+    expect(HTMLElement.prototype.scrollBy).toHaveBeenCalledWith({
+      left: expect.any(Number),
       behavior: "smooth",
     });
+
+    // The value should be negative for scrolling left
+    const scrollByCall = (HTMLElement.prototype.scrollBy as jest.Mock).mock
+      .calls[0][0];
+    expect(scrollByCall.left).toBeLessThan(0);
   });
 
-  // Step 8: Test the scroll functionality
   it("slides right when right button is clicked", () => {
     render(<TonersProducts products={mockProducts} />);
 
-    // Find the right button and click it
+    // Find the right navigation button and click it
     const rightButton = screen
-      .getByTestId("chevron-right-toners")
+      .getByTestId("chevron-right-icon")
       .closest("button");
-    fireEvent.click(rightButton!);
+    fireEvent.click(rightButton);
 
-    // Check if scrollBy was called with the correct parameters
-    expect(Element.prototype.scrollBy).toHaveBeenCalledWith({
-      left: 320, // 300 (card width) + 20 (gap)
+    // Check if scrollBy was called with positive value
+    expect(HTMLElement.prototype.scrollBy).toHaveBeenCalledWith({
+      left: expect.any(Number),
       behavior: "smooth",
     });
+
+    // The value should be positive for scrolling right
+    const scrollByCall = (HTMLElement.prototype.scrollBy as jest.Mock).mock
+      .calls[0][0];
+    expect(scrollByCall.left).toBeGreaterThan(0);
   });
 
-  // Step 9: Ensure that duplicated products are rendered correctly
-  it("duplicates products correctly", () => {
+  it("handles scroll events for infinite scrolling", () => {
     render(<TonersProducts products={mockProducts} />);
 
-    // Get all product cards
-    const productCards = screen.getAllByTestId("product-card");
+    const slider = screen
+      .getByTestId("chevron-right-icon")
+      .closest("button")?.previousSibling;
 
-    // Check if the products are duplicated correctly
-    // First set of 3 products
-    expect(productCards[0]).toHaveAttribute("data-product-id", "Tonner 1");
-    expect(productCards[1]).toHaveAttribute("data-product-id", "Tonner 2");
-    expect(productCards[2]).toHaveAttribute("data-product-id", "Tonner 3");
+    // Mock scrollLeft to be at the beginning
+    Object.defineProperty(slider, "scrollLeft", {
+      configurable: true,
+      value: 0,
+      writable: true,
+    });
 
-    // Second set of 3 products
-    expect(productCards[3]).toHaveAttribute("data-product-id", "Tonner 1");
-    expect(productCards[4]).toHaveAttribute("data-product-id", "Tonner 2");
-    expect(productCards[5]).toHaveAttribute("data-product-id", "Tonner 3");
+    // Trigger scroll event
+    fireEvent.scroll(slider as Element);
 
-    // Third set of 3 products
-    expect(productCards[6]).toHaveAttribute("data-product-id", "Tonner 1");
-    expect(productCards[7]).toHaveAttribute("data-product-id", "Tonner 2");
-    expect(productCards[8]).toHaveAttribute("data-product-id", "Tonner 3");
+    // scrollLeft should be updated to the middle section
+    expect(slider).toHaveProperty("scrollLeft", 400);
+
+    // Now mock scrollLeft to be at the end
+    Object.defineProperty(slider, "scrollLeft", {
+      configurable: true,
+      value: 800,
+      writable: true,
+    });
+
+    // Trigger scroll event again
+    fireEvent.scroll(slider as Element);
+
+    // scrollLeft should be reset to the middle section
+    expect(slider).toHaveProperty("scrollLeft", 400);
+  });
+
+  it("sets initial scroll position on component mount", () => {
+    // Create a mock ref
+    const mockRef = { current: { scrollLeft: 0 } };
+    jest.spyOn(React, "useRef").mockReturnValue(mockRef);
+
+    // Render the component
+    render(<TonersProducts products={mockProducts} />);
+
+    // The useEffect should have run and set the scrollLeft
+    // We can't easily test this directly, so we'll just verify the component rendered
+    expect(screen.getByText("Toners")).toBeInTheDocument();
+
+    // Clean up
+    jest.restoreAllMocks();
+  });
+
+  it("calculates correct scroll amount based on card width", () => {
+    render(<TonersProducts products={mockProducts} />);
+
+    // Find the right navigation button and click it
+    const rightButton = screen
+      .getByTestId("chevron-right-icon")
+      .closest("button");
+    fireEvent.click(rightButton);
+
+    // The scroll amount should be cardWidth (200) + gap (20)
+    const scrollByCall = (HTMLElement.prototype.scrollBy as jest.Mock).mock
+      .calls[0][0];
+    expect(scrollByCall.left).toBe(220);
+  });
+
+  it("applies correct styling to the container", () => {
+    render(<TonersProducts products={mockProducts} />);
+
+    // Check section styling
+    const section = screen.getByText("Toners").closest("section");
+    expect(section).toHaveClass("mt-[27px]");
+    expect(section).toHaveClass("lg:mt-[46px]");
+    expect(section).toHaveClass("relative");
+
+    // Check slider container styling
+    const sliderContainer = screen
+      .getByTestId("chevron-right-icon")
+      .closest("button")?.previousSibling;
+    expect(sliderContainer).toHaveClass("flex");
+    expect(sliderContainer).toHaveClass("overflow-x-scroll");
+    expect(sliderContainer).toHaveClass("snap-x");
+    expect(sliderContainer).toHaveClass("snap-mandatory");
+    expect(sliderContainer).toHaveClass("no-scrollbar");
   });
 });

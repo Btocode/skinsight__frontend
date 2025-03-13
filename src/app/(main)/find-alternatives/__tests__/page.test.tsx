@@ -1,14 +1,25 @@
 import React from 'react';
 import { render, screen } from '@testing-library/react';
 import FindAlternativesPage from '../page';
+import { ImageProps } from 'next/image';
+
+interface HeadingProps {
+  children: React.ReactNode;
+  className?: string;
+}
+
+interface SectionProps {
+  children: React.ReactNode;
+}
 
 // Mock the next/image component
 jest.mock('next/image', () => ({
   __esModule: true,
-  default: ({ src, alt, className }: any) => (
+  default: ({ src, alt, className }: ImageProps) => (
+    // eslint-disable-next-line @next/next/no-img-element
     <img
-      src={src}
-      alt={alt}
+      src={typeof src === 'string' ? src : ''}
+      alt={alt || ''}
       className={className}
       data-testid="next-image"
     />
@@ -18,7 +29,7 @@ jest.mock('next/image', () => ({
 // Mock the HeadingPrimary component
 jest.mock('@/components/common/HeadingPrimary', () => ({
   __esModule: true,
-  default: ({ children, className }: any) => (
+  default: ({ children, className }: HeadingProps) => (
     <h1 data-testid="heading-primary" className={className}>
       {children}
     </h1>
@@ -34,7 +45,7 @@ jest.mock('@/components/common/GradientImage', () => ({
 // Mock the SectionOpacity component
 jest.mock('@/components/animations/SectionOpacity', () => ({
   __esModule: true,
-  default: ({ children }: any) => (
+  default: ({ children }: SectionProps) => (
     <div data-testid="section-opacity">{children}</div>
   ),
 }));

@@ -1,16 +1,12 @@
 import React from 'react';
 import { render, screen } from '@testing-library/react';
 import AddPreferencePage from '../page';
-import BackButton from '@/components/common/BackButton';
-import ActionPreference from '../_components/ActionPreference';
-import GradientImage from '@/components/common/GradientImage';
-import HeadingPrimary from '@/components/common/HeadingPrimary';
 
 // Mock the components
 jest.mock('@/components/common/BackButton', () => {
   return {
     __esModule: true,
-    default: ({ buttonProps }: any) => (
+    default: ({ buttonProps }: { buttonProps: { className?: string } }) => (
       <button
         data-testid="back-button"
         className={buttonProps?.className}
@@ -38,7 +34,7 @@ jest.mock('@/components/common/GradientImage', () => {
 jest.mock('@/components/common/HeadingPrimary', () => {
   return {
     __esModule: true,
-    default: ({ children, className }: any) => (
+    default: ({ children, className }: { children: React.ReactNode; className?: string }) => (
       <h1
         data-testid="heading-primary"
         className={className}

@@ -9,11 +9,17 @@ jest.mock('next/navigation', () => ({
   useRouter: jest.fn(),
 }));
 
+interface MockButtonProps {
+  children: React.ReactNode;
+  className?: string;
+  onClick?: () => void;
+}
+
 // Mock the Button component
 jest.mock('@/components/common/Button', () => {
   return {
     __esModule: true,
-    default: ({ children, className, onClick }: any) => (
+    default: ({ children, className, onClick }: MockButtonProps) => (
       <button
         data-testid="button"
         className={className}

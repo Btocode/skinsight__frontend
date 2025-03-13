@@ -1,11 +1,27 @@
 import { render, screen } from '@testing-library/react';
 import ReviewProductCard from '../ReviewProductCard';
 import '@testing-library/jest-dom';
+import { ImageProps } from 'next/image';
+
 
 // Mock next/image
 jest.mock('next/image', () => ({
   __esModule: true,
-  default: (props: any) => <img {...props} alt={props.alt} fill="true" />,
+  default: (props: ImageProps) => {
+    const { src, alt, className, width, height } = props;
+    return (
+      // eslint-disable-next-line @next/next/no-img-element
+      <img
+        src={typeof src === 'string' ? src : ''}
+        alt={alt || ''}
+        className={className}
+        width={width}
+        height={height}
+        data-testid="product-image"
+        data-fill="true"
+      />
+    );
+  },
 }));
 
 describe('ReviewProductCard', () => {

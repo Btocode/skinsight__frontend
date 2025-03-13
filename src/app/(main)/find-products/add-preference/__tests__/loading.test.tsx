@@ -1,7 +1,6 @@
 import React from 'react';
 import { render, screen } from '@testing-library/react';
 import Loading from '../loading';
-import Spinner from '@/components/common/Spinner';
 
 // Mock the Spinner component
 jest.mock('@/components/common/Spinner', () => {

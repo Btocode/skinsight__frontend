@@ -10,25 +10,55 @@ jest.mock('next/navigation', () => ({
   useRouter: jest.fn(),
 }));
 
+
+interface ComboboxOption {
+  value: string;
+  label: string;
+}
+
+interface ComboboxProps {
+  placeholder: string;
+  onChange: (option: ComboboxOption) => void;
+  options: ComboboxOption[];
+}
+
+interface ModalProps {
+  isOpen: boolean;
+  onClose: () => void;
+  children: React.ReactNode;
+}
+
 // Mock next/image
 jest.mock('next/image', () => ({
   __esModule: true,
-  default: (props: any) => {
-    // Convert boolean props to strings
-    const { fill, priority, ...rest } = props;
-    return (
-      <img
-        {...rest}
-        fill={fill ? "true" : undefined}
-        priority={priority ? "true" : undefined}
-      />
-    );
-  },
+  default: ({
+    src,
+    alt,
+    width,
+    height,
+    className
+  }: {
+    src: string;
+    alt?: string;
+    width?: number;
+    height?: number;
+    className?: string;
+  }) => (
+    // eslint-disable-next-line @next/next/no-img-element
+    <img
+      src={src}
+      alt={alt || 'Product image'}
+      width={width}
+      height={height}
+      className={className}
+      data-testid="product-image"
+    />
+  ),
 }));
 
 // Mock Combobox component
 jest.mock('@/components/common/Combobox', () => ({
-  Combobox: ({ placeholder, onChange, options }: any) => (
+  Combobox: ({ placeholder, onChange, options }: ComboboxProps) => (
     <div data-testid="mock-combobox">
       <input
         type="text"
@@ -36,7 +66,7 @@ jest.mock('@/components/common/Combobox', () => ({
         onChange={(e) => onChange({ value: e.target.value, label: e.target.value })}
       />
       <div>
-        {options.map((option: any) => (
+        {options.map((option) => (
           <button
             key={option.value}
             onClick={() => onChange(option)}
@@ -53,7 +83,7 @@ jest.mock('@/components/common/Combobox', () => ({
 // Mock Modal component
 jest.mock('@/components/common/Modal', () => ({
   __esModule: true,
-  default: ({ isOpen, onClose, children }: any) => (
+  default: ({ isOpen, onClose, children }: ModalProps) => (
     isOpen ? (
       <div data-testid="modal">
         <button onClick={onClose} aria-label="back">back</button>

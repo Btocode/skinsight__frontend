@@ -2,19 +2,26 @@ import React from 'react';
 import { render, screen } from '@testing-library/react';
 import YourNewSkinRegimenPage from '../page';
 import { notFound } from 'next/navigation';
+import { ImageProps } from 'next/image';
 
 // Mock the next/navigation
 jest.mock('next/navigation', () => ({
   notFound: jest.fn(),
 }));
 
-// Mock the next/image component
+interface HeadingProps {
+  children: React.ReactNode;
+  className?: string;
+}
+
+// Update the mocks
 jest.mock('next/image', () => ({
   __esModule: true,
-  default: ({ src, alt, fill, className }: any) => (
+  default: ({ src, alt, fill, className }: ImageProps) => (
+    // eslint-disable-next-line @next/next/no-img-element
     <img
-      src={src}
-      alt={alt}
+      src={typeof src === 'string' ? src : ''}
+      alt={alt || ''}
       className={className}
       data-testid="product-image"
       data-fill={fill ? 'true' : 'false'}
@@ -22,20 +29,19 @@ jest.mock('next/image', () => ({
   ),
 }));
 
-// Mock the BackButton component
-jest.mock('@/components/common/BackButton', () => ({
-  __esModule: true,
-  default: () => <button data-testid="back-button">Back</button>,
-}));
-
-// Mock the HeadingPrimary component
 jest.mock('@/components/common/HeadingPrimary', () => ({
   __esModule: true,
-  default: ({ children, className }: any) => (
+  default: ({ children, className }: HeadingProps) => (
     <h1 data-testid="heading-primary" className={className}>
       {children}
     </h1>
   ),
+}));
+
+// Mock the BackButton component
+jest.mock('@/components/common/BackButton', () => ({
+  __esModule: true,
+  default: () => <button data-testid="back-button">Back</button>,
 }));
 
 // Mock the Advertisement component

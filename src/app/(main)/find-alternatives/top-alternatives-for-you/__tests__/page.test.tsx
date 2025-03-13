@@ -2,19 +2,43 @@ import React from 'react';
 import { render, screen } from '@testing-library/react';
 import TopAlternativesForYouPage from '../page';
 import { notFound } from 'next/navigation';
+import { ImageProps } from 'next/image';
 
 // Mock the next/navigation
 jest.mock('next/navigation', () => ({
   notFound: jest.fn(),
 }));
 
+interface HeadingProps {
+  children: React.ReactNode;
+  className?: string;
+}
+
+interface AdvertisementProps {
+  className?: string;
+}
+
+interface GradientImageProps {
+  secondImage?: { url: string };
+}
+
+interface Product {
+  id: string;
+  name: string;
+}
+
+interface TopAlternativesProductsProps {
+  products: Product[];
+}
+
 // Mock the next/image component
 jest.mock('next/image', () => ({
   __esModule: true,
-  default: ({ src, alt, className }: any) => (
+  default: ({ src, alt, className }: ImageProps) => (
+    // eslint-disable-next-line @next/next/no-img-element
     <img
-      src={src}
-      alt={alt}
+      src={typeof src === 'string' ? src : ''}
+      alt={alt || ''}
       className={className}
       data-testid="next-image"
     />
@@ -24,7 +48,7 @@ jest.mock('next/image', () => ({
 // Mock the HeadingPrimary component
 jest.mock('@/components/common/HeadingPrimary', () => ({
   __esModule: true,
-  default: ({ children, className }: any) => (
+  default: ({ children, className }: HeadingProps) => (
     <h1 data-testid="heading-primary" className={className}>
       {children}
     </h1>
@@ -34,7 +58,7 @@ jest.mock('@/components/common/HeadingPrimary', () => ({
 // Mock the Advertisement component
 jest.mock('@/components/common/Advertisement', () => ({
   __esModule: true,
-  default: ({ className }: any) => (
+  default: ({ className }: AdvertisementProps) => (
     <div data-testid="advertisement" className={className}>
       Advertisement
     </div>
@@ -44,7 +68,7 @@ jest.mock('@/components/common/Advertisement', () => ({
 // Mock the GradientImage component
 jest.mock('@/components/common/GradientImage', () => ({
   __esModule: true,
-  default: ({ secondImage }: any) => (
+  default: ({ secondImage }: GradientImageProps) => (
     <div data-testid="gradient-image" data-second-image={secondImage?.url}>
       Gradient Image
     </div>
@@ -60,9 +84,9 @@ jest.mock('../../_components/SelectYourTargetProduct', () => ({
 // Mock the TopAlternativesProducts component
 jest.mock('../_components/TopAlternativesProducts', () => ({
   __esModule: true,
-  default: ({ products }: any) => (
+  default: ({ products }: TopAlternativesProductsProps) => (
     <div data-testid="top-alternatives-products">
-      {products.map((product: any, index: number) => (
+      {products.map((product, index) => (
         <div key={index} data-product-id={product.id}>
           {product.name}
         </div>

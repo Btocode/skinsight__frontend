@@ -17,8 +17,10 @@ jest.mock('@/components/common/Spinner', () => ({
 // Mock next/dynamic to return the ProfileForm component directly
 jest.mock('next/dynamic', () => ({
   __esModule: true,
-  default: jest.fn((importFunc, options) => {
-    return () => <div data-testid="dynamic-component">Dynamic Component</div>;
+  default: jest.fn(() => {
+    const DynamicComponent = () => <div data-testid="dynamic-component">Dynamic Component</div>;
+    DynamicComponent.displayName = 'DynamicComponent';
+    return DynamicComponent;
   }),
 }));
 

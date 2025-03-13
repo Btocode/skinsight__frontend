@@ -23,19 +23,33 @@ jest.mock('@/redux/slices/productSlice', () => ({
 
 // Mock the common components
 jest.mock('@/components/common/BackButton', () => {
-  return function MockBackButton({ onClick }: any) {
+  return function MockBackButton({ onClick }: { onClick?: () => void }) {
     return <button data-testid="back-button" onClick={onClick}>Back</button>;
   };
 });
 
 jest.mock('@/components/common/Button', () => {
-  return function MockButton({ children, onClick, disabled }: any) {
+  return function MockButton({
+    children,
+    onClick,
+    disabled
+  }: {
+    children: React.ReactNode;
+    onClick?: () => void;
+    disabled?: boolean;
+  }) {
     return <button data-testid="button" onClick={onClick} disabled={disabled}>{children}</button>;
   };
 });
 
 jest.mock('@/components/common/Combobox', () => ({
-  Combobox: function MockCombobox({ onChange, placeholder }: any) {
+  Combobox: function MockCombobox({
+    onChange,
+    placeholder
+  }: {
+    onChange: (option: { value: string; label: string }) => void;
+    placeholder: string;
+  }) {
     return (
       <div data-testid={`combobox-${placeholder}`}>
         <select onChange={(e) => onChange({ value: e.target.value, label: e.target.value })}>
@@ -48,8 +62,18 @@ jest.mock('@/components/common/Combobox', () => ({
   }
 }));
 
+interface MockModalProps {
+  isOpen: boolean;
+  onClose: () => void;
+  children: React.ReactNode;
+}
+
+interface MockHeadingProps {
+  children: React.ReactNode;
+}
+
 jest.mock('@/components/common/Modal', () => {
-  return function MockModal({ isOpen, onClose, children }: any) {
+  return function MockModal({ isOpen, onClose, children }: MockModalProps) {
     if (!isOpen) return null;
     return (
       <div data-testid="modal">
@@ -61,17 +85,38 @@ jest.mock('@/components/common/Modal', () => {
 });
 
 jest.mock('@/components/common/HeadingPrimary', () => {
-  return function MockHeadingPrimary({ children }: any) {
+  return function MockHeadingPrimary({ children }: MockHeadingProps) {
     return <h1 data-testid="heading">{children}</h1>;
   };
 });
 
 // Mock next/image
-jest.mock('next/image', () => {
-  return function MockImage() {
-    return <img data-testid="image" alt="mock" />;
-  };
-});
+jest.mock('next/image', () => ({
+  __esModule: true,
+  default: ({
+    src,
+    alt,
+    width,
+    height,
+    className
+  }: {
+    src: string;
+    alt?: string;
+    width?: number;
+    height?: number;
+    className?: string;
+  }) => (
+    // eslint-disable-next-line @next/next/no-img-element
+    <img
+      src={src}
+      alt={alt || 'Product image'}
+      width={width}
+      height={height}
+      className={className}
+      data-testid="product-image"
+    />
+  ),
+}));
 
 describe('AddProduct Component', () => {
   const mockPush = jest.fn();
@@ -162,17 +207,16 @@ describe('AddProduct Component', () => {
   });
 
   it('renders existing preferences', () => {
-    // Mock preferences with items
+    // Mock preferences with 2 items
     (useAppSelector as jest.Mock).mockReturnValue([
       { id: '1', productId: '1', reaction: 'like', productImage: '/test.png' },
-      { id: '2', productId: '2', reaction: 'dislike', productImage: '/test.png' }
+      { id: '2', productId: '2', reaction: 'dislike', productImage: '/test2.png' }
     ]);
 
     render(<AddProduct open={true} onClose={mockOnClose} />);
 
-    // Should render images for the preferences
-    const images = screen.getAllByTestId('image');
-    expect(images.length).toBeGreaterThan(0);
+    // Check if the preferences are rendered - now using product-image testid
+    expect(screen.getAllByTestId('product-image')).toHaveLength(2);
   });
 
   it('disables Add another button when preferences length is 3', () => {

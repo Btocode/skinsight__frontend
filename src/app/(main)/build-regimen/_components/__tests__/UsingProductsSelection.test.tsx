@@ -4,6 +4,7 @@ import UsingProductsSelection from '../UsingProductsSelection';
 import { useAppDispatch, useAppSelector } from '@/lib/redux/hook';
 import { onClearPersonalRegimen } from '@/redux/slices/regimenSlice';
 import { useRouter } from 'next/navigation';
+import { ImageProps } from 'next/image';
 
 // Mock the redux hooks
 jest.mock('@/lib/redux/hook', () => ({
@@ -27,43 +28,44 @@ jest.mock('@/components/common/BackButton', () => ({
   default: () => <button data-testid="back-button">Back</button>,
 }));
 
-// Mock the Button component
+interface ButtonProps {
+  children: React.ReactNode;
+  onClick?: () => void;
+  disabled?: boolean;
+}
+
+interface HeadingProps {
+  children: React.ReactNode;
+  className?: string;
+}
+
+interface SelectProductModalProps {
+  regimenType: string;
+  onClose: () => void;
+}
+
+// Update the mocks
 jest.mock('@/components/common/Button', () => ({
   __esModule: true,
-  default: ({ children, onClick, disabled }: any) => (
-    <button
-      onClick={onClick}
-      disabled={disabled}
-      data-testid="generate-button"
-    >
-      {children}
-    </button>
+  default: ({ children, onClick, disabled }: ButtonProps) => (
+    <button onClick={onClick} disabled={disabled} data-testid="generate-button">{children}</button>
   ),
 }));
 
-// Mock the GradientImage component
-jest.mock('@/components/common/GradientImage', () => ({
-  __esModule: true,
-  default: () => <div data-testid="gradient-image">Gradient Image</div>,
-}));
-
-// Mock the HeadingPrimary component
 jest.mock('@/components/common/HeadingPrimary', () => ({
   __esModule: true,
-  default: ({ children, className }: any) => (
-    <h1 data-testid="heading-primary" className={className}>
-      {children}
-    </h1>
+  default: ({ children, className }: HeadingProps) => (
+    <h1 data-testid="heading-primary" className={className}>{children}</h1>
   ),
 }));
 
-// Mock the next/image component
 jest.mock('next/image', () => ({
   __esModule: true,
-  default: ({ src, alt, fill, className }: any) => (
+  default: ({ src, alt, fill, className }: ImageProps) => (
+    // eslint-disable-next-line @next/next/no-img-element
     <img
-      src={src}
-      alt={alt}
+      src={typeof src === 'string' ? src : ''}
+      alt={alt || ''}
       className={className}
       data-testid="product-image"
       data-fill={fill ? 'true' : 'false'}
@@ -71,10 +73,9 @@ jest.mock('next/image', () => ({
   ),
 }));
 
-// Mock the SelectProductForSkinRegimen component
 jest.mock('../SelectProductForSkinRegimen', () => ({
   __esModule: true,
-  default: ({ regimenType, onClose }: any) => (
+  default: ({ regimenType, onClose }: SelectProductModalProps) => (
     <div data-testid="select-product-modal" data-regimen-type={regimenType}>
       <button onClick={onClose} data-testid="close-modal-button">Close</button>
     </div>
@@ -294,16 +295,19 @@ describe('UsingProductsSelection Component', () => {
   });
 
   /**
-   * Test 11: Verify that the component renders the GradientImage
+   * Test 11: Verify that the component renders the gradient images
    *
    * This test ensures that:
-   * - The GradientImage component is rendered
+   * - The gradient images are rendered
    */
-  it('renders the GradientImage', () => {
+  it('renders the gradient images', () => {
     render(<UsingProductsSelection />);
 
-    // Check if the GradientImage component is rendered
-    expect(screen.getByTestId('gradient-image')).toBeInTheDocument();
+    // Check if the gradient images are rendered
+    const gradientImages = screen.getAllByTestId('product-image');
+    expect(gradientImages.length).toBeGreaterThanOrEqual(2);
+    expect(gradientImages[0]).toHaveAttribute('src', '/gradient1.png');
+    expect(gradientImages[1]).toHaveAttribute('src', '/gradient2.png');
   });
 
   /**

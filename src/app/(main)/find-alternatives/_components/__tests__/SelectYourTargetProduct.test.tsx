@@ -21,21 +21,32 @@ jest.mock('@/redux/slices/productSlice', () => ({
   setFindAlternatives: jest.fn(),
 }));
 
+interface ComboboxOption {
+  value: string;
+  label: string;
+}
+
+interface ComboboxProps {
+  placeholder: string;
+  onChange: (option: ComboboxOption) => void;
+  options: ComboboxOption[];
+}
+
 // Mock the Combobox component
 jest.mock('@/components/common/Combobox', () => ({
-  Combobox: ({ placeholder, onChange, options }: any) => (
+  Combobox: ({ placeholder, onChange, options }: ComboboxProps) => (
     <div data-testid={`combobox-${placeholder.replace(/\s+/g, '-').toLowerCase()}`}>
       <select
         data-testid={`select-${placeholder.replace(/\s+/g, '-').toLowerCase()}`}
         onChange={(e) => {
           const selectedOption = options.find(
-            (option: any) => option.value === e.target.value
+            (option) => option.value === e.target.value
           );
-          onChange(selectedOption);
+          onChange(selectedOption!);
         }}
       >
         <option value="">Select an option</option>
-        {options.map((option: any) => (
+        {options.map((option) => (
           <option key={option.value} value={option.value}>
             {option.label}
           </option>

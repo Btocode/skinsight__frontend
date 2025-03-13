@@ -16,7 +16,14 @@ jest.mock('next/navigation', () => ({
 // Mock next/image
 jest.mock('next/image', () => ({
   __esModule: true,
-  default: (props: any) => <img {...props} />,
+  default: (props: React.ComponentProps<'img'>) => {
+    // eslint-disable-next-line @next/next/no-img-element, jsx-a11y/alt-text
+    return <img
+      src={props.src as string}
+      alt={props.alt as string || ''}
+      className={props.className}
+    />;
+  }
 }));
 
 // Create mock store
@@ -71,44 +78,3 @@ describe('SignInForm', () => {
     expect(screen.getByText('Sign Up')).toBeInTheDocument();
   });
 });
-
-/*
-Future test cases to implement:
-
-1. Form Validation Tests:
-- Test email validation
-- Test password validation
-- Test empty form submission
-
-2. Social Login Tests:
-- Test Google login click handler
-- Test Facebook login click handler
-- Test Apple login click handler
-
-3. Authentication Flow Tests:
-- Test successful login
-- Test failed login
-- Test error messages display
-- Test loading state
-
-4. Navigation Tests:
-- Test sign up link navigation
-- Test forgot password link navigation
-- Test successful login navigation
-
-5. UI State Tests:
-- Test loading button state
-- Test disabled states
-- Test error message displays
-- Test success message displays
-
-6. Input Interaction Tests:
-- Test password visibility toggle
-- Test input focus states
-- Test form reset
-
-7. API Integration Tests:
-- Test login API call
-- Test API error handling
-- Test API success handling
-*/

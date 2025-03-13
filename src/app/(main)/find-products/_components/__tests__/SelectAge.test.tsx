@@ -3,11 +3,17 @@ import { render, screen, fireEvent } from '@testing-library/react';
 import SelectAge from '../SelectAge';
 import { ages } from '@/utils/products';
 
+interface MockCardProps {
+  children: React.ReactNode;
+  onClick?: () => void;
+  checked: boolean;
+  contentClassName?: string;
+}
 // Mock the Card component
 jest.mock('../Card', () => {
   return {
     __esModule: true,
-    default: ({ children, onClick, checked, contentClassName }: any) => (
+    default: ({ children, onClick, checked, contentClassName }: MockCardProps) => (
       <div
         data-testid="card"
         data-checked={checked}

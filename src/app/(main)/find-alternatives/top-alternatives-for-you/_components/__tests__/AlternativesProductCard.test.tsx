@@ -1,15 +1,22 @@
 import React from 'react';
-import { render, screen, fireEvent } from '@testing-library/react';
+import { render, screen } from '@testing-library/react';
 import { AlternativesProductCard } from '../AlternativesProductCard';
 import { FindAlternativesProduct } from '@/types/alternatives';
+import { ImageProps } from 'next/image';
+
+interface TagProps {
+  children: React.ReactNode;
+  variant: string;
+}
 
 // Mock the next/image component
 jest.mock('next/image', () => ({
   __esModule: true,
-  default: ({ src, alt, className }: any) => (
+  default: ({ src, alt, className }: ImageProps) => (
+    // eslint-disable-next-line @next/next/no-img-element
     <img
-      src={src}
-      alt={alt}
+      src={typeof src === 'string' ? src : ''}
+      alt={alt || ''}
       className={className}
       data-testid="next-image"
     />
@@ -19,7 +26,7 @@ jest.mock('next/image', () => ({
 // Mock the Tag component
 jest.mock('@/components/common/Tag', () => ({
   __esModule: true,
-  default: ({ children, variant }: any) => (
+  default: ({ children, variant }: TagProps) => (
     <div data-testid={`tag-${variant}`}>{children}</div>
   ),
 }));

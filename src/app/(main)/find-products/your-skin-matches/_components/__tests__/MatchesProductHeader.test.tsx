@@ -1,65 +1,163 @@
-import { render, screen, fireEvent } from "@testing-library/react";
-import { useRouter } from "next/navigation";
-import { MatchesProductCard } from "../MatchesProductCard";
+import React from "react";
+import { render, screen } from "@testing-library/react";
+import MatchesProductHeader from "../MatchesProductHeader";
+import "@testing-library/jest-dom";
 
-jest.mock("next/navigation", () => ({
-  useRouter: jest.fn(),
+// Mock Avatar component
+jest.mock("../MatchesProductHeader", () => {
+  const actual = jest.requireActual("../MatchesProductHeader");
+  return {
+    __esModule: true,
+    default: actual.default,
+    Avatar: ({ initials, color }: { initials: string; color: string }) => (
+      <div className={`avatar ${color}`} data-testid="avatar">
+        {initials}
+      </div>
+    ),
+  };
+});
+
+// Mock BackButton component
+jest.mock("@/components/common/BackButton", () => ({
+  __esModule: true,
+  default: ({ buttonProps }: { buttonProps?: { className?: string } }) => (
+    <button className={buttonProps?.className} data-testid="back-button">
+      Back
+    </button>
+  ),
 }));
 
-// eslint-disable-next-line react/display-name, @typescript-eslint/no-unused-vars, @typescript-eslint/no-explicit-any
-jest.mock("next/image", () => ({ fill, ...props }: any) => (
-  // eslint-disable-next-line @next/next/no-img-element
-  <img {...props} alt={props.alt} />
-));
+// Mock HeadingPrimary component
+jest.mock("@/components/common/HeadingPrimary", () => ({
+  __esModule: true,
+  default: ({
+    children,
+    className,
+  }: {
+    children: React.ReactNode;
+    className?: string;
+  }) => (
+    <h1 className={className} data-testid="heading-primary">
+      {children}
+    </h1>
+  ),
+}));
 
-describe("MatchesProductCard", () => {
-  const mockPush = jest.fn();
-  const productMock = {
-    productTitle: "Test Product",
-    productImage: "/test-image.jpg",
-    brand: "Test Brand",
-    price: "99.99",
-    matched: true,
-    best_rated: false,
-    most_viewed: false,
-  };
-
-  beforeEach(() => {
-    (useRouter as jest.Mock).mockReturnValue({ push: mockPush });
-    jest.clearAllMocks();
+describe("MatchesProductHeader", () => {
+  it("renders without crashing", () => {
+    render(<MatchesProductHeader />);
   });
 
-  it("renders product details correctly", () => {
-    render(<MatchesProductCard item={productMock} />);
+  it("renders the back button with correct props", () => {
+    render(<MatchesProductHeader />);
 
-    expect(screen.getByText("Test Brand")).toBeInTheDocument();
-    expect(screen.getByText("Test Product")).toBeInTheDocument();
-    expect(screen.getByText("$99.99")).toBeInTheDocument();
-    expect(screen.getByAltText("Test Product")).toBeInTheDocument();
+    const backButton = screen.getByTestId("back-button");
+    expect(backButton).toBeInTheDocument();
+    expect(backButton).toHaveClass("mb-2");
   });
 
-  // Product details buttons on click
-  it("navigates to product details on click", () => {
-    render(<MatchesProductCard item={productMock} />);
+  it("renders the heading with correct text", () => {
+    render(<MatchesProductHeader />);
 
-    // Click the "Add Favorite" button
-    const addFavoriteBtn = screen.getByTestId("add-favorite");
-    expect(addFavoriteBtn).toBeInTheDocument();
-    fireEvent.click(addFavoriteBtn);
-
-    // Click the "Buy Now" button
-    const buyNowBtn = screen.getByTestId("buy-now");
-    expect(buyNowBtn).toBeInTheDocument();
-    fireEvent.click(buyNowBtn);
-
-    expect(mockPush).toHaveBeenCalledWith(
-      "/find-products/your-skin-matches/Test Product"
-    );
+    const heading = screen.getByTestId("heading-primary");
+    expect(heading).toBeInTheDocument();
+    expect(heading).toHaveTextContent("Your skin matches");
   });
 
-  it("displays '99% matched' tag if matched", () => {
-    render(<MatchesProductCard item={productMock} />);
+  it("renders the heading with correct styling", () => {
+    render(<MatchesProductHeader />);
 
-    expect(screen.getByText("99% matched")).toBeInTheDocument();
+    const heading = screen.getByTestId("heading-primary");
+    expect(heading).toHaveClass("text-[28px]");
+    expect(heading).toHaveClass("leading-[33.32px]");
+    expect(heading).toHaveClass("lg:text-[42px]");
+    expect(heading).toHaveClass("lg:leading-[49.98px]");
+    expect(heading).toHaveClass("tracking-[-2%]");
+    expect(heading).toHaveClass("font-semibold");
+  });
+
+  it("renders three avatar components", () => {
+    render(<MatchesProductHeader />);
+
+    const avatars = screen.getAllByText(/[A-Z]{2}/); // Match two uppercase letters (initials)
+    expect(avatars).toHaveLength(3);
+    expect(avatars[0]).toHaveTextContent("NF");
+    expect(avatars[1]).toHaveTextContent("SA");
+    expect(avatars[2]).toHaveTextContent("RK");
+  });
+
+  it("renders avatars with correct styling", () => {
+    render(<MatchesProductHeader />);
+
+    // The actual avatar elements are one level deeper than we initially selected
+    const avatarNF = screen.getByText("NF").closest("div");
+    const avatarSA = screen.getByText("SA").closest("div");
+    const avatarRK = screen.getByText("RK").closest("div");
+
+    // Check common classes
+    expect(avatarNF).toHaveClass("rounded-full");
+    expect(avatarNF).toHaveClass("flex");
+    expect(avatarNF).toHaveClass("items-center");
+    expect(avatarNF).toHaveClass("justify-center");
+    expect(avatarNF).toHaveClass("text-white");
+
+    // Check specific background colors
+    expect(avatarNF).toHaveClass("bg-pink-400");
+    expect(avatarSA).toHaveClass("bg-emerald-400");
+    expect(avatarRK).toHaveClass("bg-purple-400");
+
+    // Check border classes
+    expect(avatarNF).toHaveClass("border-2");
+    expect(avatarNF).toHaveClass("border-white");
+  });
+
+  it("renders the skin twins text", () => {
+    render(<MatchesProductHeader />);
+
+    const skinTwinsText = screen.getByText(/We also found/i);
+    expect(skinTwinsText).toBeInTheDocument();
+
+    const strongText = screen.getByText("2,354 skin twins");
+    expect(strongText).toBeInTheDocument();
+  });
+
+  it("renders the skin twins text with correct styling", () => {
+    render(<MatchesProductHeader />);
+
+    const skinTwinsText = screen.getByText(/We also found/i);
+    expect(skinTwinsText).toHaveClass("text-[15px]");
+    expect(skinTwinsText).toHaveClass("lg:text-xl");
+    expect(skinTwinsText).toHaveClass("leading-[17.85px]");
+    expect(skinTwinsText).toHaveClass("lg:leading-[26px]");
+    expect(skinTwinsText).toHaveClass("tracking-[-0.02em]");
+    expect(skinTwinsText).toHaveClass("font-medium");
+    expect(skinTwinsText).toHaveClass("text-accent");
+  });
+
+  it("renders the avatar component with correct props", () => {
+    render(<MatchesProductHeader />);
+
+    // Check first avatar's props
+    const avatarNF = screen.getByText("NF").closest("div");
+    expect(avatarNF).toHaveClass("h-[38px]");
+    expect(avatarNF).toHaveClass("w-[38px]");
+    expect(avatarNF).toHaveClass("bg-pink-400");
+    expect(avatarNF).toHaveClass("border-2");
+    expect(avatarNF).toHaveClass("border-white");
+
+    // Check that the initials are displayed
+    expect(screen.getByText("NF")).toBeInTheDocument();
+  });
+
+  it("renders the avatar container with correct styling", () => {
+    render(<MatchesProductHeader />);
+
+    // The container of all avatars - we need to select the div with class "-space-x-4"
+    const avatarContainer = screen
+      .getByText("NF")
+      .closest("div")?.parentElement; // This is the avatar div // This is the container with -space-x-4
+
+    expect(avatarContainer).toHaveClass("flex");
+    expect(avatarContainer).toHaveClass("-space-x-4");
   });
 });

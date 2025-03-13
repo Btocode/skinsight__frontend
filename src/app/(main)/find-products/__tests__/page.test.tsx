@@ -1,29 +1,48 @@
 import React from 'react';
 import { render, screen } from '@testing-library/react';
 import FindProductsPage from '../page';
-import { useRouter } from 'next/navigation';
+import { ImageProps } from 'next/image';
+
+interface LinkProps {
+  href: string;
+  className?: string;
+  children: React.ReactNode;
+}
+
+interface HeadingProps {
+  children: React.ReactNode;
+  className?: string;
+}
+
+interface ButtonProps {
+  children: React.ReactNode;
+  className?: string;
+}
+
+interface SectionProps {
+  children: React.ReactNode;
+}
 
 // Mock dependencies before any component definitions
 jest.mock('next/image', () => ({
   __esModule: true,
-  default: ({ src, alt, className, width, height }: any) => (
+  default: ({ src, alt, className, width, height }: ImageProps) => (
+    // eslint-disable-next-line @next/next/no-img-element
     <img
-      src={src}
-      alt={alt}
+      src={typeof src === 'string' ? src : ''}
+      alt={alt || ''}
       className={className}
       width={width}
       height={height}
-      data-testid={`image-${alt.replace(/\s+/g, '-').toLowerCase()}`}
+      data-testid={`image-${(alt || '').replace(/\s+/g, '-').toLowerCase()}`}
     />
   ),
 }));
 
 jest.mock('next/link', () => ({
   __esModule: true,
-  default: ({ href, className, children }: any) => (
-    <a href={href} className={className} data-testid={`link-${href.replace(/\//g, '-')}`}>
-      {children}
-    </a>
+  default: ({ href, className, children }: LinkProps) => (
+    <a href={href} className={className} data-testid={`link-${href.replace(/\//g, '-')}`}>{children}</a>
   ),
 }));
 
@@ -34,14 +53,14 @@ jest.mock('@/components/common/BackButton', () => ({
 
 jest.mock('@/components/common/HeadingPrimary', () => ({
   __esModule: true,
-  default: ({ children, className }: any) => (
+  default: ({ children, className }: HeadingProps) => (
     <h1 data-testid="heading-primary" className={className}>{children}</h1>
   ),
 }));
 
 jest.mock('@/components/common/Button', () => ({
   __esModule: true,
-  default: ({ children, className }: any) => (
+  default: ({ children, className }: ButtonProps) => (
     <button data-testid="button" className={className}>{children}</button>
   ),
 }));
@@ -53,7 +72,7 @@ jest.mock('@/components/common/GradientImage', () => ({
 
 jest.mock('@/components/animations/SectionOpacity', () => ({
   __esModule: true,
-  default: ({ children }: any) => (
+  default: ({ children }: SectionProps) => (
     <div data-testid="section-opacity">{children}</div>
   ),
 }));
