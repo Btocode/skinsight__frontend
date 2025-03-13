@@ -1,8 +1,14 @@
 import React from 'react';
-import { render, screen } from '@testing-library/react';
 import YourSkinMatchesPage from '../page';
 import { notFound } from 'next/navigation';
 import '@testing-library/jest-dom';
+import { TextEncoder } from 'util';
+
+interface Product {
+  id: number;
+  name: string;
+}
+
 
 // Mock all the imported components
 jest.mock('../_components/MatchesProductFilter', () => ({
@@ -17,7 +23,7 @@ jest.mock('../_components/MatchesProductHeader', () => ({
 
 jest.mock('../_components/TonersProducts', () => ({
   __esModule: true,
-  default: ({ products }: { products: any }) => (
+  default: ({ products }: { products: Product[] }) => (
     <div data-testid="toners-products">
       Toners Products: {JSON.stringify(products)}
     </div>
@@ -26,7 +32,7 @@ jest.mock('../_components/TonersProducts', () => ({
 
 jest.mock('../_components/CleansersProducts', () => ({
   __esModule: true,
-  default: ({ products }: { products: any }) => (
+  default: ({ products }: { products: Product[] }) => (
     <div data-testid="cleansers-products">
       Cleansers Products: {JSON.stringify(products)}
     </div>
@@ -35,7 +41,7 @@ jest.mock('../_components/CleansersProducts', () => ({
 
 jest.mock('../_components/MoisturisersProducts', () => ({
   __esModule: true,
-  default: ({ products }: { products: any }) => (
+  default: ({ products }: { products: Product[] }) => (
     <div data-testid="moisturisers-products">
       Moisturisers Products: {JSON.stringify(products)}
     </div>
@@ -49,7 +55,7 @@ jest.mock('@/components/common/Advertisement', () => ({
 
 jest.mock('@/components/common/GradientImage', () => ({
   __esModule: true,
-  default: ({ secondImage }: { secondImage?: any }) => (
+  default: ({ secondImage }: { secondImage?: string }) => (
     <div data-testid="gradient-image">
       Gradient Image: {secondImage ? JSON.stringify(secondImage) : 'No second image'}
     </div>
@@ -89,7 +95,7 @@ jest.mock('next/navigation', () => ({
 }));
 
 // Mock TextEncoder for ReactDOMServer
-global.TextEncoder = require('util').TextEncoder;
+global.TextEncoder = TextEncoder;
 
 describe('YourSkinMatchesPage', () => {
   beforeEach(() => {
@@ -114,8 +120,9 @@ describe('YourSkinMatchesPage', () => {
     try {
       // Render the component
       await YourSkinMatchesPage();
-    } catch (error) {
+    } catch (error : unknown) {
       // This is expected since notFound() throws an error
+      console.log(error);
     }
 
     // Check that notFound was called
