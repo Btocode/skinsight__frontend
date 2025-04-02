@@ -144,7 +144,7 @@ const SignInForm = () => {
               width={56}
               height={56}
               alt="Google"
-              className="cursor-pointer transition-colors hover:opacity-80 flex-shrink-0"
+              className="google-login-icon cursor-pointer transition-colors hover:opacity-80 flex-shrink-0"
               onClick={() => handleSocialLogin("google")}
             />
             <Image
@@ -152,7 +152,7 @@ const SignInForm = () => {
               width={56}
               height={56}
               alt="Facebook"
-              className="cursor-pointer transition-colors hover:opacity-80 flex-shrink-0"
+              className="facebook-login-icon cursor-pointer transition-colors hover:opacity-80 flex-shrink-0"
               onClick={() => handleSocialLogin("facebook")}
             />
             <Image
@@ -160,7 +160,7 @@ const SignInForm = () => {
               width={56}
               height={56}
               alt="Apple"
-              className="cursor-pointer transition-colors hover:opacity-80 flex-shrink-0"
+              className="apple-login-icon cursor-pointer transition-colors hover:opacity-80 flex-shrink-0"
               onClick={() => handleSocialLogin("apple")}
             />
           </div>
