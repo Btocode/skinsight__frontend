@@ -8,10 +8,12 @@ const SelectSkinType = ({ value, onChange }: RecommendationComponentProps) => {
       {skinTypes.map((item, index) => (
         <Card
           key={index}
-          onClick={() => onChange("skinType", item)}
-          checked={value === item}
+          onClick={() => onChange("skin_type", item.toLowerCase())}
+          checked={value === item.toLowerCase()}
         >
-          <h3 className="text-xl font-semibold">{item}</h3>
+          <h3 className="text-xl font-semibold">
+            {item === "unknown" ? "Not sure" : item || ""}
+          </h3>
         </Card>
       ))}
     </div>

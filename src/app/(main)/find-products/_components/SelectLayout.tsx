@@ -30,16 +30,16 @@ const SelectLayout = ({ name }: { name: string }) => {
       if (key === "gender") {
         path += "skin-type";
       }
-      if (key === "skinType") {
+      if (key === "skin_type") {
         path += "complexion";
       }
-      if (key === "complexion") {
+      if (key === "skin_complexion") {
         path += "skin-concern";
       }
-      if (key === "age") {
+      if (key === "age_group") {
         path += "region";
       }
-      if (key !== "skinConcern" && key !== "region") {
+      if (key !== "skin_concern" && key !== "region") {
         router.push(path);
       }
     }, 1000);
@@ -62,21 +62,21 @@ const SelectLayout = ({ name }: { name: string }) => {
   const components: { [key: string]: JSX.Element } = {
     gender: <SelectGender value={userSkinProfile.gender} onChange={onChange} />,
     "skin-type": (
-      <SelectSkinType value={userSkinProfile.skinType} onChange={onChange} />
+      <SelectSkinType value={userSkinProfile.skin_type} onChange={onChange} />
     ),
     complexion: (
       <SelectComplexion
-        value={userSkinProfile.complexion}
+        value={userSkinProfile.skin_complexion}
         onChange={onChange}
       />
     ),
     "skin-concern": (
       <SelectSkinConcern
-        value={userSkinProfile.skinConcern}
+        value={userSkinProfile.skin_concern}
         onChange={onChange}
       />
     ),
-    age: <SelectAge value={userSkinProfile.age} onChange={onChange} />,
+    age: <SelectAge value={userSkinProfile.age_group} onChange={onChange} />,
     region: <SelectRegion value={userSkinProfile.region} onChange={onChange} />,
   };
 

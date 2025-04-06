@@ -10,9 +10,11 @@ const SelectAge = ({ value, onChange }: RecommendationComponentProps) => {
         <Card
           key={index}
           onClick={() =>
-            onChange("age", Array.isArray(item) ? item.join(" ") : item)
+            onChange("age_group", Array.isArray(item) ? item.join(" ") : item)
           }
-          checked={value === item}
+          checked={
+            typeof item === "string" ? value === item : value === item.join(" ")
+          }
           contentClassName="pr-4 lg:pr-0"
         >
           {Array.isArray(item) ? (
@@ -21,7 +23,9 @@ const SelectAge = ({ value, onChange }: RecommendationComponentProps) => {
               <h3 className="text-xl font-semibold">{item[1]}</h3>
             </>
           ) : (
-            <h3 className="text-xl font-semibold">{item}</h3>
+            <h3 className="text-xl font-semibold">
+              {item === "unknown" ? "I'd prefer not to say" : item || ""}
+            </h3>
           )}
         </Card>
       ))}

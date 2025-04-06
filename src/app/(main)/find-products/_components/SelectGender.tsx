@@ -9,10 +9,12 @@ const SelectGender = ({ value, onChange }: RecommendationComponentProps) => {
       {genders.map((item, index) => (
         <Card
           key={index}
-          onClick={() => onChange("gender", item)}
-          checked={value === item}
+          onClick={() => onChange("gender", item.toLowerCase())}
+          checked={value === item.toLowerCase()}
         >
-          <h3 className="text-xl font-semibold">{item}</h3>
+          <h3 className="text-xl font-semibold">
+            {item === "unknown" ? "I'd prefer not to say" : item}
+          </h3>
         </Card>
       ))}
     </div>

@@ -11,7 +11,7 @@ const SelectComplexion = ({
 }: RecommendationComponentProps) => {
   const isChecked = useCallback(
     (item: string) => {
-      return value === item;
+      return value === item.toLowerCase();
     },
     [value]
   );
@@ -27,7 +27,7 @@ const SelectComplexion = ({
               "bg-primary": isChecked(item.title),
             }
           )}
-          onClick={() => onChange("complexion", item.title)}
+          onClick={() => onChange("skin_complexion", item.title.toLowerCase())}
         >
           <div
             className={cn(

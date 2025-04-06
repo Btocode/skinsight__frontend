@@ -14,7 +14,7 @@ const SelectSkinConcern = ({
 
   const isChecked = useCallback(
     (item: string) => {
-      return Array.isArray(value) && value?.includes(item);
+      return Array.isArray(value) && value?.includes(item.toLowerCase());
     },
     [value]
   );
@@ -31,7 +31,9 @@ const SelectSkinConcern = ({
                 "bg-primary": isChecked(item.join(" & ")),
               }
             )}
-            onClick={() => onChange("skinConcern", item.join(" & "))}
+            onClick={() =>
+              onChange("skin_concern", item.join(" & ").toLowerCase())
+            }
           >
             <div
               className={cn(
