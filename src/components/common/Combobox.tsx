@@ -10,12 +10,15 @@ export interface Option {
 
 export interface ComboboxProps {
   options: Option[];
-  value?: Option;
+  value?: Option | null;
   onChange?: (value: Option) => void;
   placeholder?: string;
   className?: string;
   buttonClassName?: string;
   valueClassName?: string;
+  startIcon?: React.ReactNode;
+  endIcon?: React.ReactNode;
+  disabled?: boolean;
 }
 
 export function Combobox({
@@ -26,6 +29,9 @@ export function Combobox({
   className,
   buttonClassName,
   valueClassName,
+  startIcon,
+  endIcon,
+  disabled,
 }: ComboboxProps) {
   const [open, setOpen] = useState(false);
   const [highlightedIndex, setHighlightedIndex] = useState(-1);
@@ -119,7 +125,7 @@ export function Combobox({
         onClick={() => setOpen(!open)}
         onKeyDown={handleKeyDown}
         className={cn(
-          "flex h-[60px] w-full items-center justify-between rounded-md border border-input bg-[#8599FE26] px-3 py-3 text-sm ring-offset-[#8599FE26] placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-1 disabled:cursor-not-allowed disabled:opacity-50",
+          "relative flex h-[60px] w-full items-center justify-between rounded-md border border-input bg-[#8599FE26] px-3 py-3 text-sm ring-offset-[#8599FE26] placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-1 disabled:cursor-not-allowed disabled:opacity-50",
           open && "ring-1 ring-ring ring-offset-1",
           buttonClassName
         )}
@@ -127,31 +133,44 @@ export function Combobox({
         aria-haspopup="listbox"
         aria-controls={open ? "dropdown-list" : undefined}
         type="button"
+        disabled={disabled}
       >
+        {startIcon && (
+          <span className="mr-2 flex h-4 w-4 shrink-0 items-center justify-center">
+            {startIcon}
+          </span>
+        )}
         <span className={cn("truncate text-lg", valueClassName)}>
           {value ? value.label : placeholder}
         </span>
-        <div
-          className={cn(
-            "ml-2 h-4 w-4 shrink-0 opacity-50 transition-transform duration-200",
-            open && "rotate-180"
+
+        <div className="ml-2 flex gap-2 items-center ">
+          {endIcon ? (
+            <span className="">{endIcon}</span>
+          ) : (
+            <div
+              className={cn(
+                " h-4 w-4 shrink-0 opacity-50 transition-transform duration-200",
+                open && "rotate-180"
+              )}
+            >
+              <svg
+                width="24"
+                height="25"
+                viewBox="0 0 24 25"
+                fill="none"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <path
+                  d="M19 9.5L12 16.5L5 9.5"
+                  stroke="#2C2C2C"
+                  strokeWidth="2"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                />
+              </svg>
+            </div>
           )}
-        >
-          <svg
-            width="24"
-            height="25"
-            viewBox="0 0 24 25"
-            fill="none"
-            xmlns="http://www.w3.org/2000/svg"
-          >
-            <path
-              d="M19 9.5L12 16.5L5 9.5"
-              stroke="#2C2C2C"
-              strokeWidth="2"
-              strokeLinecap="round"
-              strokeLinejoin="round"
-            />
-          </svg>
         </div>
       </button>
       {open && (
