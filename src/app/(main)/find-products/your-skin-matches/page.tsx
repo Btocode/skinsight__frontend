@@ -1,6 +1,3 @@
-export const dynamic = 'force-dynamic';
-export const generateStaticParams = () => [];
-
 import { notFound } from "next/navigation";
 import MatchesProductFilter from "./_components/MatchesProductFilter";
 import MatchesProductHeader from "./_components/MatchesProductHeader";
@@ -12,19 +9,64 @@ import GradientImage from "@/components/common/GradientImage";
 import AddFavorite from "./_components/AddFavorite";
 import Button from "@/components/common/Button";
 import Link from "next/link";
+import { fetchClient } from "@/lib/fetch-client";
 
 const getProducts = async () => {
-  const response = await fetch("http://localhost:3000/api/your-skin-matches");
-  return await response.json();
+  try {
+    const response = await fetchClient("/recommendations/me", {
+      next: {
+        tags: ["my-recommendations"],
+      },
+    });
+
+    if (!response.ok) {
+      throw new Error(`HTTP error! status: ${response.status}`);
+    }
+
+    const data = await response.json();
+    return data;
+  } catch (error) {
+    console.error("Error fetching products:", error);
+    return null;
+  }
 };
 
 const YourSkinMatchesPage = async () => {
   const products = await getProducts();
 
+  // Handle null products (API error case)
+  if (!products) {
+    return (
+      <div className="container py-8 text-center">
+        <h2 className="text-xl font-semibold text-accent">
+          Unable to load product recommendations
+        </h2>
+        <Link href="/find-products/gender" className="mt-4 inline-block">
+          <Button className="h-[40px] px-4">Try Again</Button>
+        </Link>
+      </div>
+    );
+  }
+
+  // Handle empty products array
+  if (!Array.isArray(products) || products.length === 0) {
+    return (
+      <div className="container py-8 text-center">
+        <h2 className="text-xl font-semibold text-accent">
+          No product recommendations found
+        </h2>
+        <Link href="/find-products/gender" className="mt-4 inline-block">
+          <Button className="h-[40px] px-4">Take Skin Quiz</Button>
+        </Link>
+      </div>
+    );
+  }
+
   if (products?.length === 0) {
     notFound();
   }
 
+  console.log(products);
   return (
     <div className="container relative mt-4 lg:mt-[40px]">
       <MatchesProductHeader />
