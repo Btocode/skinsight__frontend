@@ -1,4 +1,3 @@
-
 "use client";
 
 import Image from "next/image";
@@ -30,8 +29,6 @@ const UsingProductsSelection = () => {
   const onGenerateRegimen = () => {
     router.push("/build-regimen/your-new-skin-regimen");
   };
-
-  console.log(Object.keys(selectedRegimens).length >= 3);
 
   return (
     <div className="lg:container space-y-8">
