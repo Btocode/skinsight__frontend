@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 "use client";
 import BackButton from "@/components/common/BackButton";
 import Button from "@/components/common/Button";
@@ -5,6 +6,10 @@ import { Combobox, Option } from "@/components/common/Combobox";
 import HeadingPrimary from "@/components/common/HeadingPrimary";
 import Modal from "@/components/common/Modal";
 import { useAppDispatch } from "@/lib/redux/hook";
+import {
+  useGetProductsBrandsQuery,
+  useGetProductsByBrandQuery,
+} from "@/lib/services/productApi";
 import { updatePersonalRegimen } from "@/redux/slices/regimenSlice";
 import Image from "next/image";
 import { useState } from "react";
@@ -19,207 +24,6 @@ const categories = [
   { value: "7", label: "mask" },
   { value: "8", label: "toner" },
 ];
-
-const brands = [
-  { value: "1", label: "Sensibio" },
-  { value: "2", label: "La Roche-Posay" },
-  { value: "3", label: "Good Genes" },
-  { value: "4", label: "C-Firma" },
-  { value: "5", label: "Neutrogena" },
-  { value: "6", label: "The Ordinary" },
-  { value: "7", label: "CeraVe" },
-  { value: "8", label: "Eucerin" },
-  { value: "9", label: "Aveeno" },
-  { value: "10", label: "Vichy" },
-];
-
-const products = [
-  {
-    id: "1",
-    productTitle: "Sensibio H2O Micellar Water",
-    productImage: "/products/product1.png",
-    brandId: "1",
-  },
-  {
-    id: "2",
-    productTitle: "Ultra Repair Cream",
-    productImage: "/products/product2.png",
-    brandId: "2",
-  },
-  {
-    id: "3",
-    productTitle: "Good Genes All-In-One Lactic Acid Treatment",
-    productImage: "/products/product3.png",
-    brandId: "3",
-  },
-  {
-    id: "4",
-    productTitle: "C-Firma Fresh Day Serum",
-    productImage: "/products/product1.png",
-    brandId: "4",
-  },
-  {
-    id: "5",
-    productTitle: "Neutrogena Hydro Boost Water Gel",
-    productImage: "/products/product2.png",
-    brandId: "5",
-  },
-  {
-    id: "6",
-    productTitle: "The Ordinary Niacinamide 10% + Zinc 1%",
-    productImage: "/products/product3.png",
-    brandId: "6",
-  },
-  {
-    id: "7",
-    productTitle: "CeraVe Moisturizing Cream",
-    productImage: "/products/product2.png",
-    brandId: "7",
-  },
-  {
-    id: "8",
-    productTitle: "Eucerin Advanced Repair Lotion",
-    productImage: "/products/product3.png",
-    brandId: "8",
-  },
-  {
-    id: "9",
-    productTitle: "Aveeno Daily Moisturizing Lotion",
-    productImage: "/products/product1.png",
-    brandId: "9",
-  },
-  {
-    id: "10",
-    productTitle: "Vichy Mineral 89 Hyaluronic Acid Face Serum",
-    productImage: "/products/product2.png",
-    brandId: "10",
-  },
-  {
-    id: "11",
-    productTitle: "Sensibio Eye Contour Gel",
-    productImage: "/products/product3.png",
-    brandId: "1",
-  },
-  {
-    id: "12",
-    productTitle: "La Roche-Posay Toleriane Double Repair Moisturizer",
-    productImage: "/products/product1.png",
-    brandId: "2",
-  },
-  {
-    id: "13",
-    productTitle: "Good Genes Glycolic Acid Treatment",
-    productImage: "/products/product2.png",
-    brandId: "3",
-  },
-  {
-    id: "14",
-    productTitle: "C-Firma Day Serum",
-    productImage: "/products/product3.png",
-    brandId: "4",
-  },
-  {
-    id: "15",
-    productTitle: "Neutrogena Rapid Wrinkle Repair Retinol Oil",
-    productImage: "/products/product2.png",
-    brandId: "5",
-  },
-  {
-    id: "16",
-    productTitle: "The Ordinary Hyaluronic Acid 2% + B5",
-    productImage: "/products/product1.png",
-    brandId: "6",
-  },
-  {
-    id: "17",
-    productTitle: "CeraVe Hydrating Cleanser",
-    productImage: "/products/product3.png",
-    brandId: "7",
-  },
-  {
-    id: "18",
-    productTitle: "Eucerin Roughness Relief Lotion",
-    productImage: "/products/product1.png",
-    brandId: "8",
-  },
-  {
-    id: "19",
-    productTitle: "Aveeno Positively Radiant Daily Moisturizer",
-    productImage: "/products/product2.png",
-    brandId: "9",
-  },
-  {
-    id: "20",
-    productTitle: "Vichy LiftActiv Vitamin C Brightening Skin Corrector",
-    productImage: "/products/product3.png",
-    brandId: "10",
-  },
-  {
-    id: "21",
-    productTitle: "Sensibio AR Anti-Redness Cream",
-    productImage: "/products/product2.png",
-    brandId: "1",
-  },
-  {
-    id: "22",
-    productTitle: "La Roche-Posay Anthelios Melt-in Milk Sunscreen",
-    productImage: "/products/product3.png",
-    brandId: "2",
-  },
-  {
-    id: "23",
-    productTitle: "Good Genes Clarifying Cleanser",
-    productImage: "/products/product2.png",
-    brandId: "3",
-  },
-  {
-    id: "24",
-    productTitle: "C-Firma Vitamin C Day Cream",
-    productImage: "/products/product3.png",
-    brandId: "4",
-  },
-  {
-    id: "25",
-    productTitle: "Neutrogena Ultra Sheer Dry-Touch Sunscreen",
-    productImage: "/products/product25.png",
-    brandId: "5",
-  },
-  {
-    id: "26",
-    productTitle: "The Ordinary Salicylic Acid 2% Solution",
-    productImage: "/products/product1.png",
-    brandId: "6",
-  },
-  {
-    id: "27",
-    productTitle: "CeraVe Renewing SA Cleanser",
-    productImage: "/products/product2.png",
-    brandId: "7",
-  },
-  {
-    id: "28",
-    productTitle: "Eucerin Daily Protection Face Lotion",
-    productImage: "/products/product3.png",
-    brandId: "8",
-  },
-  {
-    id: "29",
-    productTitle: "Aveeno Clear Complexion Foaming Cleanser",
-    productImage: "/products/product1.png",
-    brandId: "9",
-  },
-  {
-    id: "30",
-    productTitle: "Vichy Normaderm Anti-Acne Treatment",
-    productImage: "/products/product3.png",
-    brandId: "10",
-  },
-];
-
-const formattedProducts = products.map((p) => ({
-  value: p.id,
-  label: p.productTitle,
-}));
 
 const titles = {
   cleanser: "Add a cleanser",
@@ -245,6 +49,29 @@ const SelectProductForSkinRegimen = ({
   } | null>(null);
   const dispatch = useAppDispatch();
   const open = Boolean(regimenType);
+
+  const { isLoading: isLoadingBrands, data: brandsData } =
+    useGetProductsBrandsQuery(undefined);
+  const { isLoading: isLoadingProducts, data: productsData } =
+    useGetProductsByBrandQuery(
+      {
+        brand_name: selectedProduct?.brandId || "",
+      },
+      {
+        skip: !selectedProduct?.brandId,
+      }
+    );
+
+  const getBrandValue = (_brand: string) => {
+    const data = brandsData?.find((brand) => brand === _brand);
+    return data ? { label: data, value: data } : null;
+  };
+  const getProductValue = (_product: string) => {
+    const data = productsData?.find(
+      (product) => product?.product_id === _product
+    );
+    return data ? { label: data?.product_name, value: data?.product_id } : null;
+  };
 
   return (
     <Modal
@@ -302,8 +129,11 @@ const SelectProductForSkinRegimen = ({
             />
           )}
           <Combobox
-            options={brands as Option[]}
-            value={brands.find((b) => b.value === selectedProduct?.brandId)}
+            options={
+              brandsData?.map((item) => ({ label: item, value: item })) ?? []
+            }
+            disabled={isLoadingBrands}
+            value={getBrandValue(selectedProduct?.brandId || "")}
             onChange={(value) => {
               setSelectedProduct((prev) => ({
                 ...prev,
@@ -318,18 +148,24 @@ const SelectProductForSkinRegimen = ({
             valueClassName="text-xl font-normal leading-[26px] text-accent"
           />
           <Combobox
-            options={formattedProducts}
-            value={formattedProducts.find(
-              (p) => p.value === selectedProduct?.productId
-            )}
+            options={
+              productsData?.map((item) => ({
+                label: item?.product_name,
+                value: item?.product_id,
+              })) ?? []
+            }
+            disabled={isLoadingProducts || !selectedProduct?.brandId}
+            value={getProductValue(selectedProduct?.productId || "")}
             onChange={(value) => {
-              // eslint-disable-next-line @typescript-eslint/no-explicit-any
+              const selectedProduct = productsData?.find(
+                (product) => product?.product_id === value.value
+              );
+              if (!selectedProduct) return;
+
               setSelectedProduct((prev: any) => ({
                 ...prev,
                 productId: value.value,
-                productImage:
-                  products.find((p) => p.id === value.value)!.productImage ??
-                  "",
+                productImage: selectedProduct?.image_url ?? "",
               }));
             }}
             placeholder="Select product"

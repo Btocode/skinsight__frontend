@@ -1,33 +1,42 @@
 "use client";
 import { Combobox } from "@/components/common/Combobox";
 import { useAppDispatch, useAppSelector } from "@/lib/redux/hook";
+import {
+  useGetProductsBrandsQuery,
+  useGetProductsByBrandQuery,
+} from "@/lib/services/productApi";
 import { setFindAlternatives } from "@/redux/slices/productSlice";
+import { Loader } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { useEffect } from "react";
-
-const brands = [
-  { label: "Brand 1", value: "brand1" },
-  { label: "Brand 2", value: "brand2" },
-  { label: "Brand 3", value: "brand3" },
-];
-
-const products = [
-  { label: "Product 1", value: "Product1" },
-  { label: "Product 2", value: "Product2" },
-  { label: "Product 3", value: "Product3" },
-];
 
 const SelectYourTargetProduct = () => {
   const state = useAppSelector((state) => state.product.findAlternatives);
   const dispatch = useAppDispatch();
   const router = useRouter();
 
+  const { isLoading: isLoadingBrands, data: brandsData } =
+    useGetProductsBrandsQuery(undefined);
+  const { isLoading: isLoadingProducts, data: productsData } =
+    useGetProductsByBrandQuery(
+      {
+        brand_name: state.brand,
+      },
+      {
+        skip: !state.brand,
+      }
+    );
+
   const getBrandValue = (_brand: string) => {
-    return brands.find((brand) => brand.value === _brand);
+    const data = brandsData?.find((brand) => brand === _brand);
+    return data ? { label: data, value: data } : null;
   };
 
   const getProductValue = (_product: string) => {
-    return products.find((product) => product.value === _product);
+    const data = productsData?.find(
+      (product) => product?.product_id === _product
+    );
+    return data ? { label: data?.product_name, value: data?.product_id } : null;
   };
 
   useEffect(() => {
@@ -36,26 +45,30 @@ const SelectYourTargetProduct = () => {
     router.push("/find-alternatives/top-alternatives-for-you");
   }, [router, state]);
 
+  console.log(productsData);
+
   return (
     <div className="space-y-6">
       <Combobox
-        options={[
-          { label: "Brand 1", value: "brand1" },
-          { label: "Brand 2", value: "brand2" },
-          { label: "Brand 3", value: "brand3" },
-        ]}
+        options={
+          brandsData?.map((item) => ({ label: item, value: item })) || []
+        }
         placeholder="Select brand"
         value={getBrandValue(state.brand)}
         onChange={(brand) => {
           dispatch(setFindAlternatives({ key: "brand", value: brand.value }));
         }}
+        endIcon={
+          isLoadingBrands ? <Loader className="animate-spin" /> : undefined
+        }
       />
       <Combobox
-        options={[
-          { label: "Product 1", value: "Product1" },
-          { label: "Product 2", value: "Product2" },
-          { label: "Product 3", value: "Product3" },
-        ]}
+        options={
+          productsData?.map((item) => ({
+            label: item?.product_name,
+            value: item?.product_id,
+          })) || []
+        }
         placeholder="Select product"
         value={getProductValue(state.product)}
         onChange={(product) => {
@@ -63,6 +76,10 @@ const SelectYourTargetProduct = () => {
             setFindAlternatives({ key: "product", value: product.value })
           );
         }}
+        endIcon={
+          isLoadingProducts ? <Loader className="animate-spin" /> : undefined
+        }
+        disabled={!state.brand}
       />
     </div>
   );
