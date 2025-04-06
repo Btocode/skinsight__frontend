@@ -1,8 +1,8 @@
 import { Complexion, Gender } from "@/types/products";
 
-const genders = ["Male", "Female", "I do prefer not to say"] as Gender[];
+const genders = ["Male", "Female", "unknown"] as Gender[];
 
-const skinTypes = ["Normal", "Oily", "Dry", "Combination", "Not sure"] as const;
+const skinTypes = ["Normal", "Oily", "Dry", "Combination", "unknown"] as const;
 
 const complexionOptions: Complexion[] = [
   {
@@ -52,7 +52,7 @@ const ages = [
   "35-44",
   "45-54",
   ["54+ &", "fabulous"],
-  "I'd prefer not to say",
+  "unknown",
 ];
 
 export { genders, skinTypes, complexionOptions, skinConcerns, ages };

@@ -7,17 +7,19 @@ import { getCookie, hasCookie } from "cookies-next/client";
 
 const isClient = typeof window !== "undefined";
 
+const userSkinProfileState = {
+  gender: null,
+  skin_type: null,
+  skin_complexion: null,
+  skin_concern: [],
+  age_group: null,
+  region: null,
+};
+
 const initialRecommendationState = () => {
   if (!isClient)
     return {
-      userSkinProfile: {
-        gender: null,
-        skinType: null,
-        complexion: null,
-        skinConcern: [],
-        age: null,
-        region: null,
-      },
+      userSkinProfile: userSkinProfileState,
     };
 
   const recommendation = getCookie("recommendation");
@@ -28,14 +30,7 @@ const initialRecommendationState = () => {
         userSkinProfile: JSON.parse(recommendation || ""),
       }
     : {
-        userSkinProfile: {
-          gender: null,
-          skinType: null,
-          complexion: null,
-          skinConcern: [],
-          age: null,
-          region: null,
-        },
+        userSkinProfile: userSkinProfileState,
       };
 };
 
@@ -61,15 +56,15 @@ const productSlice = createSlice({
     ) => {
       const { key, value } = action.payload;
 
-      if (key === "skinConcern") {
-        if (state.userSkinProfile.skinConcern.includes(value as string)) {
-          state.userSkinProfile.skinConcern =
-            state.userSkinProfile.skinConcern.filter(
+      if (key === "skin_concern") {
+        if (state.userSkinProfile.skin_concern.includes(value as string)) {
+          state.userSkinProfile.skin_concern =
+            state.userSkinProfile.skin_concern.filter(
               (item: string) => item !== value
             );
           return;
         }
-        state.userSkinProfile.skinConcern.push(value as string);
+        state.userSkinProfile.skin_concern.push(value as string);
         return;
       }
       state.userSkinProfile[key] = value;
