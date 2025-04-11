@@ -4,7 +4,7 @@ import { useAppSelector } from "@/lib/redux/hook";
 import { useMakeRecommendationMutation } from "@/lib/services/productApi";
 import { motion, useAnimation } from "motion/react";
 import { useRouter } from "next/navigation";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 
 const Progressbar = ({ name }: { name: string }) => {
   const router = useRouter();
@@ -15,43 +15,58 @@ const Progressbar = ({ name }: { name: string }) => {
   const [makeRecommendation, { isLoading, data }] =
     useMakeRecommendationMutation();
 
+
+  // Step 1: Make the recommendation API call when component mounts
   useEffect(() => {
-    if (userSkinProfile) {
+    if (userSkinProfile && name === "find-perfect-match" && !localStorage.getItem('quizId')) {
       makeRecommendation({
-        gender: "male",
-        skin_type: "combination",
-        skin_complexion: "pale",
-        concern_acne: true,
-        concern_dark_spots: true,
-        concern_pores: true,
-        concern_wrinkles: true,
-        concern_dryness: true,
-        concern_sensitivity: true,
-        age_group: "13-17",
-        country: "string",
-        region: "string",
+        gender: userSkinProfile.gender || "male",
+        skin_type: userSkinProfile.skin_type || "combination",
+        skin_complexion: userSkinProfile.skin_complexion || "pale",
+        concern_acne: userSkinProfile.skin_concern.includes("acne"),
+        concern_dark_spots: userSkinProfile.skin_concern.includes("dark spots"),
+        concern_pores: userSkinProfile.skin_concern.includes("pores"),
+        concern_wrinkles: userSkinProfile.skin_concern.includes("wrinkles"),
+        concern_dryness: userSkinProfile.skin_concern.includes("dryness"),
+        concern_sensitivity: userSkinProfile.skin_concern.includes("sensitivity"),
+        age_group: userSkinProfile.age_group || "13-17",
+        country: userSkinProfile.region?.split(",")[0] || "string",
+        region: userSkinProfile.region?.split(",")[1]?.trim() || "string",
       });
     }
-  }, [makeRecommendation, userSkinProfile]);
+  }, [makeRecommendation, userSkinProfile, name]);
 
-  // useEffect(() => {
-  //   if (name !== "find-perfect-match") return;
+  // Step 2: When recommendation data is received, save ID and mark as complete
+  useEffect(() => {
+    if (data) {
+      localStorage.setItem('quizId', data);
+    }
+  }, [data]);
 
-  //   const animateProgress = async () => {
-  //     await controls.start({ width: "50%" });
-  //     await new Promise((resolve) => setTimeout(resolve, 500));
-  //     await controls.start({ width: "100%" });
-  //     // Uncomment the following line when you're ready to navigate
-  //     router.push("/find-products/your-skin-matches");
-  //   };
+  // Step 3: Handle progress bar animation and navigation
+  useEffect(() => {
+    if (name !== "find-perfect-match") return;
 
-  //   animateProgress();
+    const animateProgress = async () => {
+      await controls.start({ width: "50%" });
+      await new Promise((resolve) => setTimeout(resolve, 500));
+      await controls.start({ width: "100%" });
+      // Uncomment the following line when you're ready to navigate
+      if (localStorage.getItem('quizId')) {
+        router.push("/find-products/your-skin-matches");
+      }
+      else {
+        animateProgress();
+      }
+    };
 
-  //   // Cleanup function
-  //   return () => {
-  //     controls.stop();
-  //   };
-  // }, [name, controls, router]);
+    animateProgress();
+
+    // Cleanup function
+    return () => {
+      controls.stop();
+    };
+  }, [controls, router, data, name]);
 
   console.log(data);
 

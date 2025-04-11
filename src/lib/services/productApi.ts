@@ -10,6 +10,13 @@ const productApi = baseApi.injectEndpoints({
         body: userSkinProfile,
       }),
     }),
+    getRecommendationById: builder.mutation({
+      query: ({ id, sort_by }) => ({
+        url: `/recommendations/get/${id}`,
+        method: "POST",
+        params: { sort_by },
+      }),
+    }),
     getMyRecommendations: builder.query({
       query: () => ({
         url: "/recommendations/me",
@@ -41,12 +48,20 @@ const productApi = baseApi.injectEndpoints({
         };
       },
     }),
+    getProductById: builder.query<ProductType, string>({
+      query: (productId) => ({
+        url: `/products/${productId}`,
+        method: "GET",
+      }),
+    }),
   }),
 });
 export const {
   useMakeRecommendationMutation,
+  useGetRecommendationByIdMutation,
   useGetMyRecommendationsQuery,
   useGetRecommendationByUserIdQuery,
   useGetProductsBrandsQuery,
   useGetProductsByBrandQuery,
+  useGetProductByIdQuery,
 } = productApi;

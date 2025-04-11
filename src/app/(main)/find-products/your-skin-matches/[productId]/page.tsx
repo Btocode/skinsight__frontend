@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import ProductImageCarousel from "./_components/ProductImageCarousel";
 import ProductAccordion from "./_components/ProductAccordion";
 import BackButton from "@/components/common/BackButton";
@@ -10,9 +10,23 @@ import { Accordion } from "@/components/common/Accordion";
 import Image from "next/image";
 import ProductTabs from "./_components/ProductTabs";
 import Advertisement from "@/components/common/Advertisement";
-
+import { useParams } from "next/navigation";
+import { useGetProductByIdQuery } from "@/lib/services/productApi";
+import { ProductType } from "@/types/products";
 const ProductDetails = () => {
   const [activeId, setActiveId] = useState("1");
+  const { productId } = useParams();
+  const [productDetails, setProductDetails] = useState<ProductType | null>(null);
+
+  const { data: product } = useGetProductByIdQuery(productId as string);
+
+  useEffect(() => {
+    if (product) {
+      setProductDetails(product);
+    }
+  }, [product]);
+
+  console.log(productDetails);
 
   const handleToggle = (id: string) => {
     setActiveId(id === activeId ? "" : id);
@@ -25,15 +39,15 @@ const ProductDetails = () => {
         <div className="space-y-2">
           <BackButton />
           <p className="text-[15px] lg:text-xl font-medium leading-[17.85px] lg:leading-[23.8px] tracking-[-0.02em]">
-            Glow Recipe
+            {productDetails?.brand_name}
           </p>
           <h2 className="text-[28px] lg:text-[42px] font-semibold leading-[33.32px] lg:leading-[49.98px] tracking-[-0.02em]">
-            Watermelon Glow PHA+BHA
+            {productDetails?.product_name}
           </h2>
           <p className="text-[15px] lg:text-xl font-medium leading-[17.85px] lg:leading-[26px] tracking-[-0.02em] lg:tracking-normal">
             Price{" "}
             <span className="text-xl lg:text-2xl font-semibold leading-[26px]">
-              $$$
+              {productDetails?.brand_price_category === "High-End" ? "$$$" : productDetails?.brand_price_category === "Mid-Range" ? "$$" : "$"}
             </span>
           </p>
         </div>
@@ -74,7 +88,11 @@ const ProductDetails = () => {
             }
             className="p-0 w-[141px] h-[48px] rounded-xl flex items-center justify-center"
           >
-            <span className="text-sm font-medium leading-[21px] tracking-[-3%] text-white">
+            <span
+            onClick={() => {
+              window.open(productDetails?.buy_links[0], "_blank");
+            }}
+            className="text-sm font-medium leading-[21px] tracking-[-3%] text-white">
               Buy now
             </span>
           </Button>
@@ -82,7 +100,13 @@ const ProductDetails = () => {
       </div>
       <div className="flex flex-col-reverse lg:flex-row justify-between mt-6 lg:mt-0 gap-4 lg:gap-8">
         <div className="mb-8 lg:mb-0">
-          <ProductAccordion />
+          <ProductAccordion
+          description={productDetails?.description}
+          ingredients={productDetails?.ingredients}
+          benefits={productDetails?.benefits}
+          targets={productDetails?.targets}
+          suitable_for={productDetails?.suitable_for}
+          />
           <ProductGallery />
         </div>
         <ProductImageCarousel />

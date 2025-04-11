@@ -4,29 +4,34 @@ import Modal from "@/components/common/Modal";
 import { useRouter } from "next/navigation";
 import { useCallback, useEffect, useState } from "react";
 
-const AddFavorite = () => {
+const AddFavorite = ({ showModal, setShowModal }: { showModal: boolean, setShowModal: (showModal: boolean) => void }) => {
   const [open, setOpen] = useState(false);
   const router = useRouter();
-  const onClose = useCallback(() => setOpen(false), []);
+
+  useEffect(() => {
+    if (showModal) {
+      setOpen(true);
+    }
+  }, [showModal]);
+
+  const onClose = useCallback(() => {
+    setOpen(false);
+    setShowModal(false);
+    // Save to localStorage that user has closed the modal
+    localStorage.setItem('hasClosedFavoriteModal', 'true');
+  }, []);
 
   const onConfirm = () => {
     router.push("/find-products/add-preference");
     onClose();
   };
 
-  // Reset modal state on mount and clear localStorage
+  // Check localStorage on mount and show modal if not previously closed
   useEffect(() => {
-    localStorage.removeItem('hasShownFavoriteModal');
-    setOpen(false);
-  }, []);
-
-  // Show modal once after 4 seconds if not previously closed
-  useEffect(() => {
-    const hasShownModal = localStorage.getItem('hasShownFavoriteModal');
-    if (!hasShownModal) {
+    const hasClosedModal = localStorage.getItem('hasClosedFavoriteModal');
+    if (!hasClosedModal) {
       const timer = setTimeout(() => {
         setOpen(true);
-        localStorage.setItem('hasShownFavoriteModal', 'true');
       }, 4000);
       return () => clearTimeout(timer);
     }

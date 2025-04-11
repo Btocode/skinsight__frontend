@@ -1,3 +1,4 @@
+"use client"
 import { notFound } from "next/navigation";
 import MatchesProductFilter from "./_components/MatchesProductFilter";
 import MatchesProductHeader from "./_components/MatchesProductHeader";
@@ -9,46 +10,53 @@ import GradientImage from "@/components/common/GradientImage";
 import AddFavorite from "./_components/AddFavorite";
 import Button from "@/components/common/Button";
 import Link from "next/link";
-import { fetchClient } from "@/lib/fetch-client";
+import { useGetRecommendationByIdMutation } from "@/lib/services/productApi";
+import { useEffect, useState } from "react";
+import ProductsByCategory from "./_components/ProuctsByCategory";
+import Loading from "./loading";
+import { removeStorageItem } from "@/utils/storage";
 
-const getProducts = async () => {
-  try {
-    const response = await fetchClient("/recommendations/me", {
-      next: {
-        tags: ["my-recommendations"],
-      },
-    });
+const YourSkinMatchesPage = () => {
+  const [getRecommendation, { isLoading: isLoadingRecommendation }] =
+    useGetRecommendationByIdMutation();
+  const [products, setProducts] = useState([])
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+  const [showModal, setShowModal] = useState(false);
+  useEffect(() => {
+    const fetchRecommendations = async () => {
+      try {
+        const quizId = localStorage.getItem('quizId');
 
-    if (!response.ok) {
-      throw new Error(`HTTP error! status: ${response.status}`);
-    }
+        if (!quizId) {
+          return;
+        }
 
-    const data = await response.json();
-    return data;
-  } catch (error) {
-    console.error("Error fetching products:", error);
-    return null;
-  }
-};
+        const response = await getRecommendation({
+          id: quizId,
+          sort_by: 'best_rated'
+        }).unwrap();
 
-const YourSkinMatchesPage = async () => {
-  const products = await getProducts();
+        setProducts(response?.recommended_products);
+      } catch (err) {
+        console.log("Failed to fetch recommendations:", err);
+      } finally {
+        setLoading(false);
+      }
+    };
 
-  // Handle null products (API error case)
-  if (!products) {
-    return (
-      <div className="container py-8 text-center">
-        <h2 className="text-xl font-semibold text-accent">
-          Unable to load product recommendations
-        </h2>
-        <Link href="/find-products/gender" className="mt-4 inline-block">
-          <Button className="h-[40px] px-4">Try Again</Button>
-        </Link>
-      </div>
-    );
-  }
+    fetchRecommendations();
+  }, [getRecommendation]);
 
   // Handle empty products array
+  if (loading) {
+    return <Loading />;
+  }
+
+  if (error) {
+    return <div className="container py-10">Error loading products: {error}</div>;
+  }
+
   if (!Array.isArray(products) || products.length === 0) {
     return (
       <div className="container py-8 text-center">
@@ -62,11 +70,145 @@ const YourSkinMatchesPage = async () => {
     );
   }
 
+  const categorizedProducts = {
+    Cleansing: [
+        "cleansing_gel_foam",
+        "cleansing_oil_balm",
+        "micellar_water"
+    ],
+    Hydration_And_Moisturiser: [
+        "moisturiser"
+    ],
+    Sunscreens: [
+        "chemical_sunscreen",
+        "physical_sunscreen"
+    ],
+    Treatment: [
+        "serum",
+        "toner"
+    ],
+    Exfoliation: [
+        "physical_scrub",
+        "chemical_exfoliator",
+        "enzyme_peel"
+    ],
+    EyeCare: [
+        "eye_care"
+    ],
+    LipCare: [
+        "lip_care"
+    ],
+    Masks: [
+        "mask"
+    ],
+};
+
   if (products?.length === 0) {
     notFound();
   }
 
-  console.log(products);
+  // Initialize an object to hold categorized products with subcategories
+  const productsByCategory = {
+    Cleansing: {
+      all: [],
+      cleansing_gel_foam: [],
+      cleansing_oil_balm: [],
+      micellar_water: []
+    },
+    Hydration_And_Moisturiser: {
+      all: [],
+      moisturiser: []
+    },
+    Sunscreens: {
+      all: [],
+      chemical_sunscreen: [],
+      physical_sunscreen: []
+    },
+    Treatment: {
+      all: [],
+      serum: [],
+      toner: []
+    },
+    Exfoliation: {
+      all: [],
+      physical_scrub: [],
+      chemical_exfoliator: [],
+      enzyme_peel: []
+    },
+    Masks: {
+      all: [],
+      mask: []
+    },
+    EyeCare: {
+      all: [],
+      eye_care: []
+    },
+    LipCare: {
+      all: [],
+      lip_care: []
+    }
+  };
+
+  // Initialize productsBySubCategory with all possible subcategories
+  const productsBySubCategory = {
+    cleansing_gel_foam: [],
+    cleansing_oil_balm: [],
+    micellar_water: [],
+    moisturiser: [],
+    chemical_sunscreen: [],
+    physical_sunscreen: [],
+    serum: [],
+    toner: [],
+    physical_scrub: [],
+    chemical_exfoliator: [],
+    enzyme_peel: [],
+    mask: [],
+    eye_care: [],
+    lip_care: []
+  };
+
+  // Categorize products based on existing categories
+  products.forEach(item => {
+    // Check if the product and its category exist
+    if (item && item.product && item.product.category) {
+      const category = item.product.category;
+
+      // Check each predefined category and add the product to the corresponding array
+      for (const [parentCategory, subcategories] of Object.entries(categorizedProducts)) {
+        if (subcategories.includes(category)) {
+          // Add to parent category's "all" array
+          productsByCategory[parentCategory].all.push(item);
+
+          // Add to specific subcategory array
+          productsByCategory[parentCategory][category].push(item);
+
+          break; // Exit the loop once the product is categorized
+        }
+      }
+    }
+  });
+
+  // Categorize products based on subcategories
+  products.forEach(item => {
+    if (item && item.product && item.product.category) {
+      const category = item.product.category;
+
+      // Use category as subcategory since that's what we have
+      if (productsBySubCategory[category]) {
+        productsBySubCategory[category].push(item);
+      } else {
+        console.log(`Unknown category: ${category}`);
+      }
+    }
+  });
+
+  const handleReviewClick = () => {
+    console.log("Review button clicked");
+    removeStorageItem('hasClosedFavoriteModal');
+    setShowModal(true);
+
+  };
+
   return (
     <div className="container relative mt-4 lg:mt-[40px]">
       <MatchesProductHeader />
@@ -75,7 +217,25 @@ const YourSkinMatchesPage = async () => {
           Top products for you
         </h4>
         <div className="flex items-center gap-4">
-          <MatchesProductFilter />
+          {/* Review button */}
+          <Button
+            className="h-[40px] px-4"
+            variant="outline"
+            onClick={() => {
+              handleReviewClick();
+            }}
+          >
+            Review
+          </Button>
+
+          {/* Filter button */}
+          <MatchesProductFilter
+            productsByCategory={productsByCategory}
+            categories={categorizedProducts}
+            productsBySubcategory={productsBySubCategory}
+          />
+
+          {/* Retake button */}
           <Link href={"/find-products/gender"}>
             <Button
               icon={
@@ -102,13 +262,18 @@ const YourSkinMatchesPage = async () => {
           </Link>
         </div>
       </div>
-      <TonersProducts products={products[1]} />
-      <CleansersProducts products={products[0]} />
-      <Advertisement />
-      <MoisturisersProducts products={products[2]} />
-      <Advertisement />
+
+      {Object.entries(productsBySubCategory).map(([category, products]) => (
+        <ProductsByCategory
+          key={category}
+          products={products}
+          categoryName={category.split('_').join(' ')}
+          categoryId={category}
+        />
+      ))}
+
       <GradientImage secondImage={{ className: "lg:-right-52" }} />
-      <AddFavorite />
+      <AddFavorite showModal={showModal} setShowModal={setShowModal}/>
     </div>
   );
 };

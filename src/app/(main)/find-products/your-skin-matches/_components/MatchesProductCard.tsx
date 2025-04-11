@@ -11,12 +11,11 @@ export function MatchesProductCard({ item }: { item: Product }) {
   const router = useRouter();
   const cardRef = useRef<HTMLDivElement>(null);
   const onProductDetails: ProductDetailsHandler = () => {
-    router.push(`/find-products/your-skin-matches/${item.productTitle}`);
+    router.push(`/find-products/your-skin-matches/${item.product_id}`);
   };
 
   return (
     <div
-      onClick={onProductDetails}
       ref={cardRef}
       className="lg:w-[340px] rounded-xl bg-white p-3 lg:p-5 shadow-[0px_5.13px_33.34px_0px_#2C2C2C17] border border-[#EFEFEF]"
     >
@@ -32,6 +31,7 @@ export function MatchesProductCard({ item }: { item: Product }) {
         {/* Product Image */}
         <div className="h-[101.34px] lg:h-[204px] w-[57.36px] lg:w-[300px] relative mx-auto my-2">
           <Image
+            onClick={onProductDetails}
             src={item.productImage}
             alt={item.productTitle}
             fill
@@ -39,11 +39,14 @@ export function MatchesProductCard({ item }: { item: Product }) {
           />
         </div>
         {/* Product Info */}
-        <div className="flex-1 w-full space-y-[2px]">
+        <div
+        onClick={onProductDetails}
+
+        className="flex-1 w-full space-y-[2px]">
           <span className="text-[11.47px] lg:text-[11.54px] font-normal leading-[17.21px] lg:leading-[17.31px] tracking-[-0.03em] text-[#575656]">
             {item?.brand}
           </span>
-          <h3 className="text-[14.34px] lg:text-[15.39px] font-semibold leading-[21.51px] lg:leading-[23.08px] tracking-[-0.03em] text-[#575656] truncate">
+          <h3 className="text-[14.34px] lg:text-[15.39px] font-semibold leading-[21.51px] lg:leading-[23.08px] tracking-[-0.03em] text-[#575656] truncate cursor-pointer hover:text-[#8F80E8]">
             {item?.productTitle}
           </h3>
           <p className="text-[11.47px] lg:text-[11.54px] leading-[17.21px] lg:leading-[17.31px] font-normal tracking-[-0.03em] text-[#80E8DE]">
@@ -87,7 +90,11 @@ export function MatchesProductCard({ item }: { item: Product }) {
                 strokeWidth={2}
               />
             </svg>
-            <span className="text-[13.38px] lg:text-sm font-medium leading-[20.08px] lg:leading-[21px] tracking-[-0.03em] text-[#E77CCF]">
+            <span
+            onClick={() => {
+              window.open(item.buy_links[0], "_blank");
+            }}
+            className="text-[13.38px] lg:text-sm font-medium leading-[20.08px] lg:leading-[21px] tracking-[-0.03em] text-[#E77CCF]">
               Buy now
             </span>
           </button>

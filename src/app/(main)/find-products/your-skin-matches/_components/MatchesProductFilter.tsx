@@ -3,10 +3,23 @@ import Button from "@/components/common/Button";
 import Checkbox from "@/components/common/CheckBox";
 import Modal from "@/components/common/Modal";
 import { cn } from "@/lib/utils";
-import { Fragment, useState } from "react";
+import { Fragment, useEffect, useState } from "react";
 
-const MatchesProductFilter = () => {
+interface ProductsByCategory {
+  [key: string]: any[];
+}
+
+interface ProductsBySubcategory {
+  [key: string]: any[];
+}
+
+interface Categories {
+  [key: string]: string[];
+}
+
+const MatchesProductFilter = ({ productsByCategory, categories, productsBySubcategory }: { productsByCategory: ProductsByCategory, categories: Categories, productsBySubcategory: ProductsBySubcategory }) => {
   const [isOpen, setIsOpen] = useState(false);
+
   return (
     <div>
       <Button
@@ -38,10 +51,14 @@ const MatchesProductFilter = () => {
       <Modal
         isOpen={isOpen}
         onClose={() => setIsOpen(false)}
-        contentClassName="p-0 lg:p-0"
+        contentClassName="p-0 lg:p-0 max-w-md w-full"
         isCloseIconVisible={false}
       >
-        <FilterModal />
+        <FilterModal
+          productsByCategory={productsByCategory}
+          categories={categories}
+          productsBySubcategory={productsBySubcategory}
+        />
       </Modal>
     </div>
   );
@@ -56,7 +73,41 @@ interface FilterOption {
   children?: FilterOption[];
 }
 
-function FilterModal() {
+// Map category IDs to their corresponding filter option IDs
+const categoryToFilterMap = {
+  Cleansing: "cleansing",
+  Hydration_And_Moisturiser: "moisturisers",
+  Sunscreens: "sunscreens",
+  Treatment: "treatments",
+  Exfoliation: "exfoliation",
+  Masks: "masks",
+  EyeCare: "eye-care",
+  LipCare: "lip-care"
+};
+
+// Map subcategories to their filter option IDs
+const subcategoryToFilterMap = {
+  "cleansing_gel_foam": "cleansing-gel-foam",
+  "cleansing_oil_balm": "cleansing-oil-balm",
+  "micellar_water": "micellar-water",
+  "moisturiser": "moisturisers",
+  "chemical_sunscreen": "chemical-sunscreen",
+  "physical_sunscreen": "physical-sunscreen",
+  "serum": "serum",
+  "toner": "toner",
+  "physical_scrub": "physical-scrub",
+  "chemical_exfoliator": "chemical-exfoliator",
+  "enzyme_peel": "enzyme-peel",
+  "mask": "mask",
+  "eye_care": "eye-care",
+  "lip_care": "lip-care"
+};
+
+function FilterModal({ productsByCategory, categories, productsBySubcategory }: {
+  productsByCategory: ProductsByCategory,
+  categories: Categories,
+  productsBySubcategory: ProductsBySubcategory
+}) {
   const [sortExpanded, setSortExpanded] = useState(true);
   const [filterExpanded, setFilterExpanded] = useState(true);
 
@@ -75,145 +126,161 @@ function FilterModal() {
       id: "most-popular",
       label: "Most popular",
       checked: false,
-      children: [
-        { id: "trending", label: "Trending", checked: false },
-        { id: "all-time", label: "All-time favorites", checked: false },
-      ],
     },
-    { id: "price-low-high", label: "Price (Low to High)", checked: false },
+    { id: "price-low-high", label: "Price: Low to High", checked: false },
+    { id: "price-high-low", label: "Price: High to Low", checked: false },
   ]);
 
-  const [filterOptions, setFilterOptions] = useState<FilterOption[]>([
-    {
-      id: "all",
-      label: "All",
-      checked: false,
-    },
-    {
-      id: "toners",
-      label: "Toners",
-      checked: false,
-      children: [
-        {
-          id: "hydrating-toners",
-          label: "Hydrating Toners",
-          checked: false,
-        },
-        {
-          id: "exfoliating-toners",
-          label: "Exfoliating Toners",
-          checked: false,
-        },
-      ],
-    },
-    {
-      id: "treatments",
-      label: "Treatments",
-      checked: false,
-    },
-    {
-      id: "moisturisers",
-      label: "Moisturisers",
-      checked: false,
-      children: [
-        {
-          id: "day-creams",
-          label: "Day Creams",
-          checked: false,
-        },
-      ],
-    },
-    {
-      id: "other",
-      label: "Other",
-      checked: false,
-    },
-  ]);
+  // Initialize filter options based on available subcategories
+  const [filterOptions, setFilterOptions] = useState<FilterOption[]>(() => {
+    // Create parent category options
+    const parentOptions: FilterOption[] = Object.keys(categoryToFilterMap).map(category => {
+      const filterId = categoryToFilterMap[category as keyof typeof categoryToFilterMap];
 
-  const handleSortChange = (id: string, isChecked: boolean) => {
-    const updatedOptions = updateCheckedState(sortOptions, id, isChecked);
-    setSortOptions(updateParentState(updatedOptions)); // Ensure parent state consistency
+      // Special handling for categories with only one subcategory
+      if (category === 'Masks' || category === 'EyeCare' || category === 'LipCare' || categories[category]?.length === 1) {
+        // For these categories, we don't show subcategories
+        const subcategory = categories[category]?.[0] || '';
+        const hasProducts = productsByCategory[category]?.all?.length > 0;
+
+        return {
+          id: filterId,
+          label: category.replace(/_/g, ' '),
+          checked: hasProducts
+          // No children for these categories
+        };
+      }
+
+      // For categories with multiple subcategories
+      const children = (categories[category] || []).map(subcategory => {
+        const subFilterId = subcategoryToFilterMap[subcategory as keyof typeof subcategoryToFilterMap];
+
+        // Check if this subcategory has any products
+        const hasSubProducts = productsBySubcategory &&
+                              productsBySubcategory[subcategory] &&
+                              productsBySubcategory[subcategory].length > 0;
+
+        return {
+          id: subFilterId || subcategory,
+          label: subcategory.split('_').map(word =>
+            word.charAt(0).toUpperCase() + word.slice(1)
+          ).join(' '),
+          checked: hasSubProducts // Pre-check if there are products
+        };
+      });
+
+      // Check if all subcategories are checked
+      const allChildrenChecked = children.every(child => child.checked);
+
+      return {
+        id: filterId,
+        label: category.replace(/_/g, ' '),
+        checked: allChildrenChecked,
+        children: children
+      };
+    });
+
+    return parentOptions;
+  });
+
+  const handleSortChange = (id: string, checked: boolean) => {
+    setSortOptions((prev) =>
+      prev.map((option) => {
+        if (option.id === id) {
+          return { ...option, checked };
+        } else if (option.children) {
+          const updatedChildren = option.children.map((child) => {
+            if (child.id === id) {
+              return { ...child, checked };
+            }
+            return child;
+          });
+          return { ...option, children: updatedChildren };
+        }
+        return option;
+      })
+    );
   };
 
-  const handleFilterChange = (id: string, isChecked: boolean) => {
-    const updatedOptions = updateCheckedState(filterOptions, id, isChecked);
-    setFilterOptions(updateParentState(updatedOptions)); // Ensure parent state consistency
+  const handleFilterChange = (id: string, checked: boolean) => {
+    setFilterOptions((prev) =>
+      prev.map((option) => {
+        if (option.id === id) {
+          // If parent is checked/unchecked, update all children
+          if (option.children) {
+            return {
+              ...option,
+              checked,
+              children: option.children.map(child => ({
+                ...child,
+                checked
+              }))
+            };
+          }
+          return { ...option, checked };
+        } else if (option.children) {
+          const updatedChildren = option.children.map((child) => {
+            if (child.id === id) {
+              return { ...child, checked };
+            }
+            return child;
+          });
+
+          // Check if all children are checked, then check parent too
+          const allChildrenChecked = updatedChildren.every(child => child.checked);
+
+          return {
+            ...option,
+            checked: allChildrenChecked,
+            children: updatedChildren
+          };
+        }
+        return option;
+      })
+    );
   };
 
   const handleClear = () => {
-    setSortOptions(
-      sortOptions.map((option) => ({ ...option, checked: false }))
+    setSortOptions((prev) =>
+      prev.map((option) => {
+        if (option.children) {
+          return {
+            ...option,
+            checked: false,
+            children: option.children.map((child) => ({
+              ...child,
+              checked: false,
+            })),
+          };
+        }
+        return { ...option, checked: false };
+      })
     );
-    setFilterOptions(
-      filterOptions.map((option) => ({ ...option, checked: false }))
+
+    setFilterOptions((prev) =>
+      prev.map((option) => {
+        if (option.children) {
+          return {
+            ...option,
+            checked: false,
+            children: option.children.map((child) => ({
+              ...child,
+              checked: false,
+            })),
+          };
+        }
+        return { ...option, checked: false };
+      })
     );
   };
 
-  // Function to update the checked state for a specific node
-  function updateCheckedState(
-    options: FilterOption[],
-    id: string,
-    isChecked: boolean
-  ): FilterOption[] {
-    return options.map((option) => {
-      // If this is the target node
-      if (option.id === id) {
-        return {
-          ...option,
-          checked: isChecked,
-          children: option.children
-            ? option.children.map((child) => ({
-                ...child,
-                checked: isChecked, // Check/uncheck all children when parent is changed
-              }))
-            : undefined,
-        };
-      }
-
-      // If the node has children, recursively update them
-      if (option.children) {
-        const updatedChildren = updateCheckedState(
-          option.children,
-          id,
-          isChecked
-        );
-        const isParentChecked = updatedChildren.some((child) => child.checked);
-
-        return {
-          ...option,
-          checked: isParentChecked, // Parent stays checked if any child is checked
-          children: updatedChildren,
-        };
-      }
-
-      return option;
-    });
-  }
-
-  // Function to propagate child state changes to the parent
-  function updateParentState(options: FilterOption[]): FilterOption[] {
-    return options.map((option) => {
-      if (option.children) {
-        const updatedChildren = updateParentState(option.children);
-        const isParentChecked = updatedChildren.some((child) => child.checked);
-
-        return {
-          ...option,
-          checked: isParentChecked, // Update parent based on children
-          children: updatedChildren,
-        };
-      }
-      return option;
-    });
-  }
-
   return (
-    <div className="bg-white w-[380px]  overflow-hidden rounded-xl py-[18px]">
+    <div className="bg-white rounded-3xl p-[20px] w-[340px]">
       {/* Sort Section */}
       <div className="w-full">
-        <div className="pl-3 flex items-center justify-between">
+        <div className=" flex items-center justify-between">
           <h2 className="text-base font-semibold leading-[24px] tracking-[-0.03em] text-accent">
-            Sort by
+            Sort
           </h2>
           <Button
             variant={"ghost"}
@@ -246,9 +313,9 @@ function FilterModal() {
 
         <div
           className={cn(
-            "space-y-4 pt-3 px-[29.5px] transition-all duration-200 ease-in-out h-[0px] overflow-auto -z-10 opacity-0",
+            "space-y-4 pt-3 px-[9.5px] transition-all duration-200 ease-in-out h-[0px] overflow-auto -z-10 opacity-0",
             {
-              "h-[160px] opacity-100": sortExpanded,
+              "h-[200px] opacity-100": sortExpanded,
             }
           )}
         >
@@ -280,7 +347,7 @@ function FilterModal() {
 
       {/* Filter Section */}
       <div className="w-full">
-        <div className="pl-3 flex items-center justify-between">
+        <div className=" flex items-center justify-between">
           <h2 className="text-base font-semibold leading-[24px] tracking-[-0.03em] text-accent">
             Filter
           </h2>
@@ -315,9 +382,9 @@ function FilterModal() {
 
         <div
           className={cn(
-            "space-y-4 pt-3 px-[29.5px] transition-all duration-200 ease-in-out h-[0px] overflow-auto -z-10 opacity-0",
+            "space-y-4 pt-3 px-[9.5px] transition-all duration-200 ease-in-out h-[0px] overflow-auto -z-10 opacity-0",
             {
-              "h-[200px] opacity-100": filterExpanded,
+              "h-[350px] opacity-100": filterExpanded,
             }
           )}
         >
@@ -350,7 +417,7 @@ function FilterModal() {
       </div>
 
       {/* Action Buttons */}
-      <div className="px-[18px] flex justify-start gap-3 mt-[25px]">
+      <div className="px-[5px] flex justify-start gap-3 mt-[25px]">
         <Button
           onClick={() =>
             console.log("Applied:", { sortOptions, filterOptions })
